@@ -1,0 +1,106 @@
+{
+  "events": [
+    {
+      "id": "LOGIN_SUCCESS",
+      "type": "auth"
+    },
+    {
+      "id": "LOGIN_FAIL",
+      "type": "auth"
+    },
+    {
+      "id": "FILE_OPEN",
+      "type": "file"
+    },
+    {
+      "id": "FILE_EDIT",
+      "type": "file"
+    },
+    {
+      "id": "FILE_SAVE",
+      "type": "file"
+    },
+    {
+      "id": "FILE_DELETE",
+      "type": "file"
+    },
+    {
+      "id": "PROCESS_START",
+      "type": "process"
+    },
+    {
+      "id": "PROCESS_STOP",
+      "type": "process"
+    },
+    {
+      "id": "NETWORK_CONNECT",
+      "type": "network"
+    },
+    {
+      "id": "NETWORK_DISCONNECT",
+      "type": "network"
+    },
+    {
+      "id": "USB_INSERT",
+      "type": "hardware"
+    },
+    {
+      "id": "USB_REMOVE",
+      "type": "hardware"
+    },
+    {
+      "id": "CONFIG_CHANGE",
+      "type": "system"
+    },
+    {
+      "id": "SHUTDOWN",
+      "type": "system"
+    },
+    {
+      "id": "RESTART",
+      "type": "system"
+    }
+  ],
+  "scenarios": [
+    {
+      "name": "Рабочая сессия",
+      "sequence": [
+        "LOGIN_SUCCESS",
+        "FILE_OPEN",
+        "FILE_EDIT",
+        "FILE_SAVE",
+        "PROCESS_START",
+        "PROCESS_STOP"
+      ]
+    },
+    {
+      "name": "Подозрительное поведение",
+      "sequence": [
+        "LOGIN_FAIL",
+        "LOGIN_FAIL",
+        "LOGIN_SUCCESS",
+        "FILE_OPEN",
+        "FILE_DELETE",
+        "USB_INSERT"
+      ]
+    },
+    {
+      "name": "Сетевая активность",
+      "sequence": [
+        "LOGIN_SUCCESS",
+        "NETWORK_CONNECT",
+        "NETWORK_DISCONNECT",
+        "SHUTDOWN"
+      ]
+    },
+    {
+      "name": "Админские действия",
+      "sequence": [
+        "LOGIN_SUCCESS",
+        "CONFIG_CHANGE",
+        "PROCESS_START",
+        "RESTART"
+      ]
+    }
+  ]
+}
