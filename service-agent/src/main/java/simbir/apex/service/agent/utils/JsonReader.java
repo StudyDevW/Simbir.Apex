@@ -28,7 +28,8 @@ public class JsonReader {
             for (JsonNode e : root.get("events")) {
                 events.add(new Event(
                         e.get("id").asText(),
-                        e.get("type").asText(),
+                        e.get("device").asText(),
+                        e.get("ip").asText(),
                         System.currentTimeMillis()
                 ));
             }

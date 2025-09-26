@@ -2,63 +2,78 @@
   "events": [
     {
       "id": "LOGIN_SUCCESS",
-      "type": "auth"
+      "device": "desktop",
+      "ip": "192.168.1.10"
     },
     {
       "id": "LOGIN_FAIL",
-      "type": "auth"
+      "device": "web",
+      "ip": "192.168.1.11"
     },
     {
       "id": "FILE_OPEN",
-      "type": "file"
+      "device": "desktop",
+      "ip": "192.168.1.10"
     },
     {
       "id": "FILE_EDIT",
-      "type": "file"
+      "device": "desktop",
+      "ip": "192.168.1.10"
     },
     {
       "id": "FILE_SAVE",
-      "type": "file"
+      "device": "desktop",
+      "ip": "192.168.1.10"
     },
     {
       "id": "FILE_DELETE",
-      "type": "file"
+      "device": "desktop",
+      "ip": "192.168.1.10"
     },
     {
       "id": "PROCESS_START",
-      "type": "process"
+      "device": "desktop",
+      "ip": "192.168.1.12"
     },
     {
       "id": "PROCESS_STOP",
-      "type": "process"
+      "device": "desktop",
+      "ip": "192.168.1.12"
     },
     {
       "id": "NETWORK_CONNECT",
-      "type": "network"
+      "device": "mobile",
+      "ip": "10.0.0.5"
     },
     {
       "id": "NETWORK_DISCONNECT",
-      "type": "network"
+      "device": "mobile",
+      "ip": "10.0.0.5"
     },
     {
       "id": "USB_INSERT",
-      "type": "hardware"
+      "device": "desktop",
+      "ip": "192.168.1.13"
     },
     {
       "id": "USB_REMOVE",
-      "type": "hardware"
+      "device": "desktop",
+      "ip": "192.168.1.13"
     },
     {
       "id": "CONFIG_CHANGE",
-      "type": "system"
+      "device": "web",
+      "ip": "172.16.0.2"
     },
     {
       "id": "SHUTDOWN",
-      "type": "system"
+      "device": "desktop",
+      "ip": "192.168.1.10"
     },
     {
       "id": "RESTART",
-      "type": "system"
+      "device": "desktop",
+      "ip": "192.168.1.10"
     }
   ],
   "scenarios": [

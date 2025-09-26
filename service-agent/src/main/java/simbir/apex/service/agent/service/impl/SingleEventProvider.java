@@ -17,6 +17,6 @@ public class SingleEventProvider implements EventProvider {
     @Override
     public List<Event> generate() {
         Event base = events.get(random.nextInt(events.size()));
-        return List.of(new Event(base.getId(), base.getType(), System.currentTimeMillis()));
+        return List.of(new Event(base.getId(), base.getDevice(), base.getIp(), System.currentTimeMillis()));
     }
 }

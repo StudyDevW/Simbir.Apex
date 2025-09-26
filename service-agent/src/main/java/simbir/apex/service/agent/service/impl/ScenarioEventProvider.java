@@ -27,7 +27,7 @@ public class ScenarioEventProvider implements EventProvider {
                     .filter(ev -> ev.getId().equals(id))
                     .findFirst()
                     .ifPresent(ev -> result.add(
-                            new Event(ev.getId(), ev.getType(), System.currentTimeMillis())
+                            new Event(ev.getId(), ev.getDevice(), ev.getIp(),System.currentTimeMillis())
                     ));
         }
         return result;

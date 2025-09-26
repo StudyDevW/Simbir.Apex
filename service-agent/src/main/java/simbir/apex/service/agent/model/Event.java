@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Event {
     private String id;
-    private String type;
+    private String device;
+    private String ip;
     private long timestamp;
 }
