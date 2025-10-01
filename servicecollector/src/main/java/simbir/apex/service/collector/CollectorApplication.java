@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import simbir.apex.service.collector.ControllerTesting.ControllerTesting;
 import simbir.apex.service.collector.config.KafkaConfiguration;
 
 @SpringBootApplication
