@@ -8,13 +8,10 @@ namespace CacheRedisLogic {
     public class RedisSimbirServiceCache : ISimbirServiceCache {
         private readonly ISimbirServiceStorage simbirServiceStorage;
         private readonly IDistributedCache     distributedCache;
-        private readonly TimeSpan              cacheTime;
-        public RedisSimbirServiceCache(ISimbirServiceStorage simbirServiceStorageImp, IDistributedCache distributedCacheImp,
-                                       TimeSpan cacheTimeValue)
+        public RedisSimbirServiceCache(ISimbirServiceStorage simbirServiceStorageImp, IDistributedCache distributedCacheImp)
         {
             simbirServiceStorage = simbirServiceStorageImp;
             distributedCache = distributedCacheImp;
-            cacheTime = cacheTimeValue;
         }
 
         public bool AddCacheServiceInfo(in SimbirServiceBindingModel insertModel)
@@ -23,7 +20,7 @@ namespace CacheRedisLogic {
             string cacheData = JsonSerializer.Serialize(insertModel);
             distributedCache.SetString(insertModel.Id.ToString(), cacheData,
                                        new DistributedCacheEntryOptions {
-                                           AbsoluteExpirationRelativeToNow = cacheTime
+                                           AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(120)
                                        });
             return true;
         }
@@ -34,7 +31,7 @@ namespace CacheRedisLogic {
             string cacheData = JsonSerializer.Serialize(updateModel);
             distributedCache.SetString(updateModel.Id.ToString(), cacheData,
                                        new DistributedCacheEntryOptions {
-                                           AbsoluteExpirationRelativeToNow = cacheTime
+                                           AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(120)
                                        });
             return true;
         }
@@ -60,7 +57,7 @@ namespace CacheRedisLogic {
                     cacheData = JsonSerializer.Serialize(record);
                     distributedCache.SetString(record.Id.ToString(), cacheData,
                                                new DistributedCacheEntryOptions {
-                                                   AbsoluteExpirationRelativeToNow = cacheTime
+                                                   AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(120)
                                                });
                 }
             }

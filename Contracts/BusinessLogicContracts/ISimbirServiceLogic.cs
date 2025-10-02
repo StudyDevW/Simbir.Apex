@@ -1,6 +1,6 @@
 ﻿using Contracts.BindingModels;
 
-namespace Contracts.BusinessContracts {
+namespace Contracts.BusinessLogicContracts {
     public interface ISimbirServiceLogic {
         public void AddNewService(in SimbirServiceBindingModel insertModel);
         public void UpdateService(in SimbirServiceBindingModel updateModel);

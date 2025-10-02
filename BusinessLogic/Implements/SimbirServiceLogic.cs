@@ -1,5 +1,5 @@
 ﻿using Contracts.BindingModels;
-using Contracts.BusinessContracts;
+using Contracts.BusinessLogicContracts;
 using Contracts.CacheContracts;
 using Contracts.StorageContracts;
 

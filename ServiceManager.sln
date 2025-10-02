@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLogic", "BusinessLo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CacheRedisLogic", "CacheRedisLogic\CacheRedisLogic.csproj", "{2CC09614-0B3C-97AF-CFA7-25DE60E1EB8F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceManagerRestAPI", "ServiceManagerRestAPI\ServiceManagerRestAPI.csproj", "{E9B359A1-0AA7-4F9B-871C-94354A4966D8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{2CC09614-0B3C-97AF-CFA7-25DE60E1EB8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2CC09614-0B3C-97AF-CFA7-25DE60E1EB8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2CC09614-0B3C-97AF-CFA7-25DE60E1EB8F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9B359A1-0AA7-4F9B-871C-94354A4966D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9B359A1-0AA7-4F9B-871C-94354A4966D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9B359A1-0AA7-4F9B-871C-94354A4966D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9B359A1-0AA7-4F9B-871C-94354A4966D8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
