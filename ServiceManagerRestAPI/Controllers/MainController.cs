@@ -13,7 +13,7 @@ namespace ServiceManagerRestAPI.Controllers {
             simbirServiceLogic = simbirServiceLogicImp;
         }
 
-        [HttpGet]
+        [HttpPost]
         public bool AddNewService(SimbirServiceBindingModel insertModel) 
         {
             try { simbirServiceLogic.AddNewService(insertModel); }
@@ -21,7 +21,7 @@ namespace ServiceManagerRestAPI.Controllers {
             return true;
         }
 
-        [HttpGet]
+        [HttpPost]
         public bool UpdateService(SimbirServiceBindingModel updateModel)
         {
             try { simbirServiceLogic.UpdateService(updateModel); }
@@ -29,7 +29,7 @@ namespace ServiceManagerRestAPI.Controllers {
             return true;
         }
 
-        [HttpGet]
+        [HttpPost]
         public bool DeleteService(int deleteModelId)
         {
             try { simbirServiceLogic.DeleteService(deleteModelId); }
