@@ -1,0 +1,11 @@
+/pgadmin_data
+
+/postgres_data
+
+/redis_cache
+
+/rabbitmq_data
+
+.vs
+
+.env
