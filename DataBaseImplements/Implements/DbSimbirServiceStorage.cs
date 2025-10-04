@@ -4,48 +4,40 @@ using DataBaseImplement.DbModels;
 
 namespace DataBaseImplement.Implements {
     public class DbSimbirServiceStorage : ISimbirServiceStorage {
-        public bool InsertDbServiceInfo(in SimbirServiceBindingModel insertModel)
+        public void InsertDbServiceInfo(in SimbirServiceBindingModel insertModel)
         {
-            DbSimbirService newRec = new DbSimbirService(insertModel);
+            if (insertModel == null) { throw new ArgumentNullException(nameof(insertModel)); }
+            DbSimbirService newRec = DbSimbirService.Insert(insertModel);
             using DataBase context = new DataBase();
-            try {
-                context.SimbirServices.Add(newRec);
-                context.SaveChanges();
-            }
-            catch { return false; }
-            return true;
+            context.SimbirServices.Add(newRec);
+            context.SaveChanges();
         }
-        public bool UpdateDbServiceInfo(in SimbirServiceBindingModel updateModel)
+        public void UpdateDbServiceInfo(in SimbirServiceBindingModel updateModel)
         {
+            if (updateModel == null) { throw new ArgumentNullException(nameof(updateModel)); }
             using var context = new DataBase();
             int updateModelId = updateModel.Id;
             DbSimbirService updateRec = context.SimbirServices.First(x => x.Id == updateModelId);
             updateRec.Update(updateModel);
-            try { context.SaveChanges(); }
-            catch { return false; }
-            return true;
+            context.SaveChanges(); 
         }
-        public bool DeleteDbServiceInfo(int deleteModelId)
+        public void DeleteDbServiceInfo(int deleteModelId)
         {
             using var context = new DataBase();
             DbSimbirService deleteRec = context.SimbirServices.First(x =>x.Id == deleteModelId);
-            try {
-                context.SimbirServices.Remove(deleteRec);
-                context.SaveChanges();
-            }
-            catch { return false; }
-            return true;
+            context.SimbirServices.Remove(deleteRec);
+            context.SaveChanges();
         }
 
-        public void GetServiceDbInfo(out List<SimbirServiceBindingModel?> recordList)
+        public void GetServiceDbInfo(out List<SimbirServiceBindingModel> recordList)
         {
             using var context = new DataBase();
-            recordList = context.SimbirServices.Select(x => (SimbirServiceBindingModel?)x).ToList();
+            recordList = context.SimbirServices.Select(x => (SimbirServiceBindingModel)x).ToList();
         }
-        public void GetServiceDbInfo(out SimbirServiceBindingModel? record, int serviceId)
+        public void GetServiceDbInfo(out SimbirServiceBindingModel record, int serviceId)
         {
             using var context = new DataBase();
-            record = (SimbirServiceBindingModel?)context.SimbirServices.FirstOrDefault(x => x.Id == serviceId);
+            record = (SimbirServiceBindingModel)context.SimbirServices.First(x => x.Id == serviceId);
         }
     }
 }

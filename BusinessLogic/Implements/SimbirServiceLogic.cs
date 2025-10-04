@@ -13,38 +13,27 @@ namespace BusinessLogic.Implements {
             simbirServiceStorage = simbirServiceStorageImp;
         }
 
-        public void AddNewService(in SimbirServiceBindingModel insertModel)
+        public void InsertService(in SimbirServiceBindingModel insertModel) 
         {
-            if (simbirServiceCache.AddCacheServiceInfo(insertModel) == false) { 
-                throw new Exception("Error: AddNewService is failed"); 
-            }
+            simbirServiceStorage.InsertDbServiceInfo(insertModel);
+            simbirServiceCache.InsertCacheServiceInfo(insertModel); 
         }
-        public void UpdateService(in SimbirServiceBindingModel UpdateModel)
+        public void UpdateService(in SimbirServiceBindingModel UpdateModel) 
         {
-            if (simbirServiceCache.EditCacheServiceInfo(UpdateModel) == false) {
-                throw new Exception("Error: UpdateServuce is failed");
-            }
+            simbirServiceStorage.UpdateDbServiceInfo(UpdateModel);
+            simbirServiceCache.UpdateCacheServiceInfo(UpdateModel);
         }
-        public void DeleteService(int deleteModelId)
+        public void DeleteService(int deleteModelId) 
         {
-            if (simbirServiceCache.DeleteCacheServiceInfo(deleteModelId) == false) {
-                throw new Exception("Error: DeleteService is failed");
-            }
+            simbirServiceStorage.DeleteDbServiceInfo(deleteModelId);
+            simbirServiceCache.DeleteCacheServiceInfo(deleteModelId); 
         }
 
-        public void GetServiceInfo(out List<SimbirServiceBindingModel?> modelsInfo)
-        {
+        public void GetServiceInfo(out List<SimbirServiceBindingModel> modelsInfo) {
             simbirServiceStorage.GetServiceDbInfo(out modelsInfo);
-            if (modelsInfo.Count == 0) {
-                throw new Exception("Error: GetServiceInfo returned at empty list");
-            }
         }
-        public void GetServiceInfo(out SimbirServiceBindingModel? modelInfo, int serviceId)
-        {
+        public void GetServiceInfo(out SimbirServiceBindingModel modelInfo, int serviceId) {
             simbirServiceCache.GetCacheServiceInfo(out modelInfo, serviceId);
-            if (modelInfo == null) {
-                throw new Exception("Error: GetServiceInfo returned at null");
-            }
         }
     }
 }

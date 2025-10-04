@@ -1,21 +1,36 @@
 ﻿using Contracts.BindingModels;
 using DataModels.Models;
-using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Net;
-using System.Reflection;
 
 namespace DataBaseImplement.DbModels {
     public class DbSimbirService : ISimbirService {
-        public string ServiceName { get; set; }
-        public IPEndPoint EndPointService { get; set; }
+        public string ServiceName { get ; set; } = string.Empty;
+
+        public string EndPointServiceStr { get; set; } = string.Empty;
+
+        private IPEndPoint? _endPointService;
+        [NotMapped]
+        public IPEndPoint EndPointService {
+            get {
+                if (_endPointService == null) { _endPointService = IPEndPoint.Parse(EndPointServiceStr); }
+                return _endPointService;
+            } 
+            set {
+                EndPointServiceStr = value.ToString();
+                _endPointService = value; 
+            } 
+        }
 
         public int Id { get; set; }
 
-        public DbSimbirService(in SimbirServiceBindingModel model)
+        public static DbSimbirService Insert(in SimbirServiceBindingModel model)
         {
-            ServiceName = model.ServiceName;
-            EndPointService = model.EndPointService;
-            Id = model.Id;
+            return new DbSimbirService() {
+                ServiceName = model.ServiceName,
+                EndPointService = model.EndPointService,
+                Id = model.Id
+            };
         }
 
         public void Update(in SimbirServiceBindingModel editModel)
@@ -25,11 +40,8 @@ namespace DataBaseImplement.DbModels {
             Id = editModel.Id;
         }
 
-        public static explicit operator SimbirServiceBindingModel? (DbSimbirService? DbModel)
+        public static explicit operator SimbirServiceBindingModel (DbSimbirService DbModel)
         {
-            if (DbModel == null) {
-                return null;
-            }
             return new SimbirServiceBindingModel {
                 ServiceName = DbModel.ServiceName,
                 EndPointService = DbModel.EndPointService,

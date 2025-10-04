@@ -2,65 +2,66 @@
 using Contracts.CacheContracts;
 using Contracts.StorageContracts;
 using Microsoft.Extensions.Caching.Distributed;
-using System.Text.Json;
+using Newtonsoft.Json;
 
 namespace CacheRedisLogic {
     public class RedisSimbirServiceCache : ISimbirServiceCache {
         private readonly ISimbirServiceStorage simbirServiceStorage;
         private readonly IDistributedCache     distributedCache;
+
+        private readonly JsonSerializerSettings jsonSettings;
         public RedisSimbirServiceCache(ISimbirServiceStorage simbirServiceStorageImp, IDistributedCache distributedCacheImp)
         {
             simbirServiceStorage = simbirServiceStorageImp;
             distributedCache = distributedCacheImp;
+
+            jsonSettings = new JsonSerializerSettings();
+            jsonSettings.Converters.Add(new IPEndPointConverter());
+            jsonSettings.Converters.Add(new IPAddressConverter());
+            jsonSettings.Formatting = Formatting.Indented;
         }
 
-        public bool AddCacheServiceInfo(in SimbirServiceBindingModel insertModel)
-        {
-            if (simbirServiceStorage.InsertDbServiceInfo(insertModel) == false) { return false; }
-            string cacheData = JsonSerializer.Serialize(insertModel);
+        public void InsertCacheServiceInfo(in SimbirServiceBindingModel insertModel)
+        {   
+            if (insertModel == null) { throw new ArgumentNullException(nameof(insertModel)); }
+            string cacheData = JsonConvert.SerializeObject(insertModel, jsonSettings);
             distributedCache.SetString(insertModel.Id.ToString(), cacheData,
                                        new DistributedCacheEntryOptions {
-                                           AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(120)
+                                           AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(43800)
                                        });
-            return true;
         }
 
-        public bool EditCacheServiceInfo(in SimbirServiceBindingModel updateModel)
+        public void UpdateCacheServiceInfo(in SimbirServiceBindingModel updateModel)
         {
-            if (simbirServiceStorage.UpdateDbServiceInfo(updateModel) == false) { return false; }
-            string cacheData = JsonSerializer.Serialize(updateModel);
+            if (updateModel == null) { throw new ArgumentNullException(nameof(updateModel)); }
+            simbirServiceStorage.UpdateDbServiceInfo(updateModel);
+            string cacheData = JsonConvert.SerializeObject(updateModel, jsonSettings);
             distributedCache.SetString(updateModel.Id.ToString(), cacheData,
                                        new DistributedCacheEntryOptions {
-                                           AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(120)
+                                           AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(43800)
                                        });
-            return true;
         }
         
-        public bool DeleteCacheServiceInfo(int deleteModelId)
+        public void DeleteCacheServiceInfo(int deleteModelId)
         {
-            if (simbirServiceStorage.DeleteDbServiceInfo(deleteModelId) == false) {  return false; }
+            simbirServiceStorage.DeleteDbServiceInfo(deleteModelId);
             distributedCache.Remove(deleteModelId.ToString());
-            return true;
         }
 
-        public void GetCacheServiceInfo(out SimbirServiceBindingModel? record, int serviceId)
+        public void GetCacheServiceInfo(out SimbirServiceBindingModel record, int serviceId)
         {
             string? cacheData = null;
-            record = null;
+            SimbirServiceBindingModel? temp_rec = null;
             cacheData = distributedCache.GetString(serviceId.ToString());
-            if (cacheData != null) {
-                record = JsonSerializer.Deserialize<SimbirServiceBindingModel>(cacheData);
+            if (cacheData != null) { 
+                temp_rec = JsonConvert.DeserializeObject<SimbirServiceBindingModel>(cacheData, jsonSettings); 
             }
-            else if (record == null){
+            if (temp_rec == null){
                 simbirServiceStorage.GetServiceDbInfo(out record, serviceId);
-                if (record != null) {
-                    cacheData = JsonSerializer.Serialize(record);
-                    distributedCache.SetString(record.Id.ToString(), cacheData,
-                                               new DistributedCacheEntryOptions {
-                                                   AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(120)
-                                               });
-                }
+                InsertCacheServiceInfo(record);
+                return;
             }
+            record = temp_rec;
         }
     }
 }

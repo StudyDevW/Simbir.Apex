@@ -14,44 +14,56 @@ namespace ServiceManagerRestAPI.Controllers {
         }
 
         [HttpPost]
-        public bool AddNewService(SimbirServiceBindingModel insertModel) 
+        public void InsertService(SimbirServiceBindingModel insertModel) 
         {
-            try { simbirServiceLogic.AddNewService(insertModel); }
-            catch { return false; }
-            return true;
+            try { simbirServiceLogic.InsertService(insertModel); }
+            catch (Exception ex) {
+                Results.BadRequest(ex);
+                throw;
+            }
         }
 
         [HttpPost]
-        public bool UpdateService(SimbirServiceBindingModel updateModel)
+        public void UpdateService(SimbirServiceBindingModel updateModel)
         {
             try { simbirServiceLogic.UpdateService(updateModel); }
-            catch { return false; }
-            return true;
+            catch (Exception ex) {
+                Results.BadRequest(ex);
+                throw;
+            }
         }
 
         [HttpPost]
-        public bool DeleteService(int deleteModelId)
+        public void DeleteService(int deleteModelId)
         {
             try { simbirServiceLogic.DeleteService(deleteModelId); }
-            catch { return false; }
-            return true;
+            catch (Exception ex){ 
+                Results.BadRequest(ex);
+                throw;
+            }
         }
 
         [HttpGet]
-        public List<SimbirServiceBindingModel?>? GetServiceInfoList()
+        public List<SimbirServiceBindingModel> GetServiceInfoList()
         {
-            List<SimbirServiceBindingModel?> recordList;
+            List<SimbirServiceBindingModel> recordList = new();
             try { simbirServiceLogic.GetServiceInfo(out recordList); }
-            catch { return null; }
+            catch (Exception ex) {
+                Results.BadRequest(ex);
+                throw;
+            }
             return recordList;
         }
 
         [HttpGet]
-        public SimbirServiceBindingModel? GetServiceInfo(int serviceId)
+        public SimbirServiceBindingModel GetServiceInfo(int serviceId)
         {
-            SimbirServiceBindingModel? record;
+            SimbirServiceBindingModel record;
             try { simbirServiceLogic.GetServiceInfo(out record, serviceId); }
-            catch { return null; }
+            catch (Exception ex) { 
+                Results.BadRequest(ex);
+                throw;
+            }
             return record;
         }
     }
