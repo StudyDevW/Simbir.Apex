@@ -6,7 +6,7 @@ namespace ServiceManagerRestAPI.Controllers {
 
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class MainController {
+    public class MainController : ControllerBase {
         private readonly ISimbirServiceLogic simbirServiceLogic;
         public MainController(ISimbirServiceLogic simbirServiceLogicImp)
         {
@@ -14,32 +14,38 @@ namespace ServiceManagerRestAPI.Controllers {
         }
 
         [HttpPost]
-        public void InsertService(SimbirServiceBindingModel insertModel) 
+        public IActionResult InsertService(SimbirServiceBindingModel insertModel) 
         {
-            try { simbirServiceLogic.InsertService(insertModel); }
+            try { 
+                simbirServiceLogic.InsertService(insertModel);
+                return Ok("Данные заполнены");
+            }
             catch (Exception ex) {
-                Results.BadRequest(ex);
-                throw;
+                return BadRequest(ex.Message);
             }
         }
 
         [HttpPost]
-        public void UpdateService(SimbirServiceBindingModel updateModel)
+        public IActionResult UpdateService(SimbirServiceBindingModel updateModel)
         {
-            try { simbirServiceLogic.UpdateService(updateModel); }
+            try { 
+                simbirServiceLogic.UpdateService(updateModel);
+                return Ok("Данные обновлены");
+            }
             catch (Exception ex) {
-                Results.BadRequest(ex);
-                throw;
+                return BadRequest(ex.Message);
             }
         }
 
         [HttpPost]
-        public void DeleteService(int deleteModelId)
+        public IActionResult DeleteService(int deleteModelId)
         {
-            try { simbirServiceLogic.DeleteService(deleteModelId); }
+            try { 
+                simbirServiceLogic.DeleteService(deleteModelId);
+                return Ok("Данные удалены");
+            }
             catch (Exception ex){ 
-                Results.BadRequest(ex);
-                throw;
+                return BadRequest(ex.Message);
             }
         }
 
@@ -47,9 +53,13 @@ namespace ServiceManagerRestAPI.Controllers {
         public List<SimbirServiceBindingModel> GetServiceInfoList()
         {
             List<SimbirServiceBindingModel> recordList = new();
-            try { simbirServiceLogic.GetServiceInfo(out recordList); }
+            try { 
+                simbirServiceLogic.GetServiceInfo(out recordList);
+                if (recordList.Count == 0) { Results.BadRequest("Данные не найдены"); }
+                Results.Ok($"{recordList.Count} записей");
+            }
             catch (Exception ex) {
-                Results.BadRequest(ex);
+                Results.BadRequest(ex.Message);
                 throw;
             }
             return recordList;
@@ -59,9 +69,12 @@ namespace ServiceManagerRestAPI.Controllers {
         public SimbirServiceBindingModel GetServiceInfo(int serviceId)
         {
             SimbirServiceBindingModel record;
-            try { simbirServiceLogic.GetServiceInfo(out record, serviceId); }
+            try { 
+                simbirServiceLogic.GetServiceInfo(out record, serviceId);
+                Results.Ok($"{record.ServiceName} найден");
+            }
             catch (Exception ex) { 
-                Results.BadRequest(ex);
+                Results.BadRequest(ex.Message);
                 throw;
             }
             return record;
