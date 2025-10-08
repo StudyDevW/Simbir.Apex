@@ -7,23 +7,29 @@
 
     <groupId>simbir.apex</groupId>
     <artifactId>root</artifactId>
-    <version>${revision}</version>
+    <version>1.0.0</version>
     <packaging>pom</packaging>
 
     <modules>
-        <module>service-agent</module>
+        <module>service-analyzer</module>
     </modules>
 
     <properties>
-        <revision>1.0.0</revision>
-        <maven.version>3.8.8</maven.version>
         <java.version>23</java.version>
-        <jdk.version>23</jdk.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <!-- Spring Boot starter parent подтянет совместимые версии -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>3.5.6</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
             <!-- Kafka client -->
             <dependency>
                 <groupId>org.apache.kafka</groupId>
@@ -31,20 +37,39 @@
                 <version>3.7.1</version>
             </dependency>
 
-            <!-- JSON (Jackson) -->
+            <!-- Jackson -->
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-databind</artifactId>
                 <version>2.17.2</version>
             </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+                <version>2.17.2</version>
+            </dependency>
 
-            <!-- SLF4J + Logback -->
+            <!-- RabbitMQ client -->
+            <dependency>
+                <groupId>com.rabbitmq</groupId>
+                <artifactId>amqp-client</artifactId>
+                <version>5.17.0</version>
+            </dependency>
+
+            <!-- Lombok -->
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>1.18.36</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <!-- Logging -->
             <dependency>
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
                 <version>1.5.6</version>
             </dependency>
-
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
@@ -57,14 +82,6 @@
                 <artifactId>junit-jupiter</artifactId>
                 <version>5.10.3</version>
                 <scope>test</scope>
-            </dependency>
-
-            <!-- Lombok -->
-            <dependency>
-                <groupId>org.projectlombok</groupId>
-                <artifactId>lombok</artifactId>
-                <version>1.18.36</version>
-                <scope>provided</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -89,14 +106,17 @@
                     </configuration>
                 </plugin>
 
-                <!-- Jar plugin -->
+                <!-- Spring Boot Maven plugin -->
                 <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-jar-plugin</artifactId>
-                    <version>3.4.2</version>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>3.5.6</version>
+                    <configuration>
+                        <mainClass>simbirApex.serviceAnalyzer.AnalyzerApplication</mainClass>
+                    </configuration>
                 </plugin>
 
-                <!-- Surefire -->
+                <!-- Surefire for tests -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
@@ -105,4 +125,5 @@
             </plugins>
         </pluginManagement>
     </build>
+
 </project>

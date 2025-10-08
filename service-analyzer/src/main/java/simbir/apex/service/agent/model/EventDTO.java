@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Event {
+public class EventDTO {
     private String id;
     private String device;
     private String ip;
