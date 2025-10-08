@@ -50,34 +50,37 @@ namespace ServiceManagerRestAPI.Controllers {
         }
 
         [HttpGet]
-        public List<SimbirServiceBindingModel> GetServiceInfoList()
+        public IActionResult GetServiceInfoList()
         {
             List<SimbirServiceBindingModel> recordList = new();
             try { 
                 simbirServiceLogic.GetServiceInfo(out recordList);
                 if (recordList.Count == 0) { Results.BadRequest("Данные не найдены"); }
-                Results.Ok($"{recordList.Count} записей");
+                return Ok(recordList);
             }
             catch (Exception ex) {
-                Results.BadRequest(ex.Message);
-                throw;
+                return BadRequest(ex.Message);
             }
-            return recordList;
         }
 
         [HttpGet]
-        public SimbirServiceBindingModel GetServiceInfo(int serviceId)
+        public IActionResult GetServiceInfo(int serviceId)
         {
             SimbirServiceBindingModel record;
             try { 
                 simbirServiceLogic.GetServiceInfo(out record, serviceId);
-                Results.Ok($"{record.ServiceName} найден");
+                return Ok(record);
             }
             catch (Exception ex) { 
-                Results.BadRequest(ex.Message);
-                throw;
+                return BadRequest(ex.Message);
             }
-            return record;
+        }
+
+        [HttpGet]
+        public IActionResult RootConnect(string login, string password)
+        {
+            if (APIRoot.GetRootLogin() == login && APIRoot.GetRootPassword() == password) { return Ok(true); }
+            return BadRequest("Данные введены не верно");
         }
     }
 }
