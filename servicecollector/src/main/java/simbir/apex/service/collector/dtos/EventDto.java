@@ -1,4 +1,4 @@
-package simbir.apex.service.collector.handler;
+package simbir.apex.service.collector.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import java.util.Date;
 
+@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
@@ -15,10 +16,4 @@ public class EventDto {
     private String device;
     private String ip;
     private Date timestamp;
-    public EventDto(String id, String device, String ip, Date timestamp) {
-        this.id = id;
-        this.device = device;
-        this.ip = ip;
-        this.timestamp = timestamp;
-    }
 }

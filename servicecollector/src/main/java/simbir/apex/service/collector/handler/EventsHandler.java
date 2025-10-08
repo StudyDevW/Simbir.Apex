@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 import simbir.apex.service.collector.config.KafkaConfiguration;
+import simbir.apex.service.collector.dtos.EventDto;
 import simbir.apex.service.collector.service.EventCollectorService;
 
 @Component
@@ -30,7 +31,6 @@ public class EventsHandler {
             eventCollectorService.processEvent(eventDto);
         } catch (Exception e) {
             logger.error("Failed to parse message: {}", message, e);
-            //throw new RuntimeException(e);
         }
 
     }

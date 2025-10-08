@@ -1,11 +1,19 @@
+server:
+  port: 8080
+
 spring:
+  application:
+    name: collector
   rabbitmq:
-    host: localhost
-    port: 5672
-    username: user
-    password: password
-  server:
-    port: 8081
+    host: ${SPRING_RABBITMQ_HOST:localhost}
+    port: ${SPRING_RABBITMQ_PORT:5672}
+    username: ${SPRING_RABBITMQ_USERNAME:user}
+    password: ${SPRING_RABBITMQ_PASSWORD:password}
+  kafka:
+    consumer:
+      group-id: collector-group
+      bootstrap-servers: ${BOOTSTRAP_SERVERS:"localhost:9092"}
+
 
 app:
   rabbitmq:
