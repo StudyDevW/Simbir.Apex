@@ -37,7 +37,7 @@ namespace Contracts.BindingModels {
         {
             JObject jo = JObject.Load(reader);
             IPAddress address = jo["Address"].ToObject<IPAddress>(serializer);
-            int port = (int)jo["port"];
+            int port = (int)jo["Port"];
             return new IPEndPoint(address, port);
         }
         public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)

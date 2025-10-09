@@ -1,6 +1,7 @@
 ﻿using Contracts.BindingModels;
 using Contracts.BusinessLogicContracts;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace ServiceManagerRestAPI.Controllers {
 
@@ -8,9 +9,14 @@ namespace ServiceManagerRestAPI.Controllers {
     [ApiController]
     public class MainController : ControllerBase {
         private readonly ISimbirServiceLogic simbirServiceLogic;
+        private readonly JsonSerializerSettings jsonSettings;
         public MainController(ISimbirServiceLogic simbirServiceLogicImp)
         {
             simbirServiceLogic = simbirServiceLogicImp;
+            jsonSettings = new JsonSerializerSettings();
+            jsonSettings.Converters.Add(new IPEndPointConverter());
+            jsonSettings.Converters.Add(new IPAddressConverter());
+            jsonSettings.Formatting = Formatting.Indented;
         }
 
         [HttpPost]
@@ -52,11 +58,11 @@ namespace ServiceManagerRestAPI.Controllers {
         [HttpGet]
         public IActionResult GetServiceInfoList()
         {
-            List<SimbirServiceBindingModel> recordList = new();
+            List<SimbirServiceBindingModel> recordList;
             try { 
                 simbirServiceLogic.GetServiceInfo(out recordList);
                 if (recordList.Count == 0) { Results.BadRequest("Данные не найдены"); }
-                return Ok(recordList);
+                return Ok(JsonConvert.SerializeObject(recordList, jsonSettings));
             }
             catch (Exception ex) {
                 return BadRequest(ex.Message);
@@ -69,7 +75,7 @@ namespace ServiceManagerRestAPI.Controllers {
             SimbirServiceBindingModel record;
             try { 
                 simbirServiceLogic.GetServiceInfo(out record, serviceId);
-                return Ok(record);
+                return Ok(JsonConvert.SerializeObject(record, jsonSettings));
             }
             catch (Exception ex) { 
                 return BadRequest(ex.Message);
@@ -80,7 +86,7 @@ namespace ServiceManagerRestAPI.Controllers {
         public IActionResult RootConnect(string login, string password)
         {
             if (APIRoot.GetRootLogin() == login && APIRoot.GetRootPassword() == password) { return Ok(true); }
-            return BadRequest("Данные введены не верно");
+            return BadRequest("Данные введены не верно!");
         }
     }
 }

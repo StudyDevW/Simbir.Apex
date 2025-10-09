@@ -8,12 +8,8 @@ namespace DataBaseImplement {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured) {
-                optionsBuilder.UseSqlServer(@"Data Source=FEDOTOVILIA\SQLEXPRESS;
-                                              Initial Catalog=ServiceManager;
-                                              Integrated Security=True;
-                                              MultipleActiveResultSets=True; 
-                                              ;
-                                              TrustServerCertificate=True");
+                optionsBuilder.UseNpgsql("Host=localhost;port=5432;Database=ServiceManager;Username=postgres;Password=root")
+                    .EnableDetailedErrors();
             }
             base.OnConfiguring(optionsBuilder);
         }
