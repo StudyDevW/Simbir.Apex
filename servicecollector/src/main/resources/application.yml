@@ -12,7 +12,7 @@ spring:
   kafka:
     consumer:
       group-id: collector-group
-      bootstrap-servers: ${BOOTSTRAP_SERVERS:"localhost:9092"}
+      bootstrap-servers: ${BOOTSTRAP_SERVERS:localhost:9092}
 
 
 app:
