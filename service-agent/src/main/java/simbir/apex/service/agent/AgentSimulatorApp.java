@@ -15,7 +15,11 @@ public class AgentSimulatorApp {
 
         EventGenerator generator = new EventGenerator();
 
-        KafkaProducerService kafkaService = new KafkaProducerService("localhost:9092", "events-topic");
+        String bootstrapServers = System.getenv("BOOTSTRAP_SERVERS");
+        if (bootstrapServers == null) {
+            bootstrapServers = "localhost:9092";
+        }
+        KafkaProducerService kafkaService = new KafkaProducerService(bootstrapServers, "events-topic");
 
         System.out.println("Agent Simulator started. Sending events to Kafka...");
 
