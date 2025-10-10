@@ -3,6 +3,7 @@ package simbir.apex.service.agent;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
 import org.testcontainers.containers.KafkaContainer;
 import org.testcontainers.utility.DockerImageName;
 
@@ -15,13 +16,11 @@ import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import simbir.apex.service.agent.model.Event;
-import simbir.apex.service.agent.model.Scenario;
-import simbir.apex.service.agent.service.EventProvider;
 import simbir.apex.service.agent.service.KafkaProducerService;
-import simbir.apex.service.agent.service.impl.ScenarioEventProvider;
 import simbir.apex.service.agent.utils.JsonReader;
 
 public class KafkaTest {
@@ -43,14 +42,12 @@ public class KafkaTest {
     void testAgentEvents() throws Exception {
         JsonReader.Config config = JsonReader.loadConfig();
         final List<Event> events = config.getEvents();
-        final List<Scenario> scenarios = config.getScenarios();
-        final EventProvider scenarioProvider = new ScenarioEventProvider(events, scenarios);
-        List<Event> seriesOfEvents = scenarioProvider.generate();
 
         KafkaProducerService kafkaProducer = new KafkaProducerService(kafka.getBootstrapServers(), "events-topic");
         for (Event event : events) {
             kafkaProducer.sendEvent(event);
         }
+        
         TimeUnit.SECONDS.sleep(1);
 
         Properties props = new Properties();
@@ -63,7 +60,37 @@ public class KafkaTest {
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(props);
         consumer.subscribe(Collections.singletonList("events-topic"));
 
-        // Читаем события в течение N секунд
-        ConsumerRecords<String, String> records = consumer.poll(Duration.ofSeconds(10));
+        List<String> consumedMessages = new ArrayList<>();
+        long timeoutMs = 10_000;
+        long start = System.currentTimeMillis();
+
+        while (System.currentTimeMillis() - start < timeoutMs) {
+            ConsumerRecords<String, String> records = consumer.poll(Duration.ofSeconds(5));
+            for (ConsumerRecord<String, String> record : records) {
+                consumedMessages.add(record.value());
+            }
+            if (consumedMessages.size() >= events.size()) {
+                break;
+            }
+        }
+
+        consumer.close();
+
+        ObjectMapper mapper = new ObjectMapper();
+        List<String> sentMessages = events.stream()
+                .map(e -> {
+                    try {
+                        return mapper.writeValueAsString(e);
+                    } catch (JsonProcessingException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                })
+                .toList();
+
+        Assertions.assertEquals(
+                new HashSet<>(sentMessages),
+                new HashSet<>(consumedMessages),
+                "Полученные события не совпадают с отправленными"
+        );
     }
 }
