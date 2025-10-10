@@ -11,6 +11,7 @@ spring:
     password: ${SPRING_RABBITMQ_PASSWORD:password}
   kafka:
     consumer:
+      auto-offset-reset: earliest
       group-id: collector-group
       bootstrap-servers: ${BOOTSTRAP_SERVERS:localhost:9092}
 
