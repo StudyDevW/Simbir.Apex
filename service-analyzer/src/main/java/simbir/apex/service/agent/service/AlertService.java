@@ -1,13 +1,13 @@
-//для записи алертов. НАдо будет изменить когда будет бд
-
 package simbir.apex.service.agent.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import simbir.apex.service.agent.model.AlertDto;
+import simbir.apex.service.agent.db.entity.Alert;
+import simbir.apex.service.agent.db.jpaRepository.AlertRepository;
 import simbir.apex.service.agent.model.enums.Status;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -16,33 +16,41 @@ public class AlertService {
 
     private final AlertRepository alertRepository;
 
-    public void sendAlert(AlertDto alert) {
-        alertRepository.save(alert);
+    public Alert sendAlert(Alert alert) {
+        return alertRepository.save(alert);
     }
 
-    public AlertDto confirmAlert(Long id) {
+    public List<Alert> findAll() {
+        return alertRepository.findAll();
+    }
+
+    public Optional<Alert> findById(Long id) {
+        return alertRepository.findById(id);
+    }
+
+    public Alert confirmAlert(Long id) {
         return updateStatus(id, Status.CONFIRMED_PRESET, null);
     }
 
-    public AlertDto escalateAlert(Long id) {
+    public Alert escalateAlert(Long id) {
         return updateStatus(id, Status.ESCALATED, null);
     }
 
-    public AlertDto resolveAlert(Long id, String notes) {
+    public Alert resolveAlert(Long id, String notes) {
         return updateStatus(id, Status.RESOLVED, notes);
     }
 
-    public AlertDto markFalsePositive(Long id) {
+    public Alert markFalsePositive(Long id) {
         return updateStatus(id, Status.FALSE_POSITIVE, null);
     }
 
-    private AlertDto updateStatus(Long id, Status newStatus, String notes) {
-        Optional<AlertDto> optional = alertRepository.findById(id);
+    private Alert updateStatus(Long id, Status newStatus, String notes) {
+        Optional<Alert> optional = alertRepository.findById(id);
         if (optional.isEmpty()) {
             throw new IllegalArgumentException("Alert not found with id: " + id);
         }
 
-        AlertDto alert = optional.get();
+        Alert alert = optional.get();
         alert.setStatus(newStatus);
         if (newStatus == Status.RESOLVED) {
             alert.setClosedAt(new Timestamp(System.currentTimeMillis()));
@@ -51,7 +59,6 @@ public class AlertService {
             alert.setResolutionNotes(notes);
         }
 
-        alertRepository.save(alert);
-        return alert;
+        return alertRepository.save(alert);
     }
 }

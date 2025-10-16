@@ -36,7 +36,6 @@
                 <artifactId>kafka-clients</artifactId>
                 <version>3.7.1</version>
             </dependency>
-
             <!-- Jackson -->
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
