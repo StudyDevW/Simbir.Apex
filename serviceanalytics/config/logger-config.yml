@@ -14,7 +14,7 @@ handlers:
     stream: ext://sys.stdout
 
 loggers:
-  service-analytics:
+  service_analytics:
     level: INFO
     handlers: [console]
     propagate: False

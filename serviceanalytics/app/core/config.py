@@ -7,16 +7,17 @@ from typing import Optional
 import aiohttp
 import yaml
 
-script_dir = os.path.dirname(os.path.abspath(__file__))
+
+LOGGER_NAME = "service_analytics"
+LOGGER_CONFIG_FILE = "config/logger-config.yml"
+
+logger = logging.getLogger(LOGGER_NAME)
 
 try:
     SERVICE_MANAGER_URL = os.environ['SERVICE_MANAGER_URL']
 except KeyError:
-    logging.critical("Environment var 'SERVICE_MANAGER_URL' not set")
+    logger.critical("Environment var 'SERVICE_MANAGER_URL' not set")
     SERVICE_MANAGER_URL = None
-
-LOGGER_NAME = "service_analytics"
-LOGGER_CONFIG_FILE = os.path.join(script_dir, 'logger-config.yml')
 
 ML_BASE_INTERVAL = 60 # minutes
 
@@ -34,7 +35,7 @@ async def get_analyzer_url(force_refresh: bool = False) -> Optional[str]:
     if ANALYZER_URL_CACHE and not force_refresh:
         return ANALYZER_URL_CACHE
 
-    logging.info(f"Cache is invalidated. Checking service manager for new URL")
+    logger.info(f"Cache is invalidated. Checking service manager for new URL")
 
     try:
         async with aiohttp.ClientSession() as session:
@@ -46,15 +47,15 @@ async def get_analyzer_url(force_refresh: bool = False) -> Optional[str]:
 
                     if url:
                         ANALYZER_URL_CACHE = url
-                        logging.info(f"Got new URL: {url}, caching it")
+                        logger.info(f"Got new URL: {url}, caching it")
                         return url
                     else:
-                        logging.error("Service manager sent empty URL")
+                        logger.error("Service manager sent empty URL")
                 else:
-                    logging.error(f"Service manager error: {res.status}")
+                    logger.error(f"Service manager error: {res.status}")
 
     except aiohttp.ClientConnectorError:
-        logging.error(f"Failed to connect to service manager at {SERVICE_MANAGER_URL}.")
+        logger.error(f"Failed to connect to service manager at {SERVICE_MANAGER_URL}.")
 
     return None
 
