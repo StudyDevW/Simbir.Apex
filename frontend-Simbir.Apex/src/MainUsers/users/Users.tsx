@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Cross from "../assets/icon/icon-cross.png";
-import Pencil from "../assets/icon/icon-pencil.png";
-import Plus from "../assets/icon/icon-plus.png";
-import LeftArrow from "../assets/icon/icon-left.png"
-import WhiteCircle from "../assets/icon/icon-white-sercale.png"
+import Cross from "../../assets/icon/icon-cross.png";
+import Pencil from "../../assets/icon/icon-pencil.png";
+import Plus from "../../assets/icon/icon-plus.png";
+import LeftArrow from "../../assets/icon/icon-left.png"
+import Analytics from '../../MainAnalytics/analytics/Analytics';
 import './Users.sass';
 
 export interface User {
@@ -70,7 +70,7 @@ const UsersPage: React.FC<UsersPageProps> = ({
           <div className="section">
             <h3>Основное</h3>
             <ul>
-              <li><a href="#">Руководство</a></li>
+              <li><a href="#">Аналиитика</a></li>
               <li><a href="#">Угрозы</a></li>
               <li><a href="#">Уведомления</a></li>
             </ul>

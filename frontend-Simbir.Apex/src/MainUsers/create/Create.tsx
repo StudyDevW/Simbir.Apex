@@ -1,18 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import type { User } from '../users/Users';
-import LeftArrow from "../assets/icon/icon-left.png";
-import './Editing.sass';
+import LeftArrow from "../../assets/icon/icon-left.png";
+import './Create.sass';
 
-interface EditUserPageProps {
-  users: User[];
-  onSaveUser: (userData: User) => void;
+interface CreateUserPageProps {
+  onCreateUser: (userData: Omit<User, 'id'>) => void;
 }
 
-const EditUserPage: React.FC<EditUserPageProps> = ({ users, onSaveUser }) => {
-  const { userId } = useParams<{ userId: string }>();
+const CreateUserPage: React.FC<CreateUserPageProps> = ({ onCreateUser }) => {
   const navigate = useNavigate();
-  const [user, setUser] = useState<User | null>(null);
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -21,32 +18,10 @@ const EditUserPage: React.FC<EditUserPageProps> = ({ users, onSaveUser }) => {
     status: 'online' as 'online' | 'offline'
   });
 
-  useEffect(() => {
-    if (userId) {
-      const foundUser = users.find(u => u.id === parseInt(userId));
-      if (foundUser) {
-        setUser(foundUser);
-        setFormData({
-          fullName: foundUser.fullName,
-          email: foundUser.email,
-          phone: foundUser.phone,
-          password: foundUser.password,
-          status: foundUser.status
-        });
-      }
-    }
-  }, [userId, users]);
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (user) {
-      const updatedUser: User = {
-        ...user,
-        ...formData
-      };
-      onSaveUser(updatedUser);
-      navigate('/users');
-    }
+    onCreateUser(formData);
+    navigate('/users');
   };
 
   const handleGoBack = () => {
@@ -59,10 +34,6 @@ const EditUserPage: React.FC<EditUserPageProps> = ({ users, onSaveUser }) => {
       [field]: value
     }));
   };
-
-  if (!user) {
-    return <div>Пользователь не найден</div>;
-  }
 
   return (
     <div className="users-page">
@@ -113,6 +84,10 @@ const EditUserPage: React.FC<EditUserPageProps> = ({ users, onSaveUser }) => {
 
 
 
+
+
+
+
       <div className="main-content">
         <div className="content-header">
           <div className="content-header-left">
@@ -123,72 +98,67 @@ const EditUserPage: React.FC<EditUserPageProps> = ({ users, onSaveUser }) => {
               onClick={handleGoBack}
               style={{ cursor: 'pointer' }}
             />
-            <h1 className='content-header-title'>Редактирование пользователя</h1>
+            <h1 className='content-header-title'>Создание пользователя</h1>
           </div>
         </div>
 
-        <div className="edit-user-form">
+        <div className="create-user-form">
           <form onSubmit={handleSubmit}>
             <div className="form-group">
-              <label  htmlFor="fullName">ФИО</label>
-              <br />
+              <label htmlFor="fullName">ФИО</label>
               <input
                 type="text"
                 id="fullName"
                 value={formData.fullName}
                 onChange={(e) => handleChange('fullName', e.target.value)}
-                required
                 className='input'
+                required
               />
             </div>
 
             <div className="form-group">
-              <label className="Email" htmlFor="email">Email</label>
-              <br />
+              <label htmlFor="email">Email</label>
               <input
                 type="email"
                 id="email"
                 value={formData.email}
                 onChange={(e) => handleChange('email', e.target.value)}
-                required
                 className='input'
+                required
               />
             </div>
 
             <div className="form-group">
               <label htmlFor="phone">Телефон</label>
-              <br />
               <input
                 type="tel"
                 id="phone"
                 value={formData.phone}
                 onChange={(e) => handleChange('phone', e.target.value)}
-                required
                 className='input'
+                required
               />
             </div>
 
             <div className="form-group">
               <label htmlFor="password">Пароль</label>
-              <br />
               <input
                 type="password"
                 id="password"
                 value={formData.password}
                 onChange={(e) => handleChange('password', e.target.value)}
-                required
                 className='input'
+                required
               />
             </div>
 
             <div className="form-group">
               <label htmlFor="status">Роль</label>
-              <br />
               <select
                 id="status"
                 value={formData.status}
-                onChange={(e) => handleChange('status', e.target.value)}
                 className='input'
+                onChange={(e) => handleChange('status', e.target.value)}
               >
                 <option value="analytics">Аналитик</option>
                 <option value="supervisor">Руководитель</option>
@@ -199,7 +169,7 @@ const EditUserPage: React.FC<EditUserPageProps> = ({ users, onSaveUser }) => {
 
             <div className="form-actions">
               <button type="submit" className="btn-primary">
-                Сохранить изменения
+                Создать пользователя
               </button>
             </div>
           </form>
@@ -209,4 +179,4 @@ const EditUserPage: React.FC<EditUserPageProps> = ({ users, onSaveUser }) => {
   );
 };
 
-export default EditUserPage;
+export default CreateUserPage;

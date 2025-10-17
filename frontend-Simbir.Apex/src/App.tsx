@@ -1,9 +1,9 @@
-// src/App.tsx
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import UsersPage, { type User } from './users/Users';
-import EditUserPage from './editing/Editing';
-import CreateUserPage from './create/Create';
+import UsersPage, { type User } from './MainUsers/users/Users';
+import EditUserPage from './MainUsers/editing/Editing';
+import CreateUserPage from './MainUsers/create/Create';
+import Analytics from './MainAnalytics/analytics/Analytics';
 
 const App: React.FC = () => {
   const [users, setUsers] = useState<User[]>([
@@ -67,6 +67,10 @@ const App: React.FC = () => {
     <Router>
       <Routes>
         <Route 
+          path="/analytics"  // ← ИСПРАВЛЕНО: было /analtics
+          element={<Analytics />}
+        />
+        <Route 
           path="/users" 
           element={
             <UsersPage 
@@ -94,12 +98,17 @@ const App: React.FC = () => {
             />
           } 
         />
-        <Route path="/" element={<UsersPage 
-          users={users}
-          onEditUser={handleEditUser}
-          onCreateUser={handleCreateUser}
-          onDeleteUser={handleDeleteUser}
-        />} />
+        <Route 
+          path="/" 
+          element={
+            <UsersPage 
+              users={users}
+              onEditUser={handleEditUser}
+              onCreateUser={handleCreateUser}
+              onDeleteUser={handleDeleteUser}
+            />
+          } 
+        />
       </Routes>
     </Router>
   );
