@@ -112,9 +112,52 @@ def aggregate_alert_features(df_alerts: pd.DataFrame) -> pd.DataFrame:
     return df_alerts_agg
 
 
-def aggregate_features(df_events: pd.DataFrame, df_alerts: pd.DataFrame) -> pd.DataFrame:
+def aggregate_features_train(df_events: pd.DataFrame, df_alerts: pd.DataFrame) -> pd.DataFrame:
     """
-    Aggregates events and alerts, appends lags and time context
+    Aggregates events and alerts for training, appends lags and time context
+
+    :param df_events: event DataFrame indexed by time.
+    :param df_alerts: alert DataFrame indexed by tim.
+    :return: final DataFrame ready for training
+    """
+    df_features = aggregate_event_features(df_events)
+    df_alerts_agg = aggregate_alert_features(df_alerts)
+
+    df_final = df_features.merge(df_alerts_agg, left_index=True, right_index=True, how='outer')
+    df_final['is_alert_future'] = df_final['is_alert'].shift(-1)
+    df_final = df_final.drop(columns=['is_alert'])
+
+    df_final = df_final.rename(columns={'is_alert_future': 'is_alert'})
+
+    df_final = df_final.fillna({
+        col: 0.0 if df_final[col].dtype in [np.float64, np.int64] else 'none_missing'
+        for col in df_final.columns
+    })
+
+    df_final['hour_of_day'] = df_final.index.hour
+    df_final['day_of_week'] = df_final.index.dayofweek
+    df_final['is_weekend'] = df_final['dayofweek'].apply(lambda x: 1 if x >= 5 else 0)
+
+    lag_features = [col for col in df_final.columns if
+                    col not in ['hour_of_day', 'day_of_week', 'is_weekend', 'is_alert']]
+
+    lag_features.append('is_alert')
+
+    for feature in lag_features:
+        for lag in range(1, LAG_INTERVAL + 1):
+            new_col_name = f'{feature}_lag_{lag}'
+            df_final[new_col_name] = df_final[feature].shift(lag)
+
+            if df_final[feature].dtype == object:
+                df_final[new_col_name].fillna('missing_lag', inplace=True)
+
+    df_final = df_final.iloc[LAG_INTERVAL:].dropna(subset=['is_alert'])
+
+    return df_final
+
+def aggregate_features_pred(df_events: pd.DataFrame, df_alerts: pd.DataFrame) -> pd.DataFrame:
+    """
+    Aggregates events and alerts for predictions, appends lags and time context
 
     :param df_events: event DataFrame indexed by time.
     :param df_alerts: alert DataFrame indexed by tim.
@@ -149,4 +192,8 @@ def aggregate_features(df_events: pd.DataFrame, df_alerts: pd.DataFrame) -> pd.D
 
     df_final = df_final.iloc[LAG_INTERVAL:]
 
-    return df_final
+    X_inference = df_final.iloc[[-1]]
+
+    X_inference = X_inference.drop(columns=['is_alert'])
+
+    return X_inference

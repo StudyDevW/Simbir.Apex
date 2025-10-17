@@ -7,9 +7,9 @@ from typing import Optional
 import aiohttp
 import yaml
 
-
 LOGGER_NAME = "service_analytics"
 LOGGER_CONFIG_FILE = "config/logger-config.yml"
+MODEL_EXPORT_FILE = "trained_models/model.cbm"
 
 logger = logging.getLogger(LOGGER_NAME)
 
@@ -19,7 +19,7 @@ except KeyError:
     logger.critical("Environment var 'SERVICE_MANAGER_URL' not set")
     SERVICE_MANAGER_URL = None
 
-ML_BASE_INTERVAL = 60 # minutes
+ML_BASE_INTERVAL = 60  # minutes
 
 
 async def get_analyzer_url(force_refresh: bool = False) -> Optional[str]:
