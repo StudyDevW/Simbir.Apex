@@ -1,11 +1,27 @@
 services:
+  simbirapex.backend.serviceui: 
+    image: ${DOCKER_REGISTRY-}serviceui_apex:1.0
+    container_name: Simbir.Apex.ServiceUI
+    depends_on:
+      postgres_db:
+        condition: service_healthy
+    build:
+      context: ./Backend
+      dockerfile: ServiceUI/Dockerfile
+    environment:
+      RSA_PUBLIC_KEY: ${RSA_PUBLIC_KEY}
+      RSA_PRIVATE_KEY: ${RSA_PRIVATE_KEY}
+      DATABASE_CONNECT: ${DATABASE_CONNECT}
+    ports:
+       - "8080:80"
+    restart: unless-stopped
   postgres_db:
     image: postgres:17.0-bookworm
     container_name: Simbir.Apex.PostgreSQL
     environment:
-        POSTGRES_DB: "simbirapex"
-        POSTGRES_USER: "practice_user"
-        POSTGRES_PASSWORD: "root"
+        POSTGRES_DB: ${POSTGRES_DB}
+        POSTGRES_USER: ${POSTGRES_USER}
+        POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5432:80"
     volumes:
@@ -20,8 +36,8 @@ services:
     image: dpage/pgadmin4:latest
     container_name: Simbir.Apex.PgAdmin
     environment:
-      PGADMIN_DEFAULT_EMAIL: practice@gmail.com
-      PGADMIN_DEFAULT_PASSWORD: root
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
     ports:
       - "5050:80"
     volumes:
