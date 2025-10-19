@@ -8,6 +8,7 @@ import ErrorPage from './pages/ErrorPage';
 import Homepage from './pages/Homepage';
 import EventsPage from './pages/EventsPage';
 import UsersPage from './pages/UsersPage';
+import RulesPage from './pages/RulesPage.jsx';
 
 const routes = [
   {
@@ -22,6 +23,10 @@ const routes = [
   {
     path: '/users',
     element: <UsersPage />,
+  },
+  {
+    path: '/rules',
+    element: <RulesPage />,
   },
 ];
 

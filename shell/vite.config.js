@@ -10,6 +10,7 @@ export default defineConfig({
       remotes: {
         events: 'http://localhost:5001/assets/remoteEntry.js',
         users: 'http://localhost:5002/assets/remoteEntry.js',
+        rules: 'http://localhost:5003/assets/remoteEntry.js',
       },
       shared: ['react','react-dom','react-router-dom']
     })
