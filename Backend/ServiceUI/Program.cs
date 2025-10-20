@@ -112,11 +112,14 @@ namespace ServiceUI
 
             builder.Services.AddSingleton<IDatabaseService, DatabaseService>();
 
+            builder.Services.AddSingleton<IUIService, UIService>();
+
+            builder.Services.AddSingleton<IAutoMigrationService, AutoMigrationService>();
+
             builder.Services.AddSingleton<IJwtService, JwtSDK>();
 
             builder.Services.AddSingleton<ICacheService, CacheSDK>();
 
-            builder.Services.AddSingleton<IAutoMigrationService, AutoMigrationService>();
 
             builder.Services.AddCors(options =>
             {

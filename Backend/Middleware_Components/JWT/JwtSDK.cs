@@ -124,7 +124,7 @@ namespace Middleware_Components.JWT
                 }
 
                 string userName = "";
-                int userId = -1;
+                Guid userId = Guid.Empty;
                 List<string> userRoles = new List<string>();
 
                 foreach (var claim in validation.Claims)
@@ -133,13 +133,13 @@ namespace Middleware_Components.JWT
                         userName = claim.Value;
 
                     if (claim.Type == "Id")
-                        userId = int.Parse(claim.Value);
+                        userId = Guid.Parse(claim.Value);
 
                     if (claim.Type == "Roles")
                         userRoles = JsonSerializer.Deserialize<List<string>>(claim.Value);
                 }
 
-                if (userId == -1)
+                if (userId == Guid.Empty)
                     return new Token_ValidProperties() { token_error = new Token_ValidError { errorLog = "unauthorized" } };
 
                 if (userRoles == null)
@@ -193,7 +193,7 @@ namespace Middleware_Components.JWT
                 }
 
                 string userName = "";
-                int userId = -1;
+                Guid userId = Guid.Empty;
                 List<string> userRoles = new List<string>();
 
                 foreach (var claim in validation.Claims)
@@ -202,13 +202,13 @@ namespace Middleware_Components.JWT
                         userName = claim.Value;
 
                     if (claim.Type == "Id")
-                        userId = int.Parse(claim.Value);
+                        userId = Guid.Parse(claim.Value);
 
                     if (claim.Type == "Roles")
                         userRoles = JsonSerializer.Deserialize<List<string>>(claim.Value);
                 }
 
-                if (userId == -1)
+                if (userId == Guid.Empty)
                     return new Token_ValidProperties() { token_error = new Token_ValidError { errorLog = "unauthorized" } };
 
                 if (userRoles == null)

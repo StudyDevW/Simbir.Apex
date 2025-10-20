@@ -16,7 +16,7 @@ namespace ServiceUI.Services
         {
             //Вытянул из старого проекта, все вырезал (доработаю)
 
-            await _dbcontext.Database.MigrateAsync();
+          //  await _dbcontext.Database.MigrateAsync();
         }
     }
 }
