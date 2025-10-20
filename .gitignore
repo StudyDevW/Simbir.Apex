@@ -370,6 +370,8 @@ FodyWeavers.xsd
 
 /rabbitmq_data
 
+/Backend/ServiceUI/Migrations
+
 .vs
 
 .env
