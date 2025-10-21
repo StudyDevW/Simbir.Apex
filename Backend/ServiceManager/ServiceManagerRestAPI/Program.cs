@@ -34,12 +34,15 @@ namespace ServiceManagerRestAPI {
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment()) {
-                app.UseSwagger();
-                app.UseSwaggerUI(s => s.SwaggerEndpoint("/swagger/v1/swagger.json", "ServiceManagerRestAPI v1"));
-            }
+          
+            app.UseSwagger();
+            app.UseSwaggerUI(s => {
+                s.SwaggerEndpoint("/swagger/v1/swagger.json", "ServiceManagerRestAPI v1");
+                s.RoutePrefix  = "manager-swagger";
+            });
+            
 
-            app.UseHttpsRedirection();
+         //   app.UseHttpsRedirection();
 
             app.UseAuthorization();
 
