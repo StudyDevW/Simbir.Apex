@@ -21,6 +21,7 @@ namespace ServiceUI.Services
             _cache = cache;
         }
         
+        //AUTH PARTS
         private async Task<AuthPairTokens?> GenerateTokens(AuthCheckInfo check)
         {
             if (check.check_success == null)
@@ -108,6 +109,137 @@ namespace ServiceUI.Services
             var tokensOut = await GenerateTokens(authCheckInfo);
 
             return tokensOut;
+        }
+
+        public async Task<AuthPairTokens?> RefreshClientSession(string refreshTokenDTO)
+        {
+            var validation = await _jwt.RefreshTokenValidation(refreshTokenDTO);
+
+            if (validation.TokenHasError())
+            {
+                return null;
+            }
+            else if (validation.TokenHasSuccess())
+            {
+                Auth_CheckSuccess authsuccess = new Auth_CheckSuccess()
+                {
+                    Id = validation.token_success.Id,
+                    roles = validation.token_success.userRoles,
+                    username = validation.token_success.userName
+                };
+
+                var accessToken = _jwt.JwtTokenCreation(authsuccess);
+                var refreshToken = _jwt.RefreshTokenCreation(authsuccess);
+
+                if (_cache.CheckExistKeysStorage(authsuccess.Id, "accessTokens"))
+                    _cache.DeleteKeyFromStorage(authsuccess.Id, "accessTokens");
+
+                if (_cache.CheckExistKeysStorage(authsuccess.Id, "refreshTokens"))
+                    _cache.DeleteKeyFromStorage(authsuccess.Id, "refreshTokens");
+
+
+                _cache.WriteKeyInStorage(authsuccess.Id, "accessTokens", accessToken, DateTime.UtcNow.AddMinutes(10));
+                _cache.WriteKeyInStorage(authsuccess.Id, "refreshTokens", refreshToken, DateTime.UtcNow.AddDays(7));
+
+
+
+                AuthPairTokens pair_tokens = new AuthPairTokens()
+                {
+                    accessToken = _cache.GetKeyFromStorage(authsuccess.Id, "accessTokens"),
+                    refreshToken = _cache.GetKeyFromStorage(authsuccess.Id, "refreshTokens")
+                };
+
+
+                _logger.LogInformation($"Токены для id: {validation.token_success.Id} обновлены!");
+
+                return pair_tokens;
+            }
+
+            return null;
+        }
+
+        //USERS CONTROLS PARTS
+        public async Task AddNewUser(UserAddDTO dtoObj, string token)
+        {
+            var validation = await _jwt.AccessTokenValidation(token);
+
+            if (validation.TokenHasError())
+            {
+                throw new Exception("token_invalid");
+            }
+            else if (validation.TokenHasSuccess())
+            {
+                if (validation.token_success!.userRoles!.Equals("MANAGER") || validation.token_success!.userRoles!.Equals("SUPER_USER"))
+                    await _database.AddUser(dtoObj);
+                else
+                    throw new Exception("role_invalid");
+            }
+        }
+
+        public async Task ChangeUser(UserChangeDTO dtoObj, string token)
+        {
+            var validation = await _jwt.AccessTokenValidation(token);
+
+            if (validation.TokenHasError())
+            {
+                throw new Exception("token_invalid");
+            }
+            else if (validation.TokenHasSuccess())
+            {
+                if (validation.token_success!.userRoles!.Equals("MANAGER") || validation.token_success!.userRoles!.Equals("SUPER_USER"))
+                    await _database.ChangeUser(dtoObj, validation.token_success!.Id);
+                else
+                    throw new Exception("role_invalid");
+            }
+        }
+
+        public async Task DeleteUser(Guid idUser, string token)
+        {
+            var validation = await _jwt.AccessTokenValidation(token);
+
+            if (validation.TokenHasError())
+            {
+                throw new Exception("token_invalid");
+            }
+            else if (validation.TokenHasSuccess())
+            {
+                if (validation.token_success!.userRoles!.Equals("MANAGER") || validation.token_success!.userRoles!.Equals("SUPER_USER"))
+                    await _database.DeleteUser(idUser);
+                else
+                    throw new Exception("role_invalid");
+            }
+        }
+
+        public async Task<List<UserGetDTO>?> GetAllUsers(string token)
+        {
+            var validation = await _jwt.AccessTokenValidation(token);
+
+            if (validation.TokenHasError())
+            {
+                throw new Exception("token_invalid");
+            }
+            else if (validation.TokenHasSuccess())
+            {
+                return await _database.GetAllUsers();
+            }
+
+            return null;
+        }
+
+        public async Task<UserGetDTO?> GetUser(Guid idUser, string token)
+        {
+            var validation = await _jwt.AccessTokenValidation(token);
+
+            if (validation.TokenHasError())
+            {
+                throw new Exception("token_invalid");
+            }
+            else if (validation.TokenHasSuccess())
+            {
+                return await _database.GetUser(idUser);
+            }
+
+            return null;
         }
     }
 }

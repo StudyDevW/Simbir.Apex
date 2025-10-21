@@ -11,18 +11,14 @@ namespace ServiceUI.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly IDatabaseService _database;
         private readonly IJwtService _jwt;
-        private readonly ICacheService _cache;
         private readonly ILogger _logger;
         private readonly IUIService _serviceUI;
 
-        public AuthController(IDatabaseService database, IJwtService jwt, ICacheService cache, IConfiguration configuration, IUIService serviceUI)
+        public AuthController(IJwtService jwt, IUIService serviceUI)
         {
             _logger = LoggerFactory.Create(builder => builder.AddConsole()).CreateLogger("ServiceUI | controller-logger");
-            _database = database;
             _jwt = jwt;
-            _cache = cache;
             _serviceUI = serviceUI; 
         }
 
@@ -49,6 +45,7 @@ namespace ServiceUI.Controllers
             }
 
             var validation = await _jwt.AccessTokenValidation("Bearer " + token);
+
 
             if (validation.TokenHasError())
             {
@@ -80,12 +77,12 @@ namespace ServiceUI.Controllers
         [HttpPost("Refresh")]
         public async Task<IActionResult> UserRefreshTokens([FromBody] AuthRefreshTokens dtoObj)
         {
-            //var refreshInfo = await _serviceUI.RefreshClientSession(dtoObj);
+            var refreshInfo = await _serviceUI.RefreshClientSession(dtoObj.refreshToken);
 
-            //if (refreshInfo != null)
-            //{
-            //    return Ok(refreshInfo);
-            //}
+            if (refreshInfo != null)
+            {
+                return Ok(refreshInfo);
+            }
 
             return Unauthorized();
         }

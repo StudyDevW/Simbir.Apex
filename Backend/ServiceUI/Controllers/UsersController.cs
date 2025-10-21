@@ -1,55 +1,101 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Middleware_Components.DTO;
 using Middleware_Components.Services;
 using ServiceUI.Interfaces;
 
 namespace ServiceUI.Controllers
 {
+
+ 
     [Route("api/User/")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = "Asymmetric")]
     public class UsersController : ControllerBase
     {
-        private readonly IDatabaseService _database;
         private readonly IJwtService _jwt;
-        private readonly ICacheService _cache;
         private readonly ILogger _logger;
+        private readonly IUIService _serviceUI;
 
-        public UsersController(IDatabaseService database, IJwtService jwt, ICacheService cache, IConfiguration configuration) 
+        public UsersController(IJwtService jwt, IUIService serviceUI) 
         {
             _logger = LoggerFactory.Create(builder => builder.AddConsole()).CreateLogger("ServiceUI | controller-logger");
-            _database = database;
             _jwt = jwt;
-            _cache = cache;
+            _serviceUI = serviceUI;
         }
 
-        //Руководитель
+        //ТОЛЬКО Руководитель 
         [HttpPost("Add")]
-        public async Task<IActionResult> AddUser(/**/)
+        public async Task<IActionResult> AddUser([FromBody] UserAddDTO dtoObj)
         {
-            return Ok();
+            try
+            {
+                await _serviceUI.AddNewUser(dtoObj, Request.Headers["Authorization"]);
+                return Ok("user_added");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
+        //ТОЛЬКО Руководитель 
         [HttpPatch("Change")]
-        public async Task<IActionResult> ChangeUser(/**/)
+        public async Task<IActionResult> ChangeUser([FromBody] UserChangeDTO dtoObj)
         {
-            return Ok();
+            try
+            {
+                await _serviceUI.ChangeUser(dtoObj, Request.Headers["Authorization"]);
+                return Ok("user_changed");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-        [HttpDelete("Delete")]
-        public async Task<IActionResult> DeleteUser(/**/)
+        //ТОЛЬКО Руководитель 
+        [HttpDelete("Delete/{id}")]
+        public async Task<IActionResult> DeleteUser(Guid id)
         {
-            return Ok();
+            try
+            {
+                await _serviceUI.DeleteUser(id, Request.Headers["Authorization"]);
+                return Ok("user_deleted");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
+
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetUser(int id_user)
+        public async Task<IActionResult> GetUser(Guid id)
         {
-            return Ok();
+            try
+            {
+                var user = await _serviceUI.GetUser(id, Request.Headers["Authorization"]);
+                return Ok(user);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("AllUsers")]
         public async Task<IActionResult> GetUsers(/**/)
         {
-            return Ok();
+            try
+            {
+                var users = await _serviceUI.GetAllUsers(Request.Headers["Authorization"]);
+                return Ok(users);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
