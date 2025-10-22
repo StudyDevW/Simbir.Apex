@@ -1,0 +1,16 @@
+C:\Users\ogoro\IdeaProjects\Практика Симбирсофт 2025\Simbir.Apex\Backend\service-analyzer\src\main\java\simbir\apex\service\agent\config\RabbitConfig.java
+C:\Users\ogoro\IdeaProjects\Практика Симбирсофт 2025\Simbir.Apex\Backend\service-analyzer\src\main\java\simbir\apex\service\agent\model\enums\EventSeverity.java
+C:\Users\ogoro\IdeaProjects\Практика Симбирсофт 2025\Simbir.Apex\Backend\service-analyzer\src\main\java\simbir\apex\service\agent\service\RabbitConsumer.java
+C:\Users\ogoro\IdeaProjects\Практика Симбирсофт 2025\Simbir.Apex\Backend\service-analyzer\src\main\java\simbir\apex\service\agent\AnalyzerApplication.java
+C:\Users\ogoro\IdeaProjects\Практика Симбирсофт 2025\Simbir.Apex\Backend\service-analyzer\src\main\java\simbir\apex\service\agent\consumer\RabbitConsumer.java
+C:\Users\ogoro\IdeaProjects\Практика Симбирсофт 2025\Simbir.Apex\Backend\service-analyzer\src\main\java\simbir\apex\service\agent\model\enums\EventCategory.java
+C:\Users\ogoro\IdeaProjects\Практика Симбирсофт 2025\Simbir.Apex\Backend\service-analyzer\src\main\java\simbir\apex\service\agent\model\AlertDto.java
+C:\Users\ogoro\IdeaProjects\Практика Симбирсофт 2025\Simbir.Apex\Backend\service-analyzer\src\main\java\simbir\apex\service\agent\model\enums\Status.java
+C:\Users\ogoro\IdeaProjects\Практика Симбирсофт 2025\Simbir.Apex\Backend\service-analyzer\src\main\java\simbir\apex\service\agent\service\EventProcessor.java
+C:\Users\ogoro\IdeaProjects\Практика Симбирсофт 2025\Simbir.Apex\Backend\service-analyzer\src\main\java\simbir\apex\service\agent\service\AlertService.java
+C:\Users\ogoro\IdeaProjects\Практика Симбирсофт 2025\Simbir.Apex\Backend\service-analyzer\src\main\java\simbir\apex\service\agent\db\jpaRepository\AlertRepository.java
+C:\Users\ogoro\IdeaProjects\Практика Симбирсофт 2025\Simbir.Apex\Backend\service-analyzer\src\main\java\simbir\apex\service\agent\model\RuleDto.java
+C:\Users\ogoro\IdeaProjects\Практика Симбирсофт 2025\Simbir.Apex\Backend\service-analyzer\src\main\java\simbir\apex\service\agent\model\EventDto.java
+C:\Users\ogoro\IdeaProjects\Практика Симбирсофт 2025\Simbir.Apex\Backend\service-analyzer\src\main\java\simbir\apex\service\agent\db\entity\Alert.java
+C:\Users\ogoro\IdeaProjects\Практика Симбирсофт 2025\Simbir.Apex\Backend\service-analyzer\src\main\java\simbir\apex\service\agent\controller\AlertController.java
+C:\Users\ogoro\IdeaProjects\Практика Симбирсофт 2025\Simbir.Apex\Backend\service-analyzer\src\main\java\simbir\apex\service\agent\service\RuleService.java
