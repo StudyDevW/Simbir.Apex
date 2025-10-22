@@ -4,7 +4,6 @@ import Cross from "../assets/icon/icon-cross.png";
 import Pencil from "../assets/icon/icon-pencil.png";
 import Plus from "../assets/icon/icon-plus.png";
 import LeftArrow from "../assets/icon/icon-left.png"
-import WhiteCircle from "../assets/icon/icon-white-sercale.png"
 import './Users.sass';
 
 export interface User {

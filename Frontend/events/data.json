@@ -1,0 +1,52 @@
+{
+    "events": [
+        {
+            "id": "asd",
+            "category": "auth",
+            "ip": "165.143.55.78",
+            "isLan": "true",
+            "device": "server 1",
+            "timestamp": "2025-10-15 10:00"
+        },
+        {
+            "id": "asdddd",
+            "category": "network",
+            "ip": "165.143.55.78",
+            "isLan": "true",
+            "device": "server 1",
+            "timestamp": "2025-10-15 10:20"
+        },
+        {
+            "id": "asd1",
+            "category": "auth",
+            "ip": "135.142.98.78",
+            "isLan": "false",
+            "device": "server 2",
+            "timestamp": "2025-10-15 10:30"
+        },
+        {
+            "id": "asdsad",
+            "category": "auth",
+            "ip": "165.143.55.78",
+            "isLan": "true",
+            "device": "server 1",
+            "timestamp": "2025-10-15 11:00"
+        },
+        {
+            "id": "asd23",
+            "category": "network",
+            "ip": "135.142.98.78",
+            "isLan": "false",
+            "device": "server 2",
+            "timestamp": "2025-10-15 11:30"
+        }
+    ],
+    "devices": [
+        {
+            "name": "server 1"
+        },
+        {
+            "name": "server 2"
+        }
+    ]
+}
