@@ -1,45 +1,6 @@
-import axios from 'axios';
-import toast from 'react-hot-toast';
+import { ApiClient } from 'shell/api';
 
-export class HttpError extends Error {
-    constructor(message = '') {
-        super(message);
-        this.name = 'HttpError';
-        Object.setPrototypeOf(this, new.target.prototype);
-        toast.error(message, { id: 'HttpError' });
-    }
-}
-
-function responseHandler(response) {
-    if (response.status === 200 || response.status === 201) {
-        const data = response?.data;
-        if (!data) {
-            throw new HttpError('API Error. No data!');
-        }
-        return data;
-    }
-    throw new HttpError(`API Error! Invalid status code ${response.status}!`);
-}
-
-function responseErrorHandler(error) {
-    if (error === null) {
-        throw new Error('Unrecoverable error!! Error is null!');
-    }
-    toast.error(error.message, { id: 'AxiosError' });
-    return Promise.reject(error.message);
-}
-
-export const ApiClient = axios.create({
-    baseURL: 'http://localhost:3000',
-    timeout: 3000,
-    headers: {
-        Accept: 'application/json',
-    },
-});
-
-ApiClient.interceptors.response.use(responseHandler, responseErrorHandler);
-
-class EventsService {
+class EventsApiService {
     url = 'events';
 
     async getAll(params = {}) {
@@ -51,4 +12,4 @@ class EventsService {
     }
 }
 
-export default new EventsService();
+export default new EventsApiService();

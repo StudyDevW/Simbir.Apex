@@ -1,0 +1,109 @@
+{
+  "events": [
+    {
+      "id": "asd",
+      "category": "auth",
+      "ip": "165.143.55.78",
+      "isLan": "true",
+      "device": "server 1",
+      "timestamp": "2025-10-15 10:00"
+    },
+    {
+      "id": "asdddd",
+      "category": "network",
+      "ip": "165.143.55.78",
+      "isLan": "true",
+      "device": "server 1",
+      "timestamp": "2025-10-15 10:20"
+    },
+    {
+      "id": "asd1",
+      "category": "auth",
+      "ip": "135.142.98.78",
+      "isLan": "false",
+      "device": "server 2",
+      "timestamp": "2025-10-15 10:30"
+    },
+    {
+      "id": "asdsad",
+      "category": "auth",
+      "ip": "165.143.55.78",
+      "isLan": "true",
+      "device": "server 1",
+      "timestamp": "2025-10-15 11:00"
+    },
+    {
+      "id": "asd23",
+      "category": "network",
+      "ip": "135.142.98.78",
+      "isLan": "false",
+      "device": "server 2",
+      "timestamp": "2025-10-15 11:30"
+    }
+  ],
+  "devices": [
+    {
+      "name": "server 1",
+      "id": "0cb6"
+    },
+    {
+      "name": "server 2",
+      "id": "c9ac"
+    }
+  ],
+  "alerts": [
+    {
+      "id": "alert1",
+      "title": "alert 1",
+      "ruleName": "rule 1",
+      "assignedToName": "dude",
+      "hostname": "server 1",
+      "status": "active",
+      "severity": "moderate",
+      "createdAt": "2025-10-22 10:00",
+      "closedAt": "2025-10-22 13:00"
+    }
+  ],
+  "rules": [
+    {
+      "id": "ba93",
+      "name": "rule 1",
+      "description": "описание",
+      "logic": "{}",
+      "severity": "low",
+      "status": "active"
+    },
+    {
+      "id": "f6e7",
+      "name": "rule",
+      "description": "skldf",
+      "logic": "{}",
+      "severity": "low",
+      "status": "active"
+    },
+    {
+      "id": "5b53",
+      "name": "кгуцуцу",
+      "description": "цуцу",
+      "logic": "цу",
+      "severity": "low",
+      "status": "active"
+    },
+    {
+      "name": "ывллаыдл",
+      "description": "ыв",
+      "logic": "ывлоа",
+      "severity": "low",
+      "status": "active",
+      "id": "6324"
+    },
+    {
+      "id": "d494",
+      "name": "asdads",
+      "description": "asdasas",
+      "logic": "asd",
+      "severity": "medium",
+      "status": "active"
+    }
+  ]
+}

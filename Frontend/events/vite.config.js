@@ -11,6 +11,9 @@ export default defineConfig({
       exposes: {
         './Events': './src/components/events/table/Events.jsx',
       },
+      remotes: {
+        shell: 'http://localhost:5000/assets/remoteEntry.js',
+      },
       shared: ['react', 'react-dom', 'react-router-dom']
     })
   ],
