@@ -61,6 +61,9 @@ async def get_analyzer_url(force_refresh: bool = False) -> Optional[str]:
 
 
 def setup_logger():
+    """
+    Setting up logger for application
+    """
     if os.path.exists(LOGGER_CONFIG_FILE):
         with open(LOGGER_CONFIG_FILE, "rt") as f:
             try:

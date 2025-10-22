@@ -31,6 +31,15 @@ def train_model(
         X_val: pd.DataFrame,
         Y_val: pd.Series
 ) -> CatBoostClassifier:
+    """
+    Trains CatBoost model based on data
+    :param X_train: data for training
+    :param Y_train: labels for training
+    :param categorical_features: explicitly passed to model categorial features for training
+    :param X_val: validation data
+    :param Y_val: validation labels
+    :return: trained model
+    """
     logger.info(f"Start training CatBoost model...")
 
     model = CatBoostClassifier(
@@ -55,9 +64,13 @@ def train_model(
 
 def evaluate_model(model: CatBoostClassifier,
                    X_test: pd.DataFrame,
-                   Y_test: pd.Series):
+                   Y_test: pd.Series) -> float:
     """
     Evaluates model performance on test data
+    :param model: trained model
+    :param X_test: test data
+    :param Y_test: test labels
+    :return: AUC-ROC score
     """
     logger.info("Evaluating model performance")
 
@@ -77,6 +90,7 @@ def evaluate_model(model: CatBoostClassifier,
 def export_model(model: CatBoostClassifier):
     """
     Exports trained model to a file
+    :param model: trained model
     """
     os.makedirs(MODEL_EXPORT_FILE, exist_ok=True)
 

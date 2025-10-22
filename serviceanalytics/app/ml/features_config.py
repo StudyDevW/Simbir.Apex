@@ -7,7 +7,13 @@ from serviceanalytics.app.schemas.alert_schema import AlertSchema
 LAG_INTERVAL = 4
 FREQ = f"{ML_BASE_INTERVAL}T"
 
+
 def create_alerts_dataframe(alerts: list[AlertSchema]) -> pd.DataFrame:
+    """
+    Creating dataframe from alert list
+    :param alerts: list of alerts
+    :return: alerts dataframe
+    """
     if not alerts:
         return pd.DataFrame()
 
@@ -22,6 +28,11 @@ def create_alerts_dataframe(alerts: list[AlertSchema]) -> pd.DataFrame:
 
 
 def create_events_dataframe(alerts: list[AlertSchema]) -> pd.DataFrame:
+    """
+    Creating event dataframe from alert list
+    :param alerts: list of alerts
+    :return: events dataframe
+    """
     if not alerts:
         return pd.DataFrame()
 
@@ -87,6 +98,7 @@ def aggregate_alert_features(df_alerts: pd.DataFrame) -> pd.DataFrame:
     :param df_alerts: alerts DataFrame indexed by time
     :return: aggregated with features DataFrame
     """
+
     def mode_value(x):
         return x.mode()[0] if not x.empty else 'none'
 
@@ -154,6 +166,7 @@ def aggregate_features_train(df_events: pd.DataFrame, df_alerts: pd.DataFrame) -
     df_final = df_final.iloc[LAG_INTERVAL:].dropna(subset=['is_alert'])
 
     return df_final
+
 
 def aggregate_features_pred(df_events: pd.DataFrame, df_alerts: pd.DataFrame) -> pd.DataFrame:
     """
