@@ -17,6 +17,9 @@ spring:
 
 
 app:
+  manager:
+    url: ${MANAGER_URL:localhost}
+    port: ${MANAGER_PORT:8081}
   rabbitmq:
     exchange: events.exchange
     queue: events.queue
