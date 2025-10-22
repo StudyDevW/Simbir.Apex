@@ -6,8 +6,8 @@ namespace ServiceManagerRestAPI {
 
         public static void GetConfiguration(IConfiguration configuration)
         {
-            Root.Login = configuration["Root:Login"] ?? "Admin";
-            Root.Password = configuration["Root:Password"] ?? "root";
+            Root.Login = configuration["SUPERUSER_NAME"] ?? throw new Exception("superuser name or pass not set");
+            Root.Password = configuration["SUPERUSER_PASSWORD"] ?? throw new Exception("superuser name or pass not set");
         }
 
         public static string GetRootLogin() { return Root.Login; }

@@ -1,6 +1,0 @@
-@ServiceManagerRestAPI_HostAddress = http://localhost:8081
-
-GET {{ServiceManagerRestAPI_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

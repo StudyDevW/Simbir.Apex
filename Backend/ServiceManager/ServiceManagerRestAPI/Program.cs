@@ -4,20 +4,30 @@ using Contracts.CacheContracts;
 using CacheRedisLogic;
 using Contracts.StorageContracts;
 using DataBaseImplement.Implements;
+using DotNetEnv;
+using DotNetEnv.Configuration;
+using DataBaseImplement;
+using Microsoft.EntityFrameworkCore;
 
 namespace ServiceManagerRestAPI {
     public class Program {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
+            // .env read
+            builder.Configuration.AddDotNetEnv(".env", LoadOptions.TraversePath());
+            // Add database conntect string
+            builder.Services.AddDbContext<DataBase>(options => {
+                var connectString = builder.Configuration["DATABASE_CONNECT"];
+                if (connectString != null) { options.UseNpgsql(connectString); }
+            });
             // Add services to the container.
-            builder.Services.AddTransient<ISimbirServiceStorage, DbSimbirServiceStorage>();
+            builder.Services.AddSingleton<ISimbirServiceStorage, DbSimbirServiceStorage>();
             builder.Services.AddSingleton<ISimbirServiceCache, RedisSimbirServiceCache>();
-            builder.Services.AddTransient<ISimbirServiceLogic, SimbirServiceLogic>();
+            builder.Services.AddSingleton<ISimbirServiceLogic, SimbirServiceLogic>();
             builder.Services.AddStackExchangeRedisCache(optinos => {
                 optinos.Configuration = "localhost";
-                optinos.InstanceName = "local";
+                optinos.InstanceName = "6380"; //todo -- получать из docker-compose 
             });
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -42,7 +52,7 @@ namespace ServiceManagerRestAPI {
             });
             
 
-         //   app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseAuthorization();
 
@@ -50,7 +60,16 @@ namespace ServiceManagerRestAPI {
             app.MapControllers();
             app.MapHealthChecksUI();
 
-            app.Run();
+            app.Use(async (context, next) => {
+                if (context.Request.Path == "/") {
+                    context.Response.Redirect("/manager-swagger/");
+                }
+                else {
+                    await next();
+                }
+            });
+
+            await app.RunAsync();
         }
     }
 }
