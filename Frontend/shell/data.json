@@ -53,15 +53,27 @@
   ],
   "alerts": [
     {
-      "id": "alert1",
       "title": "alert 1",
-      "ruleName": "rule 1",
-      "assignedToName": "dude",
+      "assignedToId": "qwerty",
       "hostname": "server 1",
-      "status": "active",
-      "severity": "moderate",
+      "status": "Активна",
+      "severity": "Низкий",
       "createdAt": "2025-10-22 10:00",
-      "closedAt": "2025-10-22 13:00"
+      "closedAt": "2025-10-22 13:00",
+      "id": "alert1"
+    },
+    {
+      "title": "alert 3",
+      "assignedToId": "qwerty",
+      "hostname": "server 2",
+      "description": "описание",
+      "status": "Активна",
+      "severity": "Средний",
+      "rawData": "{}",
+      "createdAt": "2025-10-22 10:00",
+      "closedAt": "2025-10-22 13:00",
+      "resolutionNotes": "бла бла бла",
+      "id": "alert2"
     }
   ],
   "rules": [
@@ -104,6 +116,24 @@
       "logic": "asd",
       "severity": "medium",
       "status": "active"
+    }
+  ],
+  "hostnames": [
+    {
+      "name": "server 1"
+    },
+    {
+      "name": "server 2"
+    }
+  ],
+  "users": [
+    {
+      "id": "qwer",
+      "name": "Иванов Иван"
+    },
+    {
+      "id": "qwerty",
+      "name": "Сергеев Сергей"
     }
   ]
 }
