@@ -10,7 +10,6 @@ const RulesTable = ({ children }: RulesTableProps) => {
     <Table className="mt-2" striped responsive hover>
       <thead>
         <tr>
-          <th scope="col">#</th>
           <th scope="col">Название</th>
           <th scope="col">Описание</th>
           <th scope="col">Уровень риска</th>

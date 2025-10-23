@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { useFilter, useDeviceFilter } from '../hooks/EventsFilterHook.js';
 import useEvents from '../hooks/EventsHook.js';
 import EventsTable from './EventsTable.jsx';
@@ -8,7 +8,7 @@ import Select from '../../input/Select.jsx';
 import Input from '../../input/Input.jsx';
 import { Button, Form, Modal } from 'react-bootstrap';
 import PseudoQueryModal from './PseudoQueryModal.jsx';
-import { Funnel, ArrowLeft } from "react-bootstrap-icons";
+import { Funnel } from "react-bootstrap-icons";
 
 const Events = () => {
     const currentCategoryFilter = useFilter("category");
@@ -81,13 +81,6 @@ const Events = () => {
 
     return (
         <>
-            <div className='bg-dark p-3 fs-3 rounded fw-bold text-white mb-2'>
-                <a href='' className='text-white text-decoration-none d-flex align-items-center'>
-                    <ArrowLeft />
-                    &nbsp;
-                    <span className='mb-1'>События</span>
-                </a>
-            </div>
             <div className="d-flex mb-2">
                 <Button variant="outline-dark" className="me-2" onClick={handleShowFilters}>
                     <Funnel />

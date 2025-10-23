@@ -31,10 +31,9 @@ const Rules = () => {
   return (
     <>
       <RulesTable>
-        {rules.map((rule, index) => (
+        {rules.map((rule) => (
           <RulesTableRow
             key={rule.id}
-            index={index}
             rule={rule}
             onDelete={() => showDeleteModal(rule.id)}
             onEdit={() => showFormModal(rule.id)}

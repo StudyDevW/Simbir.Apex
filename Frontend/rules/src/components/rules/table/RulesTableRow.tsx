@@ -2,13 +2,12 @@ import { PencilFill, Trash3 } from "react-bootstrap-icons";
 import type { Rule } from "../entity/Rule";
 
 interface RulesTableRowProps {
-  index: number;
   rule: Rule;
   onDelete: () => void;
   onEdit: () => void;
 }
 
-const RulesTableRow = ({ index, rule, onDelete, onEdit }: RulesTableRowProps) => {
+const RulesTableRow = ({ rule, onDelete, onEdit }: RulesTableRowProps) => {
   const handleAnchorClick = (
     event: React.MouseEvent<HTMLAnchorElement>,
     action: () => void
@@ -19,7 +18,6 @@ const RulesTableRow = ({ index, rule, onDelete, onEdit }: RulesTableRowProps) =>
 
   return (
     <tr>
-      <th scope="row">{index + 1}</th>
       <td>{rule.name}</td>
       <td>{rule.description}</td>
       <td>{rule.severity}</td>
