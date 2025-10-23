@@ -1,8 +1,9 @@
 import pandas as pd
 import numpy as np
 
-from serviceanalytics.app.core.config import ML_BASE_INTERVAL
-from serviceanalytics.app.schemas.alert_schema import AlertSchema
+from app.core.config import ML_BASE_INTERVAL
+from app.schemas.alert_schema import AlertSchema
+from app.schemas.event_schema import EventSchema
 
 LAG_INTERVAL = 4
 FREQ = f"{ML_BASE_INTERVAL}T"
@@ -48,6 +49,25 @@ def create_events_dataframe(alerts: list[AlertSchema]) -> pd.DataFrame:
 
     df_events['timestamp'] = pd.to_datetime(df_events['timestamp'])
     df_events = df_events.set_index('timestamp').sort_index()
+
+    return df_events
+
+def append_events_to_exists_df(df: pd.DataFrame, events: list[EventSchema]) -> pd.DataFrame:
+    """
+    Appends events to existing DataFrame with events
+    :param df: existing DataFrame with events
+    :param events: list of events
+    :return: appended events dataframe
+    """
+    if not events:
+        return df
+
+    df_events = pd.concat([df, pd.DataFrame(events)])
+
+    df_events['timestamp'] = pd.to_datetime(df_events['timestamp'])
+    df_events = df_events.set_index('timestamp').sort_index()
+
+    df_events.drop(inplace=True)
 
     return df_events
 

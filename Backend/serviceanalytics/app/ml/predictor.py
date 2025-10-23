@@ -6,10 +6,12 @@ from datetime import timedelta
 import pandas as pd
 from catboost import CatBoostClassifier
 
-from serviceanalytics.app.core.config import MODEL_EXPORT_FILE, LOGGER_NAME, ML_BASE_INTERVAL
-from serviceanalytics.app.ml.features_config import LAG_INTERVAL, create_alerts_dataframe, aggregate_features_pred, \
-    create_events_dataframe
-from serviceanalytics.app.schemas.alert_schema import AlertSchema
+from app.core.config import MODEL_EXPORT_FILE, LOGGER_NAME, ML_BASE_INTERVAL
+from app.ml.features_config import LAG_INTERVAL, create_alerts_dataframe, aggregate_features_pred, \
+    create_events_dataframe, append_events_to_exists_df
+from app.schemas.alert_schema import AlertSchema
+
+from app.schemas.event_schema import EventSchema
 
 logger = logging.getLogger(LOGGER_NAME)
 
@@ -36,17 +38,21 @@ def load_model() -> CatBoostClassifier:
 
 
 def predict_alerts(
-        raw_data: list[AlertSchema],
+        alert_data: list[AlertSchema],
+        events_data: list[EventSchema],
         model: CatBoostClassifier
 ) -> tuple[pd.Timestamp, float, int]:
     """
-    Predicting alers in next ``ML_BASE_INTERVAL``
-    :param raw_data: list with ``AlertSchema`` for ``LAG_INTERVAL * ML_BASE_INTERVAL`` interval
+    Predicting alerts in next ``ML_BASE_INTERVAL``
+    :param alert_data: list with ``AlertSchema`` for ``LAG_INTERVAL * ML_BASE_INTERVAL`` interval
+    :param events_data: list with ``EventSchema`` for ``LAG_INTERVAL * ML_BASE_INTERVAL`` interval
     :param model: pretrained ``CatBoostClassifier`` model
     :return: tuple with ``pd.Timestamp`` of next timestamp, ``float`` probability and ``int`` prediction
     """
-    df_alerts = create_alerts_dataframe(raw_data)
-    df_events = create_events_dataframe(raw_data)
+    df_alerts = create_alerts_dataframe(alert_data)
+    df_events_from_alerts = create_events_dataframe(alert_data)
+
+    df_events = append_events_to_exists_df(df_events_from_alerts, events_data)
 
     if df_events.empty and df_alerts.empty:
         logger.info("No new data in this period")

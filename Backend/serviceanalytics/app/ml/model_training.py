@@ -5,7 +5,7 @@ import pandas as pd
 from catboost import CatBoostClassifier
 from sklearn.metrics import roc_auc_score, classification_report
 
-from serviceanalytics.app.core.config import LOGGER_NAME, MODEL_EXPORT_FILE
+from app.core.config import LOGGER_NAME, MODEL_EXPORT_FILE
 
 logger = logging.getLogger(LOGGER_NAME)
 RND_SEED = 42

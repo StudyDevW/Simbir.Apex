@@ -3,4 +3,4 @@ from pydantic import BaseModel
 
 class ResponseSchema(BaseModel):
     probability: float
-    prediction: int
+    guidelines: list[str] # TODO: определить какие будут рекомендации от ЭС

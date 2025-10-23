@@ -1,7 +1,9 @@
+import json
 import os
 
 import logging
 import logging.config
+import socket
 from typing import Optional
 
 import aiohttp
@@ -10,6 +12,7 @@ import yaml
 LOGGER_NAME = "service_analytics"
 LOGGER_CONFIG_FILE = "config/logger-config.yml"
 MODEL_EXPORT_FILE = "trained_models/model.cbm"
+PORT = 8000
 
 logger = logging.getLogger(LOGGER_NAME)
 
@@ -20,6 +23,32 @@ except KeyError:
     SERVICE_MANAGER_URL = None
 
 ML_BASE_INTERVAL = 60  # minutes
+
+async def register_in_manager():
+    """
+    Registering service in service manager.
+    """
+    if not SERVICE_MANAGER_URL:
+        logger.error(f"Service manager URL not set, skipping registration")
+        return None
+
+    service_data = {
+        "serviceName": "service-analytics",
+        "EndpointService": {
+            "Address": socket.gethostbyname(socket.getfqdn()),
+            "Port": PORT
+        }
+    }
+
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.post(f"{SERVICE_MANAGER_URL}/api/main/insertservice?jsonData={json.dumps(service_data)}") as res:
+                if res.status == 200:
+                    logger.info("Service registered successfully")
+                else:
+                    logger.error(f"Service manager error: {res.json()}")
+    except aiohttp.ClientConnectorError:
+        logger.error(f"Failed to connect to service manager at {SERVICE_MANAGER_URL}.")
 
 
 async def get_analyzer_url(force_refresh: bool = False) -> Optional[str]:
