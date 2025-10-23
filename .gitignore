@@ -365,6 +365,7 @@ FodyWeavers.xsd
 /pgadmin_data
 
 /postgres_data
+/postgres_data2
 
 /redis_cache
 
