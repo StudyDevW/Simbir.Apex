@@ -1,11 +1,14 @@
 package simbir.apex.service.agent.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import simbir.apex.service.agent.db.entity.Alert;
 import simbir.apex.service.agent.service.AlertService;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -61,5 +64,16 @@ public class AlertController {
     @PostMapping("/{id}/false-positive")
     public ResponseEntity<Alert> markFalsePositive(@PathVariable Long id) {
         return ResponseEntity.ok(alertService.markFalsePositive(id));
+    }
+
+    @GetMapping("/range")
+    public List<Alert> getAlertsByRange(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end
+    ) {
+        return alertService.getByPeriod(
+                Timestamp.valueOf(start),
+                Timestamp.valueOf(end)
+        );
     }
 }

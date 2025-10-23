@@ -44,6 +44,10 @@ public class AlertService {
         return updateStatus(id, Status.FALSE_POSITIVE, null);
     }
 
+    public List<Alert> getByPeriod(Timestamp start, Timestamp end) {
+        return alertRepository.findAllByCreatedAtBetween(start, end);
+    }
+
     private Alert updateStatus(Long id, Status newStatus, String notes) {
         Optional<Alert> optional = alertRepository.findById(id);
         if (optional.isEmpty()) {
