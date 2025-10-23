@@ -6,4 +6,18 @@
 
 ## Запуск
 
-TBD
+### Запуск в Docker Compose
+В `docker-compose.yml` файле используйте сервис так
+```yaml
+services:
+  # ...
+  service-analytics:
+    build: .
+    ports:
+      - 8000:8080 # 8000 - порт Docker образа по умолчанию
+    environment:
+      - SERVICE_MANAGER_URL="service-manager:8080" # адрес сервиса управленца
+  # ...
+```
+
+Сервис имеет OpenAPI документацию по адресу ```http://localhost:8000/docs```
