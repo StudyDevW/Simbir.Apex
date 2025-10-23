@@ -79,6 +79,7 @@
       - ./pgadmin_data:/var/lib/pgadmin
     depends_on:
       - postgres_db
+      - postgres_db_manager
     healthcheck:
       test: ["CMD", "wget", "-O", "-", "http://localhost:80/misc/ping"]
       interval: 10s
