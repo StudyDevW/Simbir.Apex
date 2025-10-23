@@ -18,16 +18,17 @@ namespace ServiceManagerRestAPI {
             builder.Configuration.AddDotNetEnv(".env", LoadOptions.TraversePath());
             // Add database conntect string
             builder.Services.AddDbContext<DataBase>(options => {
-                var connectString = builder.Configuration["DATABASE_CONNECT"];
+                var connectString = builder.Configuration["DATABASE_CONNECT_M"];
                 if (connectString != null) { options.UseNpgsql(connectString); }
             });
             // Add services to the container.
             builder.Services.AddSingleton<ISimbirServiceStorage, DbSimbirServiceStorage>();
             builder.Services.AddSingleton<ISimbirServiceCache, RedisSimbirServiceCache>();
             builder.Services.AddSingleton<ISimbirServiceLogic, SimbirServiceLogic>();
+            builder.Services.AddSingleton<IAutoMigrationService, AutoMigrationService>();
             builder.Services.AddStackExchangeRedisCache(optinos => {
-                optinos.Configuration = "localhost";
-                optinos.InstanceName = "6380"; //todo -- получать из docker-compose 
+                optinos.Configuration = "redis_cache";
+                optinos.InstanceName = "6380";  
             });
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -43,8 +44,15 @@ namespace ServiceManagerRestAPI {
 
             var app = builder.Build();
 
+            using (var serviceScope = app.Services.CreateScope()) {
+                var migrations = serviceScope.ServiceProvider.GetService<IAutoMigrationService>();
+
+                if (migrations != null)
+                    await migrations.EnsureDatabaseInitializedAsync();
+            }
+
             // Configure the HTTP request pipeline.
-          
+
             app.UseSwagger();
             app.UseSwaggerUI(s => {
                 s.SwaggerEndpoint("/swagger/v1/swagger.json", "ServiceManagerRestAPI v1");

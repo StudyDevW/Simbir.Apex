@@ -1,4 +1,4 @@
-services:
+﻿services:
   simbirapex.backend.serviceui: 
     image: ${DOCKER_REGISTRY-}serviceui_apex:1.0
     container_name: Simbir.Apex.ServiceUI
@@ -19,15 +19,17 @@ services:
     image: ${DOCKER_REGISTRY-}servicemanager_apex:1.0
     container_name: Simbir.Apex.ServiceManager
     depends_on:
-      postgres_db:
+      postgres_db_manager:
         condition: service_healthy
     build:
       context: ./Backend/ServiceManager
       dockerfile: ServiceManagerRestAPI/Dockerfile
     environment:
+      SUPERUSER_NAME: ${SUPERUSER_NAME}
+      SUPERUSER_PASSWORD: ${SUPERUSER_PASSWORD}
       RSA_PUBLIC_KEY: ${RSA_PUBLIC_KEY}
       RSA_PRIVATE_KEY: ${RSA_PRIVATE_KEY}
-      DATABASE_CONNECT: ${DATABASE_CONNECT}
+      DATABASE_CONNECT_M: ${DATABASE_CONNECT_M}
     ports:
        - "8081:80"
     restart: unless-stopped
@@ -42,6 +44,23 @@ services:
       - "5432:80"
     volumes:
       - ./postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "-d", "db_prod"]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 80s
+  postgres_db_manager:
+    image: postgres:17.0-bookworm
+    container_name: Simbir.Apex.PostgreSQL.Manager
+    environment:
+        POSTGRES_DB: ${POSTGRES_DB_M}
+        POSTGRES_USER: ${POSTGRES_USER}
+        POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5433:80"
+    volumes:
+      - ./postgres_data2:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready", "-d", "db_prod"]
       interval: 30s
@@ -106,7 +125,7 @@ services:
       - 5672:5672
       - 15672:15672
 
-#Сбор и визуализация логов
+#РЎР±РѕСЂ Рё РІРёР·СѓР°Р»РёР·Р°С†РёСЏ Р»РѕРіРѕРІ
   grafana:
     container_name: Simbir.Apex.Metrics.Grafana
     image: grafana/grafana:latest

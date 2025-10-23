@@ -1,14 +1,14 @@
 ﻿using Contracts.BindingModels;
 using Contracts.StorageContracts;
 using DataBaseImplement.DbModels;
-using Microsoft.Extensions.Configuration;
+
 
 namespace DataBaseImplement.Implements {
     public class DbSimbirServiceStorage : ISimbirServiceStorage {
         private readonly DataBase context;
         public DbSimbirServiceStorage(IConfiguration conf) 
         {
-            context = new DataBase(conf["DATABASE_CONNECT"]);
+            context = new DataBase(conf["DATABASE_CONNECT_M"]);
         }
         public void InsertDbServiceInfo(in SimbirServiceBindingModel insertModel)
         {
