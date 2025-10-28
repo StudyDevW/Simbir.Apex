@@ -16,7 +16,6 @@ import java.util.UUID;
 @Builder
 public class EventDto {
     private UUID id;
-
     private boolean isLan;
     private String device;
     private String eventId;

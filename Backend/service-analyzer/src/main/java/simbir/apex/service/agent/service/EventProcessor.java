@@ -3,6 +3,7 @@ package simbir.apex.service.agent.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import simbir.apex.service.agent.db.entity.Alert;
+import simbir.apex.service.agent.db.entity.Event;
 import simbir.apex.service.agent.model.EventDto;
 import simbir.apex.service.agent.model.RuleDto;
 import simbir.apex.service.agent.model.enums.Status;
@@ -21,6 +22,7 @@ public class EventProcessor {
 
     private  RuleService ruleService;
     private  AlertService alertService;
+    private final EventService eventService;
 
     private Map<String, Deque<EventDto>> eventHistory = new ConcurrentHashMap<>();
     private ExecutorService executor = Executors.newFixedThreadPool(8);
@@ -28,6 +30,16 @@ public class EventProcessor {
 
     public void processEvent(EventDto event) {
         executor.submit(() -> {
+
+            Event savedEvent = Event.builder()
+                    .isLan(event.isLan())
+                    .device(event.getDevice())
+                    .eventId(event.getEventId())
+                    .severity(event.getSeverity())
+                    .timestamp(new Date())
+                    .build();
+            eventService.saveEvent(savedEvent);
+
             List<RuleDto> rules = ruleService.fetchRules();
 
             for (RuleDto rule : rules) {
