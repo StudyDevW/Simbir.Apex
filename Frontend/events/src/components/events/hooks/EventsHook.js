@@ -1,34 +1,37 @@
 import { useEffect, useState } from 'react';
 import EventsApiService from '../service/EventsApiService';
 
-const useEvents = ({ categoryFilter, deviceFilter, lanFilter, startDateFilter, endDateFilter }) => {
+const useEvents = (filters = {}, page = 1) => {
     const [events, setEvents] = useState([]);
     const [eventsRefresh, setEventsRefresh] = useState(false);
+    const [totalPages, setTotalPages] = useState(1);
     const handleEventsChange = () => setEventsRefresh(!eventsRefresh);
-    const clearFilters = () => {categoryFilter, deviceFilter, lanFilter, startDateFilter, endDateFilter = null;}
 
     const getEvents = async () => {
-        const params = {};
+        const params = Object.fromEntries(
+            Object.entries(filters).filter(
+                ([, value]) => value !== '' && value !== null && value !== undefined
+            )
+        );
 
-        if (categoryFilter) params.category = categoryFilter;
-        if (deviceFilter) params.device = deviceFilter;
-        if (lanFilter) params.isLan = lanFilter;
-        if (startDateFilter) params.startDate = startDateFilter;
-        if (endDateFilter) params.endDate = endDateFilter;
+        params.page = page;
 
-        const data = await EventsApiService.getAll(params);
-        setEvents(data ?? []);
+        const response = await EventsApiService.getAll(params);
+
+        //TODO: заменить на: setEvents(response.items ?? []);
+        setEvents(response ?? []);
+        setTotalPages(response.totalPages ?? 1);
     };
 
     useEffect(() => {
         getEvents();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [categoryFilter, deviceFilter, lanFilter, startDateFilter, endDateFilter, eventsRefresh]);
+    }, [page, eventsRefresh]);
 
     return {
         events,
         handleEventsChange,
-        clearFilters
+        totalPages
     };
 };
 
