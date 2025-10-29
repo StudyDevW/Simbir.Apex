@@ -10,6 +10,8 @@ export default defineConfig({
       filename: 'remoteEntry.js',
       exposes: {
         './api': './src/api/ApiClient.js',
+        './pagination/Pagination': './src/components/pagination/Pagination.jsx',
+        './pagination/usePagination': './src/components/pagination/PaginationHook.js',
       },
       remotes: {
         events: 'http://localhost:5001/assets/remoteEntry.js',
