@@ -16,7 +16,7 @@ const AlertsFiltersForm = ({ filters, handleChange }) => {
             <Select values={rules} name='ruleId' label='Шаблон' value={filters.ruleId} onChange={handleChange} />
             <Select values={users} name='assignedToId' label='Назначено' value={filters.assignedToId} onChange={handleChange} />
             <Select values={hostnames} name='hostname' label='Источник' value={filters.hostname} onChange={handleChange} />
-            <Select values={statuses} name='status' label='Статус' value={alert.status} onChange={handleChange} />
+            <Select values={statuses} name='status' label='Статус' value={filters.status} onChange={handleChange} />
             <Select values={severities} name='severity' label='Уровень риска' value={filters.severity} onChange={handleChange} />
             <Input name='startDate' label='С' value={filters.startDate} onChange={handleChange}
                 type='datetime-local' />

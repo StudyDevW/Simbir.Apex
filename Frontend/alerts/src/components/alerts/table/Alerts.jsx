@@ -7,7 +7,8 @@ import AlertsForm from '../form/AlertsForm.jsx';
 import useAlertsFiltersForm from '../hooks/AlertsFiltersHook.js';
 import AlertsFiltersForm from '../form/AlertsFiltersForm.jsx';
 import { Funnel } from 'react-bootstrap-icons';
-
+import Pagination from 'shell/pagination/Pagination';
+import usePagination from 'shell/pagination/usePagination';
 
 const Alerts = () => {
     const {
@@ -19,8 +20,9 @@ const Alerts = () => {
         applyFilters,
         resetFilters,
     } = useAlertsFiltersForm();
-    
-    const { alerts, handleAlertsChange } = useAlerts(filters);
+
+    const { currentPage } = usePagination();
+    const { alerts, totalPages, handleAlertsChange } = useAlerts(filters, currentPage);
 
     const {
         isFormModalShow,
@@ -46,6 +48,7 @@ const Alerts = () => {
                         />)
                 }
             </AlertsTable>
+            <Pagination totalPages={totalPages} />
             <Modal show={isFormModalShow} backdrop='static' onHide={handleFormClose}>
                 <Modal.Header className='pt-2 pb-2 ps-3 pe-3' closeButton>
                     <Modal.Title>Редактирование угрозы</Modal.Title>
