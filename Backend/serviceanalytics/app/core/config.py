@@ -9,8 +9,11 @@ from typing import Optional
 import aiohttp
 import yaml
 
+ANALYZER_URL_CACHE = None
+ES_CONFIG = None
 LOGGER_NAME = "service_analytics"
 LOGGER_CONFIG_FILE = "config/logger-config.yml"
+EXPERT_SYSTEM_CONFIG = "config/expert.yml"
 MODEL_EXPORT_FILE = "trained_models/model.cbm"
 PORT = 8000
 
@@ -88,7 +91,6 @@ async def get_analyzer_url(force_refresh: bool = False) -> Optional[str]:
 
     return None
 
-
 def setup_logger():
     """
     Setting up logger for application
@@ -105,3 +107,25 @@ def setup_logger():
     else:
         print(f"WARNING: Logging config file not found at {LOGGER_CONFIG_FILE}. Using basic INFO config.")
         logging.basicConfig(level=logging.INFO)
+
+def setup_es_config():
+    """
+    Setting up expert system config
+    """
+    if os.path.exists(EXPERT_SYSTEM_CONFIG):
+        with open(EXPERT_SYSTEM_CONFIG, "rt") as f:
+            try:
+                global ES_CONFIG
+                ES_CONFIG = yaml.safe_load(f.read())
+                logger.info(f"Expert system config loaded from: {EXPERT_SYSTEM_CONFIG}")
+            except Exception as e:
+                logger.error(f"Error while set up config from file {EXPERT_SYSTEM_CONFIG}: {e}")
+    else:
+        logger.critical(f"Expert system config file not found at {EXPERT_SYSTEM_CONFIG}")
+
+
+def get_es_config() -> dict | None:
+    """
+    Returns expert system config
+    """
+    return ES_CONFIG

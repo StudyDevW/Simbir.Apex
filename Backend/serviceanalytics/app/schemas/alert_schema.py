@@ -4,7 +4,7 @@ from enum import Enum
 
 from pydantic import BaseModel
 
-from serviceanalytics.app.schemas.event_schema import EventSchema
+from app.schemas.event_schema import EventSchema
 
 
 class AlertStatus(str, Enum):
