@@ -1,11 +1,16 @@
 import { ApiClient } from 'shell/api';
-import { type Rule } from '../entity/Rule'
+import type { Rule } from '../entity/Rule';
+
+interface PaginatedResponse<T> {
+  items: T[];
+  totalPages: number;
+}
 
 class RulesApiService {
   private readonly url = 'rules';
 
-  async getAll(): Promise<Rule[]> {
-    return ApiClient.get(this.url);
+  async getAll(params?: { page?: number }): Promise<PaginatedResponse<Rule>> {
+    return ApiClient.get(this.url, { params });
   }
 
   async get(id: string): Promise<Rule> {

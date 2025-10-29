@@ -7,9 +7,12 @@ import useRules from "../hooks/RulesHook";
 import RulesTable from "./RulesTable";
 import RulesTableRow from "./RulesTableRow";
 import RulesForm from "../form/RulesForm";
+import Pagination from 'shell/pagination/Pagination';
+import usePagination from 'shell/pagination/usePagination';
 
 const Rules = () => {
-  const { rules, handleRulesChange } = useRules();
+  const { currentPage } = usePagination();
+  const { rules, totalPages, handleRulesChange } = useRules(currentPage);
 
   const {
     isDeleteModalShow,
@@ -49,6 +52,9 @@ const Rules = () => {
           Добавить правило
         </Button>
       </div>
+
+      <Pagination totalPages={totalPages} />
+
       <ModalConfirm
         show={isDeleteModalShow}
         onConfirm={handleDeleteConfirm}
