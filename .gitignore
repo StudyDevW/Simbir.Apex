@@ -366,6 +366,9 @@ FodyWeavers.xsd
 
 /postgres_data
 /postgres_data2
+/postgres_data3
+/kafka_data
+/grafana
 
 /redis_cache
 
