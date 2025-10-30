@@ -1,0 +1,121 @@
+{
+  "events": [
+    {
+      "id": "LOGIN_SUCCESS",
+      "device": "desktop",
+      "ip": "192.168.1.10"
+    },
+    {
+      "id": "LOGIN_FAIL",
+      "device": "web",
+      "ip": "192.168.1.11"
+    },
+    {
+      "id": "FILE_OPEN",
+      "device": "desktop",
+      "ip": "192.168.1.10"
+    },
+    {
+      "id": "FILE_EDIT",
+      "device": "desktop",
+      "ip": "192.168.1.10"
+    },
+    {
+      "id": "FILE_SAVE",
+      "device": "desktop",
+      "ip": "192.168.1.10"
+    },
+    {
+      "id": "FILE_DELETE",
+      "device": "desktop",
+      "ip": "192.168.1.10"
+    },
+    {
+      "id": "PROCESS_START",
+      "device": "desktop",
+      "ip": "192.168.1.12"
+    },
+    {
+      "id": "PROCESS_STOP",
+      "device": "desktop",
+      "ip": "192.168.1.12"
+    },
+    {
+      "id": "NETWORK_CONNECT",
+      "device": "mobile",
+      "ip": "10.0.0.5"
+    },
+    {
+      "id": "NETWORK_DISCONNECT",
+      "device": "mobile",
+      "ip": "10.0.0.5"
+    },
+    {
+      "id": "USB_INSERT",
+      "device": "desktop",
+      "ip": "192.168.1.13"
+    },
+    {
+      "id": "USB_REMOVE",
+      "device": "desktop",
+      "ip": "192.168.1.13"
+    },
+    {
+      "id": "CONFIG_CHANGE",
+      "device": "web",
+      "ip": "172.16.0.2"
+    },
+    {
+      "id": "SHUTDOWN",
+      "device": "desktop",
+      "ip": "192.168.1.10"
+    },
+    {
+      "id": "RESTART",
+      "device": "desktop",
+      "ip": "192.168.1.10"
+    }
+  ],
+  "scenarios": [
+    {
+      "name": "Рабочая сессия",
+      "sequence": [
+        "LOGIN_SUCCESS",
+        "FILE_OPEN",
+        "FILE_EDIT",
+        "FILE_SAVE",
+        "PROCESS_START",
+        "PROCESS_STOP"
+      ]
+    },
+    {
+      "name": "Подозрительное поведение",
+      "sequence": [
+        "LOGIN_FAIL",
+        "LOGIN_FAIL",
+        "LOGIN_SUCCESS",
+        "FILE_OPEN",
+        "FILE_DELETE",
+        "USB_INSERT"
+      ]
+    },
+    {
+      "name": "Сетевая активность",
+      "sequence": [
+        "LOGIN_SUCCESS",
+        "NETWORK_CONNECT",
+        "NETWORK_DISCONNECT",
+        "SHUTDOWN"
+      ]
+    },
+    {
+      "name": "Админские действия",
+      "sequence": [
+        "LOGIN_SUCCESS",
+        "CONFIG_CHANGE",
+        "PROCESS_START",
+        "RESTART"
+      ]
+    }
+  ]
+}
