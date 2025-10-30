@@ -1,184 +1,543 @@
-.users-page 
+.users-page
   margin: 0
   padding: 0
-  display: flex
+  width: 100%
   min-height: 100vh
   font-family: 'Arial', sans-serif
+  display: flex
+  flex-direction: column
 
+  @media (min-width: 769px)
+    flex-direction: row
 
-.sidebar 
-  width: 280px
+.sidebar
+  width: 100%
   background: black
-  border-radius: 3%
   color: white
   display: flex
   flex-direction: column
-  padding: 20px 0
+  border-radius: 0
 
+  @media (max-width: 768px)
+    height: auto
+    position: sticky
+    top: 0
+    z-index: 100
 
-  .sidebar-header 
-    padding: 0 10px 20px
+  @media (min-width: 769px) and (max-width: 1024px)
+    width: 200px
+    height: 100vh
+    border-radius: 15px
+    margin: 10px
+
+  @media (min-width: 1025px)
+    width: 280px
+    border-radius: 3%
+    padding: 20px 0
+
+  .sidebar-header
+    padding: 15px 10px
     border-bottom: 1px solid #4a6278
+
+    @media (min-width: 769px)
+      padding: 0 10px 20px
 
     .sidebar-title
       background-color: #3498db
       display: flex
-      width: 98%
-      height: 47%
+      flex-direction: column
       color: white
-      margin-right: 20%
-      padding-left: 2%
-      border-top-left-radius: 5%
-      border-top-right-radius: 5%
-      box-shadow: inset
-      
-    .title 
-      font-size: 26px
-      font-weight: bold
-      margin-bottom: 30px
-      color: #ecf0f1
-    
-    .mini-title
-      font-size: 12px
-      margin-top: 30%
+      padding: 15px 10px
+      border-radius: 5px
+      margin-bottom: 10px
 
-    .main-nav 
+      @media (min-width: 769px)
+        width: 98%
+        height: 47%
+        margin-right: 20%
+        padding-left: 2%
+        border-top-left-radius: 5%
+        border-top-right-radius: 5%
+        box-shadow: inset
+
+      .title
+        font-size: 20px
+        font-weight: bold
+        color: #ecf0f1
+        margin: 0
+
+        @media (min-width: 769px)
+          font-size: 26px
+          margin-bottom: 30px
+
+      .mini_title
+        font-size: 14px
+        padding-left: 50%
+
+      @media (max-width: 1440px)
+        margin-top: 20%
+        padding-right: 0
+        font-size: 11px
+
+      @media (max-width: 1024px)
+        margin-top: 25%
+        padding-right: 3%
+
+      @media (max-width: 768px)
+        margin-top: 0
+        padding-right: 0
+        font-size: 11px
+
+    .main-nav
       display: flex
       flex-direction: column
-      padding-top: 5%
-      padding: 1%
-      gap: 2px
+      gap: 5px
       font-size: 14px
       background-color: #245A8C
-      border-bottom-left-radius:  5%
-      border-bottom-right-radius:  5%
+      border-radius: 5px
+      padding: 10px
 
-      .nav-item 
+      @media (min-width: 769px)
+        padding-top: 5%
+        padding: 1%
+        gap: 2px
+        border-bottom-left-radius: 5%
+        border-bottom-right-radius: 5%
+
+      .nav-item,
+      .nav-item-active
         color: #bdc3c7
         text-decoration: none
         padding: 10px 15px
         border-radius: 5px
         transition: all 0.3s ease
 
+        &:hover
+          background-color: #34495e
+          color: white
 
       .nav-item-active
         color: white
-        text-decoration: none
-        padding: 10px 15px
-        border-radius: 5px
-        transition: all 0.3s ease
-       
-        
-      
-    
-  
+        background-color: #1a486e
 
-  .sidebar-content 
+  .sidebar-content
     flex: 1
-    padding: 20px
+    padding: 15px
+
+    @media (min-width: 769px)
+      padding: 20px
 
     .section
-      margin-bottom: 30px
+      margin-bottom: 25px
 
-      h3 
+      @media (min-width: 769px)
+        margin-bottom: 30px
+
+      h3
         color: white
         font-size: 14px
         text-transform: uppercase
-        margin-bottom: 15px
+        margin-bottom: 12px
         font-weight: 600
-      
 
-      ul 
+      ul
         list-style: none
         padding: 0
         margin: 0
 
-        li 
-          margin-bottom: 10px
+        li
+          margin-bottom: 8px
 
-          a 
+          @media (min-width: 769px)
+            margin-bottom: 10px
+
+          a
             color: white
             text-decoration: none
             padding: 8px 12px
             display: block
             border-radius: 4px
             transition: all 0.3s ease
+            font-size: 13px
 
-            &:hover 
+            @media (min-width: 769px)
+              font-size: 14px
+
+            &:hover
               background-color: #34495e
               color: white
-            
-          
-        
-      
-    
-  
 
-  .sidebar-footer 
-    padding: 20px
+  .sidebar-footer
+    padding: 15px
+    border-top: 1px solid #4a6278
 
-    .user-info 
+    @media (min-width: 769px)
+      padding: 20px
+      border-top: none
+
+    .user-info
       display: flex
       align-items: center
       gap: 12px
 
-      .user-avatar 
-        width: 40px
-        height: 40px
+      .user-avatar
+        width: 35px
+        height: 35px
         background-color: white
         border-radius: 50%
         display: flex
         align-items: center
         justify-content: center
         font-weight: bold
-      
+        color: black
+        font-size: 12px
 
-      .user-details 
+        @media (min-width: 769px)
+          width: 40px
+          height: 40px
+          font-size: 14px
+
+      .user-details
         display: flex
         flex-direction: column
 
-        strong 
-          font-size: 14px
+        strong
+          font-size: 13px
           margin-bottom: 2px
-        
 
-        span 
-          font-size: 12px
+          @media (min-width: 769px)
+            font-size: 14px
+
+        span
+          font-size: 11px
           color: #bdc3c7
-        
-      
-    
-.create-user-form
-    text-align: left
-    margin-left: 250px
-    padding-left: 30px
-    height: 80%
-    font-size: 22px
-    border: 1px solid black
-    width: 40%
-    box-shadow: 5px 5px 2px #F6F6F6
 
-    
+          @media (min-width: 769px)
+            font-size: 12px
+
+.main-content
+  flex: 1
+  padding: 20px 15px
+
+  @media (min-width: 769px)
+    padding-top: 40px
+    padding-left: 40px
+
+  .content-header
+    display: flex
+    justify-content: space-between
+    align-items: center
+    margin-bottom: 20px
+    padding: 15px
+    background-color: black
+    border-radius: 10px
+    flex-direction: column
+    gap: 15px
+
+    @media (min-width: 480px)
+      flex-direction: row
+
+    @media (min-width: 769px)
+      width: 90%
+      margin-left: 5%
+      height: 70px
+      border-radius: 15px
+      flex-direction: row
+      gap: 0
+      margin-bottom: 30px
+      padding: 0 10px
+
+    .content-header-left
+      display: flex
+      align-items: center
+      gap: 12px
+      width: 100%
+      justify-content: space-between
+
+      @media (min-width: 480px)
+        width: auto
+        justify-content: flex-start
+
+      .content-header-back
+        width: 30px
+        height: 30px
+        cursor: pointer
+        transition: transform 0.2s ease
+        padding: 0
+
+        @media (min-width: 769px)
+          width: 35px
+          height: 35px
+
+        &:hover
+          transform: translateX(-2px)
+
+    .content-header-title
+      color: white
+      font-size: 18px
+      font-weight: 600
+      margin: 0
+      text-align: center
+
+      @media (min-width: 480px)
+        text-align: left
+        font-size: 20px
+
+      @media (min-width: 769px)
+        font-size: 26px
+
+.create-user-form
+  background: white
+  border-radius: 15px
+  border: 1px solid #e0e0e0
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1)
+  padding: 20px
+  margin: 0 auto
+  width: 100%
+  max-width: 500px
+
+  @media (max-width: 768px)
+    margin: 0
+    border-radius: 10px
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1)
+    font-size: 16px
+
+  @media (min-width: 769px) and (max-width: 1024px)
+    margin-left: 10%
+    width: 80%
+    max-width: none
+
+  @media (min-width: 1025px)
+    margin-left: 35%
+    padding-left: 30px
+    height: auto
+    font-size: 22px
+    width: 40%
+
+  form
+    width: 100%
+
+    .form-group
+      margin-bottom: 25px
+
+      @media (max-width: 768px)
+        margin-bottom: 20px
+        margin-top: 20px
+
+      @media (min-width: 769px)
+        margin-top: 40px
+
+      label
+        display: block
+        margin-bottom: 8px
+        font-weight: 600
+        color: #2c3e50
+        font-size: 16px
+
+        @media (min-width: 1025px)
+          font-size: 18px
+
+        br
+          display: none
+
+      .input
+        width: 100%
+        height: 45px
+        border: 1px solid #bdc3c7
+        border-radius: 10px
+        padding: 0 15px
+        font-size: 16px
+        background-color: #F6F6F6
+        transition: all 0.3s ease
+        box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1)
+
+        @media (max-width: 768px)
+          height: 40px
+          font-size: 14px
+          border-radius: 8px
+
+        @media (min-width: 1025px)
+          height: 35px
+          font-size: 18px
+          border-radius: 15px
+          width: 90%
+
+        &:focus
+          outline: none
+          border-color: #3498db
+          box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2)
+          background-color: white
+
+      select.input
+        cursor: pointer
+        appearance: none
+        background-image: url("data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'><path fill='%23333' d='M2 0L0 2h4zm0 5L0 3h4z'/></svg>")
+        background-repeat: no-repeat
+        background-position: right 15px center
+        background-size: 12px
+
+    .form-actions
+      text-align: center
+      margin-top: 30px
+      width: 100%
+
+      @media (max-width: 768px)
+        margin-top: 25px
+
+      @media (min-width: 1025px)
+        width: 30%
+        margin-left: 32.5%
+
+      .btn-primary
+        width: 100%
+        max-width: 300px
+        height: 50px
+        border: none
+        border-radius: 12px
+        background-color: #3498db
+        color: white
+        font-size: 16px
+        font-weight: 600
+        cursor: pointer
+        transition: all 0.3s ease
+        box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2)
+
+        @media (max-width: 768px)
+          height: 45px
+          font-size: 15px
+          border-radius: 10px
+          max-width: 100%
+
+        @media (min-width: 1025px)
+          width: 100%
+          height: 40px
+          border-radius: 15px
+
+        &:hover
+          background-color: #2980b9
+          transform: translateY(-2px)
+          box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3)
+
+        &:active
+          transform: translateY(0)
+          box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2)
+
+@media (max-width: 360px)
+  .users-page
+    .main-content
+      padding: 15px 10px
+
+    .content-header
+      .content-header-title
+        font-size: 16px
+
+    .create-user-form
+      padding: 15px
+      border-radius: 8px
+
+      .form-group
+        margin-bottom: 15px
+
+        label
+          font-size: 14px
+
+        .input
+          height: 35px
+          font-size: 13px
+
+      .btn-primary
+        height: 40px
+        font-size: 14px
+
+@media (min-width: 1440px)
+  .users-page
+    .sidebar
+      width: 300px
+
+    .main-content
+      padding-left: 50px
+
+      .content-header
+        width: 85%
+
+      .create-user-form
+        margin-left: 30%
+        width: 35%
+
+@media (max-width: 768px) and (orientation: landscape)
+  .users-page
+    .sidebar
+      position: relative
+
+    .create-user-form
+      max-height: 70vh
+      overflow-y: auto
+
+@media (hover: none) and (pointer: coarse)
+  .btn-primary
+    &:hover
+      transform: none
+      background-color: #3498db
+
+    &:active
+      background-color: #2980b9
+      transform: scale(0.98)
+
+  .content-header-back
+    &:hover
+      transform: none
+
+    &:active
+      transform: translateX(-2px)
+
+@media (prefers-color-scheme: dark)
+  .create-user-form
+    background-color: #2c3e50
+    border-color: #34495e
+
+    .form-group
+      label
+        color: #ecf0f1
+
+      .input
+        background-color: #34495e
+        border-color: #4a6278
+        color: white
+
+        &:focus
+          background-color: #2c3e50
+          color: white
 
 .input
-    width: 90%
-    height: 35px
-    border-radius: 5%
-    box-shadow: 1px 1px 1px black
-    font-size: 18px
-    background-color: #F6F6F6
+  &:invalid:not(:focus):not(:placeholder-shown)
+    border-color: #e74c3c
+    background-color: #fdf2f2
 
-
-.form-group
-    margin-top: 40px
-
+  &:valid:not(:focus):not(:placeholder-shown)
+    border-color: #27ae60
+    background-color: #f2fdf2
 
 .btn-primary
-    text-align: center
-    margin-top: 20px
-    margin-left: 0%
-    box-shadow: 1px 1px 1px #F6F6F6
-    width: 90%
-    height: 40px
-    color: white
-    background-color: #3498db 
+  position: relative
+  overflow: hidden
+
+  &:disabled
+    background-color: #bdc3c7
+    cursor: not-allowed
+    transform: none
+
+  .loading-spinner
+    display: inline-block
+    width: 20px
+    height: 20px
+    border: 2px solid transparent
+    border-top: 2px solid white
+    border-radius: 50%
+    animation: spin 1s linear infinite
+    margin-right: 10px
+
+@keyframes spin
+  0%
+    transform: rotate(0deg)
+  100%
+    transform: rotate(360deg)

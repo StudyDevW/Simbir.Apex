@@ -17,10 +17,17 @@ const CreateUserPage: React.FC<CreateUserPageProps> = ({ onCreateUser }) => {
     password: '',
     status: 'online' as 'online' | 'offline'
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
+
+    // Имитация задержки сети
+    await new Promise(resolve => setTimeout(resolve, 500));
+
     onCreateUser(formData);
+    setIsSubmitting(false);
     navigate('/users');
   };
 
@@ -41,7 +48,7 @@ const CreateUserPage: React.FC<CreateUserPageProps> = ({ onCreateUser }) => {
         <div className="sidebar-header">
           <div className="sidebar-title">
             <h1 className="title">Пользователи</h1>
-            <h3 className="mini-title">Активная вкладка</h3>
+            <p className='mini_title'>Активная вкладка</p>
           </div>
           <nav className="main-nav">
             <a href="#" className="nav-item">Главная</a>
@@ -70,7 +77,7 @@ const CreateUserPage: React.FC<CreateUserPageProps> = ({ onCreateUser }) => {
 
         <div className="sidebar-footer">
           <div className="user-info">
-            <div className="user-avatar"></div>
+            <div className="user-avatar">И</div>
             <div className="user-details">
               <strong>Иван (Desa1s13)</strong>
               <span>Руководитель</span>
@@ -79,24 +86,14 @@ const CreateUserPage: React.FC<CreateUserPageProps> = ({ onCreateUser }) => {
         </div>
       </div>
 
-
-
-
-
-
-
-
-
-
       <div className="main-content">
         <div className="content-header">
           <div className="content-header-left">
-            <img 
-              src={LeftArrow} 
-              className="content-header-back" 
-              alt="Назад" 
+            <img
+              src={LeftArrow}
+              className="content-header-back"
+              alt="Назад"
               onClick={handleGoBack}
-              style={{ cursor: 'pointer' }}
             />
             <h1 className='content-header-title'>Создание пользователя</h1>
           </div>
@@ -113,6 +110,9 @@ const CreateUserPage: React.FC<CreateUserPageProps> = ({ onCreateUser }) => {
                 onChange={(e) => handleChange('fullName', e.target.value)}
                 className='input'
                 required
+                placeholder="Введите ФИО пользователя"
+                minLength={2}
+                maxLength={100}
               />
             </div>
 
@@ -125,6 +125,8 @@ const CreateUserPage: React.FC<CreateUserPageProps> = ({ onCreateUser }) => {
                 onChange={(e) => handleChange('email', e.target.value)}
                 className='input'
                 required
+                placeholder="Введите email"
+                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
               />
             </div>
 
@@ -137,6 +139,8 @@ const CreateUserPage: React.FC<CreateUserPageProps> = ({ onCreateUser }) => {
                 onChange={(e) => handleChange('phone', e.target.value)}
                 className='input'
                 required
+                placeholder="Введите телефон"
+                pattern="[\+]?[0-9\s\-\(\)]+"
               />
             </div>
 
@@ -149,6 +153,8 @@ const CreateUserPage: React.FC<CreateUserPageProps> = ({ onCreateUser }) => {
                 onChange={(e) => handleChange('password', e.target.value)}
                 className='input'
                 required
+                placeholder="Введите пароль"
+                minLength={6}
               />
             </div>
 
@@ -157,19 +163,29 @@ const CreateUserPage: React.FC<CreateUserPageProps> = ({ onCreateUser }) => {
               <select
                 id="status"
                 value={formData.status}
-                className='input'
                 onChange={(e) => handleChange('status', e.target.value)}
+                className='input'
               >
-                <option value="analytics">Аналитик</option>
-                <option value="supervisor">Руководитель</option>
-                <option value="Expert">Эксперт</option>
-
+                <option value="online">Аналитик</option>
+                <option value="offline">Руководитель</option>
+                <option value="online">Эксперт</option>
               </select>
             </div>
 
             <div className="form-actions">
-              <button type="submit" className="btn-primary">
-                Создать пользователя
+              <button
+                type="submit"
+                className="btn-primary"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? (
+                  <>
+                    <span className="loading-spinner"></span>
+                    Создание...
+                  </>
+                ) : (
+                  'Создать пользователя'
+                )}
               </button>
             </div>
           </form>

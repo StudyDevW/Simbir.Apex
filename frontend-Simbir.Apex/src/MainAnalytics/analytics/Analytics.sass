@@ -1,101 +1,305 @@
-.analytics 
+.analytics
   margin: 0
   padding: 0
+  width: 100%
+  height: 100%
   display: flex
-  min-height: 100vh
   font-family: 'Arial', sans-serif
 
+  @media (max-width: 1440px)
+    height: auto
+    min-height: 100vh
 
-.sidebar 
-  width: 280px
+  @media (max-width: 1024px)
+    height: auto
+    min-height: 100vh
+
+  @media (max-width: 768px)
+    flex-direction: column
+
+  @media (max-width: 425px)
+    min-height: 100vh
+
+.sidebar
+  position: fixed
+  width: 300px
+  height: 875px
+  margin: 0
   background: black
-  border-radius: 3%
+  border-radius: 15px
   color: white
   display: flex
   flex-direction: column
-  padding: 20px 0
 
+  @media (max-width: 1440px)
+    width: 280px
+    height: 100vh
 
-  .sidebar-header 
-    padding: 0 10px 20px
+  @media (max-width: 1024px)
+    width: 280px
+    height: 100vh
+    position: fixed
+    z-index: 1000
+
+  @media (max-width: 768px)
+    position: fixed
+    top: 0
+    left: -100%
+    width: 280px
+    height: 100vh
+    transition: left 0.3s ease
+    z-index: 1000
+    border-radius: 0
+
+    &.mobile-open
+      left: 0
+
+  @media (max-width: 425px)
+    width: 100%
+    left: -100%
+
+    &.mobile-open
+      left: 0
+
+  .sidebar-header
+    height: 30%
+    padding: 0 10px 0px
     border-bottom: 1px solid #4a6278
+
+    @media (max-width: 1440px)
+      padding: 0 15px 20px
+
+    @media (max-width: 1024px)
+      padding: 0 8px 15px
+
+    @media (max-width: 768px)
+      padding: 15px 20px
+
+    @media (max-width: 425px)
+      padding: 15px
 
     .sidebar-title
       background-color: #3498db
       display: flex
-      width: 98%
-      height: 47%
+      width: 95%
+      height: 33%
       color: white
-      margin-right: 20%
+      margin-right: 50%
       padding-left: 2%
       border-top-left-radius: 5%
       border-top-right-radius: 5%
       box-shadow: inset
-      
-    .title 
+
+      @media (max-width: 1440px)
+        width: 100%
+        margin-right: 0
+        padding: 20px
+        height: auto
+        border-radius: 12px
+
+      @media (max-width: 1024px)
+        width: 100%
+        margin-right: 0
+        padding: 12px
+        height: auto
+
+      @media (max-width: 768px)
+        width: 100%
+        margin-right: 0
+        padding: 15px
+        border-radius: 10px
+        height: auto
+        flex-direction: column
+
+      @media (max-width: 375px)
+        padding: 12px
+
+    .title
       font-size: 26px
       font-weight: bold
       margin-bottom: 30px
       color: #ecf0f1
-    
-    .mini-title
-      font-size: 12px
-      margin-top: 30%
+      padding-left: 5%
 
-    .main-nav 
+      @media (max-width: 1440px)
+        font-size: 24px
+        margin-bottom: 25px
+        padding-left: 0
+
+      @media (max-width: 1024px)
+        font-size: 22px
+        margin-bottom: 20px
+        padding-left: 3%
+
+      @media (max-width: 768px)
+        font-size: 22px
+        margin-bottom: 10px
+        padding-left: 0
+
+      @media (max-width: 375px)
+        font-size: 20px
+
+    .mini_title
+      font-size: 14px
+      padding-left: 50%
+
+      @media (max-width: 1440px)
+        margin-top: 20%
+        padding-right: 0
+        font-size: 11px
+
+      @media (max-width: 1024px)
+        margin-top: 25%
+        padding-right: 3%
+
+      @media (max-width: 768px)
+        margin-top: 0
+        padding-right: 0
+        font-size: 11px
+
+    .main-nav
       display: flex
       flex-direction: column
-      padding-top: 5%
-      padding: 1%
       gap: 2px
       font-size: 14px
       background-color: #245A8C
-      border-bottom-left-radius:  5%
-      border-bottom-right-radius:  5%
+      border-bottom-left-radius: 5%
+      border-bottom-right-radius: 5%
 
-      .nav-item 
-        color: #bdc3c7
-        text-decoration: none
+      @media (max-width: 1440px)
+        padding-top: 20px
+        border-radius: 12px
+        gap: 4px
+
+      @media (max-width: 1024px)
+        padding-top: 4%
+        font-size: 13px
+
+      @media (max-width: 768px)
+        padding: 10px
+        border-radius: 10px
+        flex-direction: column
+        gap: 5px
+
+      @media (max-width: 425px)
+        padding: 8px
+
+    .nav-item
+      color: #bdc3c7
+      text-decoration: none
+      padding: 8px 15px
+      padding-left: 20%
+      border-radius: 5px
+      transition: all 0.3s ease
+
+      @media (max-width: 1440px)
+        padding: 10px 20px
+        padding-left: 20px
+        font-size: 14px
+
+      @media (max-width: 1024px)
+        padding: 7px 12px
+        padding-left: 15%
+
+      @media (max-width: 768px)
         padding: 10px 15px
-        border-radius: 5px
-        transition: all 0.3s ease
+        text-align: left
+        font-size: 14px
+
+      @media (max-width: 375px)
+        padding: 8px 12px
+        font-size: 13px
 
       .nav-item-active
         color: white
         text-decoration: none
-        padding: 10px 15px
+        padding: 8px 15px
+        padding-left: 20%
         border-radius: 5px
         transition: all 0.3s ease
-       
-        
-      
-    
-  
 
-  .sidebar-content 
+        @media (max-width: 1440px)
+          padding: 10px 20px
+          padding-left: 20px
+
+        @media (max-width: 1024px)
+          padding: 7px 12px
+          padding-left: 15%
+
+        @media (max-width: 768px)
+          padding: 10px 15px
+
+        @media (max-width: 375px)
+          padding: 8px 12px
+
+  .sidebar-content
     flex: 1
     padding: 20px
+
+    @media (max-width: 1440px)
+      padding: 25px 20px
+
+    @media (max-width: 1024px)
+      padding: 15px
+
+    @media (max-width: 768px)
+      padding: 15px 20px
+
+    @media (max-width: 425px)
+      padding: 12px 15px
 
     .section
       margin-bottom: 30px
 
-      h3 
+      @media (max-width: 1440px)
+        margin-bottom: 25px
+
+      @media (max-width: 1024px)
+        margin-bottom: 20px
+
+      @media (max-width: 768px)
+        margin-bottom: 25px
+
+      @media (max-width: 425px)
+        margin-bottom: 20px
+
+      h3
         color: white
         font-size: 14px
         text-transform: uppercase
         margin-bottom: 15px
         font-weight: 600
-      
 
-      ul 
+        @media (max-width: 1440px)
+          font-size: 13px
+          margin-bottom: 12px
+
+        @media (max-width: 1024px)
+          font-size: 13px
+          margin-bottom: 12px
+
+        @media (max-width: 425px)
+          font-size: 12px
+          margin-bottom: 10px
+
+      ul
         list-style: none
         padding: 0
         margin: 0
 
-        li 
+        li
           margin-bottom: 10px
 
-          a 
+          @media (max-width: 1440px)
+            margin-bottom: 8px
+
+          @media (max-width: 1024px)
+            margin-bottom: 8px
+
+          @media (max-width: 425px)
+            margin-bottom: 6px
+
+          a
             color: white
             text-decoration: none
             padding: 8px 12px
@@ -103,25 +307,52 @@
             border-radius: 4px
             transition: all 0.3s ease
 
-            &:hover 
+            @media (max-width: 1440px)
+              padding: 8px 10px
+              font-size: 13px
+
+            @media (max-width: 1024px)
+              padding: 6px 10px
+              font-size: 13px
+
+            @media (max-width: 425px)
+              padding: 5px 8px
+              font-size: 12px
+
+            &:hover
               background-color: #34495e
               color: white
-            
-          
-        
-      
-    
-  
 
-  .sidebar-footer 
+  .sidebar-footer
     padding: 20px
 
-    .user-info 
+    @media (max-width: 1440px)
+      padding: 25px 20px
+
+    @media (max-width: 1024px)
+      padding: 15px
+
+    @media (max-width: 768px)
+      padding: 15px 20px
+
+    @media (max-width: 425px)
+      padding: 12px 15px
+
+    .user-info
       display: flex
       align-items: center
       gap: 12px
 
-      .user-avatar 
+      @media (max-width: 1440px)
+        gap: 15px
+
+      @media (max-width: 1024px)
+        gap: 10px
+
+      @media (max-width: 425px)
+        gap: 8px
+
+      .user-avatar
         width: 40px
         height: 40px
         background-color: white
@@ -130,17 +361,759 @@
         align-items: center
         justify-content: center
         font-weight: bold
-      
 
-      .user-details 
+        @media (max-width: 1440px)
+          width: 45px
+          height: 45px
+
+        @media (max-width: 1024px)
+          width: 35px
+          height: 35px
+
+        @media (max-width: 375px)
+          width: 32px
+          height: 32px
+
+      .user-details
         display: flex
         flex-direction: column
 
-        strong 
+        strong
           font-size: 14px
           margin-bottom: 2px
-        
 
-        span 
+          @media (max-width: 1440px)
+            font-size: 15px
+
+          @media (max-width: 1024px)
+            font-size: 13px
+
+          @media (max-width: 375px)
+            font-size: 12px
+
+        span
           font-size: 12px
           color: #bdc3c7
+
+          @media (max-width: 1440px)
+            font-size: 13px
+
+          @media (max-width: 1024px)
+            font-size: 11px
+
+          @media (max-width: 375px)
+            font-size: 10px
+
+// Mobile menu button
+.mobile-menu-btn
+  display: none
+  position: fixed
+  top: 15px
+  left: 15px
+  z-index: 1001
+  background: #3498db
+  color: white
+  border: none
+  border-radius: 5px
+  padding: 10px 12px
+  cursor: pointer
+  font-size: 18px
+
+  @media (max-width: 768px)
+    display: block
+
+  @media (max-width: 375px)
+    padding: 8px 10px
+    font-size: 16px
+
+// Mobile overlay
+.mobile-overlay
+  display: none
+  position: fixed
+  top: 0
+  left: 0
+  width: 100%
+  height: 100%
+  background: rgba(0, 0, 0, 0.7)
+  z-index: 999
+
+  @media (max-width: 768px)
+    &.active
+      display: block
+
+.main
+  padding-top: 3%
+  padding-left: 9%
+  width: 100%
+  height: 100%
+
+  @media (max-width: 1440px)
+    padding: 2% 0 0 300px
+    width: calc(100% - 300px)
+
+  @media (max-width: 1024px)
+    padding: 2% 0 0 300px
+    width: calc(100% - 300px)
+
+  @media (max-width: 768px)
+    padding: 70px 20px 20px
+    width: 100%
+
+  @media (max-width: 425px)
+    padding: 60px 15px 15px
+
+  @media (max-width: 375px)
+    padding: 55px 12px 12px
+
+  @media (max-width: 320px)
+    padding: 50px 10px 10px
+
+.main-header
+  background-color: black
+  color: white
+  width: 75%
+  margin-left: 13%
+  height: 170px
+  padding: 20px 50px
+  border-radius: 15px
+  display: flex
+  flex-direction: column
+  justify-content: space-between
+  position: relative
+
+  @media (max-width: 1440px)
+    width: 80%
+    margin-left: 10%
+    height: 180px
+    padding: 25px 40px
+
+  @media (max-width: 1024px)
+    width: 90%
+    margin-left: 5%
+    height: 160px
+    padding: 15px 30px
+
+  @media (max-width: 768px)
+    width: 100%
+    margin-left: 0
+    height: auto
+    padding: 20px
+    gap: 20px
+
+  @media (max-width: 425px)
+    padding: 15px
+    gap: 15px
+    border-radius: 12px
+
+  @media (max-width: 375px)
+    padding: 12px
+    gap: 12px
+
+.main-header-content
+  display: flex
+  justify-content: space-between
+  align-items: flex-start
+  flex: 1
+
+  @media (max-width: 1440px)
+    align-items: center
+
+  @media (max-width: 1024px)
+    align-items: center
+
+  @media (max-width: 768px)
+    flex-direction: column
+    gap: 15px
+    text-align: center
+
+  @media (max-width: 425px)
+    gap: 12px
+
+.text-content
+  flex: 1
+
+  @media (max-width: 1440px)
+    flex: 2
+
+.main-header-title
+  font-size: 30px
+  font-weight: bold
+  margin: 0
+
+  @media (max-width: 1440px)
+    font-size: 28px
+
+  @media (max-width: 1024px)
+    font-size: 24px
+
+  @media (max-width: 768px)
+    font-size: 22px
+
+  @media (max-width: 425px)
+    font-size: 20px
+
+  @media (max-width: 375px)
+    font-size: 18px
+
+  @media (max-width: 320px)
+    font-size: 17px
+
+.main-header-text
+  margin: 0
+  padding-top: 10px
+  font-size: 22px
+  color: #cccccc
+
+  @media (max-width: 1440px)
+    font-size: 20px
+    padding-top: 8px
+
+  @media (max-width: 1024px)
+    font-size: 18px
+    padding-top: 8px
+
+  @media (max-width: 768px)
+    font-size: 16px
+    padding-top: 5px
+
+  @media (max-width: 425px)
+    font-size: 15px
+
+  @media (max-width: 375px)
+    font-size: 14px
+
+  @media (max-width: 320px)
+    font-size: 13px
+
+.main-header-img
+  width: 100px
+  height: 80px
+  object-fit: contain
+  margin-left: 20px
+  margin-top: 20px
+
+  @media (max-width: 1440px)
+    width: 90px
+    height: 70px
+    margin-left: 25px
+    margin-top: 0
+
+  @media (max-width: 1024px)
+    width: 80px
+    height: 60px
+    margin-left: 15px
+    margin-top: 0
+
+  @media (max-width: 768px)
+    margin: 0 auto
+    width: 70px
+    height: 55px
+
+  @media (max-width: 425px)
+    width: 60px
+    height: 50px
+
+.stats-section
+  font-weight: bold
+  background-color: #3498db
+  max-width: 400px
+  padding: 8px 15px
+  border-radius: 15px
+
+  @media (max-width: 1440px)
+    max-width: 380px
+    padding: 10px 20px
+
+  @media (max-width: 1024px)
+    max-width: 350px
+    padding: 6px 12px
+
+  @media (max-width: 768px)
+    max-width: 100%
+    text-align: center
+    padding: 10px 15px
+
+  @media (max-width: 425px)
+    padding: 8px 12px
+    border-radius: 12px
+
+.stats-table
+  width: 100%
+
+.status-text
+  font-size: 16px
+  color: white
+  padding-right: 15px
+
+  @media (max-width: 1440px)
+    font-size: 16px
+    padding-right: 20px
+
+  @media (max-width: 1024px)
+    font-size: 14px
+    padding-right: 10px
+
+  @media (max-width: 768px)
+    font-size: 15px
+
+  @media (max-width: 425px)
+    font-size: 14px
+    padding-right: 8px
+
+  @media (max-width: 375px)
+    font-size: 13px
+
+.stats-value
+  background-color: #245A8C
+  width: 60px
+  height: 40px
+  border-radius: 10px
+  text-align: center
+  font-size: 18px
+  color: white
+  display: flex
+  align-items: center
+  justify-content: center
+
+  @media (max-width: 1440px)
+    width: 65px
+    height: 45px
+    font-size: 19px
+
+  @media (max-width: 1024px)
+    width: 50px
+    height: 35px
+    font-size: 16px
+
+  @media (max-width: 425px)
+    width: 45px
+    height: 32px
+    font-size: 15px
+    border-radius: 8px
+
+.events-section-header
+  display: flex
+  flex-direction: column
+  gap: 15px
+
+  @media (max-width: 1440px)
+    gap: 18px
+
+  @media (max-width: 1024px)
+    gap: 12px
+
+  @media (max-width: 768px)
+    gap: 10px
+
+  @media (max-width: 425px)
+    gap: 8px
+
+.events-section-title
+  padding-top: 1.5%
+  padding-left: 13%
+  font-size: 28px
+  font-weight: bold
+  margin: 0
+  color: black
+  text-decoration: underline
+
+  @media (max-width: 1440px)
+    padding-left: 10%
+    font-size: 26px
+    padding-top: 2%
+
+  @media (max-width: 1024px)
+    padding-left: 5%
+    font-size: 24px
+    padding-top: 2%
+
+  @media (max-width: 768px)
+    padding: 20px 0 0 0
+    font-size: 24px
+    text-align: center
+
+  @media (max-width: 425px)
+    font-size: 22px
+    padding-top: 15px
+
+  @media (max-width: 375px)
+    font-size: 20px
+
+  @media (max-width: 320px)
+    font-size: 19px
+
+.search-container
+  position: relative
+  display: flex
+  align-items: center
+  width: 81%
+  margin-left: 13%
+  padding-top: 1%
+
+  @media (max-width: 1440px)
+    width: 80%
+    margin-left: 10%
+    padding-top: 0.5%
+
+  @media (max-width: 1024px)
+    width: 90%
+    margin-left: 5%
+    padding-top: 0.5%
+
+  @media (max-width: 768px)
+    width: 100%
+    margin-left: 0
+    padding-top: 0
+
+  .search-input
+    padding: 10px 15px
+    padding-right: 45px
+    border: 1px solid #ced4da
+    border-radius: 6px
+    font-size: 14px
+    width: 100%
+    background-color: #E8E8E8
+    transition: all 0.2s
+    color: black
+
+    @media (max-width: 1440px)
+      padding: 12px 18px
+      padding-right: 50px
+      font-size: 15px
+      border-radius: 8px
+
+    @media (max-width: 1024px)
+      padding: 8px 12px
+      padding-right: 40px
+      font-size: 13px
+
+    @media (max-width: 768px)
+      padding: 10px 14px
+      font-size: 14px
+
+    @media (max-width: 425px)
+      padding: 8px 12px
+      font-size: 13px
+
+    @media (max-width: 320px)
+      padding: 7px 10px
+      font-size: 12px
+
+    &:focus
+      outline: none
+      border-color: #667eea
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1)
+
+    &::placeholder
+      color: #6c757d
+
+  .search-img
+    position: absolute
+    right: 10px
+    width: 20px
+    height: 20px
+    cursor: pointer
+
+    @media (max-width: 1440px)
+      width: 22px
+      height: 22px
+      right: 15px
+
+    @media (max-width: 1024px)
+      width: 18px
+      height: 18px
+      right: 8px
+
+    @media (max-width: 425px)
+      width: 16px
+      height: 16px
+      right: 8px
+
+.data-table
+  margin-top: 1%
+  width: 81%
+  margin-left: 13%
+  border-collapse: collapse
+  background: white
+  border-radius: 3px
+  overflow: hidden
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1)
+
+  @media (max-width: 1440px)
+    width: 80%
+    margin-left: 10%
+    margin-top: 0.5%
+    border-radius: 8px
+
+  @media (max-width: 1024px)
+    width: 90%
+    margin-left: 5%
+    margin-top: 0.5%
+
+  @media (max-width: 768px)
+    width: 100%
+    margin-left: 0
+    margin-top: 15px
+
+  @media (max-width: 425px)
+    margin-top: 12px
+    font-size: 13px
+
+  @media (max-width: 375px)
+    font-size: 12px
+
+  th, td
+    padding: 15px 20px
+    text-align: left
+    border-bottom: 1px solid #dee2e6
+
+    @media (max-width: 1440px)
+      padding: 16px 22px
+
+    @media (max-width: 1024px)
+      padding: 12px 15px
+
+    @media (max-width: 768px)
+      padding: 10px 12px
+
+    @media (max-width: 425px)
+      padding: 8px 10px
+
+    @media (max-width: 375px)
+      padding: 6px 8px
+
+  th
+    background-color: #f8f9fa
+    font-weight: 600
+    color: #495057
+
+    @media (max-width: 1440px)
+      font-size: 15px
+
+    @media (max-width: 1024px)
+      font-size: 14px
+
+    @media (max-width: 425px)
+      font-size: 12px
+
+    @media (max-width: 375px)
+      font-size: 11px
+
+.section-header-title
+  font-size: 28px
+  font-weight: bold
+  padding-top: 3%
+  padding-left: 13%
+  margin: 0
+  text-decoration: underline
+
+  @media (max-width: 1440px)
+    padding-left: 10%
+    font-size: 26px
+    padding-top: 2.5%
+
+  @media (max-width: 1024px)
+    padding-left: 5%
+    font-size: 24px
+    padding-top: 2%
+
+  @media (max-width: 768px)
+    padding: 25px 0 0 0
+    font-size: 24px
+    text-align: center
+
+  @media (max-width: 425px)
+    font-size: 22px
+    padding-top: 20px
+
+  @media (max-width: 375px)
+    font-size: 20px
+
+.reports-section
+  .reports-grid
+    margin-top: 1%
+    max-width: 81%
+    margin-left: 13%
+    display: grid
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr))
+    gap: 20px
+
+    @media (max-width: 1440px)
+      max-width: 80%
+      margin-left: 10%
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr))
+      gap: 25px
+
+    @media (max-width: 1024px)
+      max-width: 90%
+      margin-left: 5%
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr))
+      gap: 15px
+
+    @media (max-width: 768px)
+      max-width: 100%
+      margin-left: 0
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr))
+      gap: 15px
+
+    @media (max-width: 425px)
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr))
+      gap: 12px
+
+    @media (max-width: 375px)
+      grid-template-columns: 1fr
+      gap: 10px
+
+  .report-card
+    margin: 0
+    height: 80%
+    background: #E8E8E8
+    border: 1px solid black
+    border-radius: 8px
+    padding: 10px 18px
+    text-align: center
+    transition: all 0.3s ease
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05)
+
+    @media (max-width: 1440px)
+      padding: 15px 20px
+      border-radius: 10px
+
+    @media (max-width: 1024px)
+      padding: 12px 15px
+      height: auto
+
+    @media (max-width: 768px)
+      padding: 15px
+      height: auto
+
+    @media (max-width: 425px)
+      padding: 12px
+      border-radius: 6px
+
+    &:hover
+      transform: translateY(-2px)
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1)
+
+    .report-title
+      text-align: left
+      font-weight: bold
+      color: black
+      font-size: 23px
+      margin: 0
+
+      @media (max-width: 1440px)
+        font-size: 22px
+        text-align: center
+
+      @media (max-width: 1024px)
+        font-size: 20px
+        text-align: center
+
+      @media (max-width: 768px)
+        text-align: center
+        font-size: 20px
+
+      @media (max-width: 425px)
+        font-size: 18px
+
+    .report-mini-title
+      padding-top: 5px
+      font-weight: normal
+      text-align: left
+      margin: 0
+
+      @media (max-width: 1440px)
+        text-align: center
+        padding-top: 8px
+        font-size: 15px
+
+      @media (max-width: 1024px)
+        text-align: center
+        padding-top: 8px
+
+      @media (max-width: 768px)
+        text-align: center
+        padding-top: 8px
+
+      @media (max-width: 425px)
+        font-size: 14px
+
+    .view-btn
+      background-color: #3498db
+      color: white
+      padding: 10px 10px
+      border-radius: 6px
+      cursor: pointer
+      font-size: 14px
+      font-weight: 500
+      transition: all 0.2s
+      width: 60%
+      margin-top: 5%
+      margin-left: 46%
+      border: none
+
+      @media (max-width: 1440px)
+        width: 70%
+        margin: 10px auto 0 auto
+        padding: 12px
+        font-size: 15px
+
+      @media (max-width: 1024px)
+        width: 80%
+        margin: 8px auto 0 auto
+        padding: 8px
+
+      @media (max-width: 768px)
+        width: 100%
+        margin: 10px 0 0 0
+        padding: 12px
+        font-size: 15px
+
+      @media (max-width: 425px)
+        padding: 10px
+        font-size: 14px
+        border-radius: 5px
+
+      @media (max-width: 375px)
+        padding: 8px
+        font-size: 13px
+
+      &:hover
+        transform: translateY(-1px)
+        box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3)
+
+@media (max-height: 858px)
+  .sidebar
+    height: 100vh
+    overflow-y: auto
+
+  .main-header
+    height: auto
+    min-height: 140px
+
+  .stats-section
+    margin-top: auto
+
+@media (max-width: 768px)
+  .sidebar
+    &::-webkit-scrollbar
+      width: 4px
+
+    &::-webkit-scrollbar-thumb
+      background: #3498db
+      border-radius: 2px
+
+@media (max-width: 1440px) and (max-height: 858px)
+  .sidebar
+    height: 100vh
+
+  .main-header
+    height: 160px
+
+  .main
+    max-height: 100vh
+    overflow-y: auto
+
+  .reports-grid
+    margin-bottom: 20px

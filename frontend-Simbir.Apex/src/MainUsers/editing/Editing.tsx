@@ -61,7 +61,31 @@ const EditUserPage: React.FC<EditUserPageProps> = ({ users, onSaveUser }) => {
   };
 
   if (!user) {
-    return <div>Пользователь не найден</div>;
+    return (
+      <div className="users-page">
+        <div className="sidebar">
+          {/* Сайдбар аналогичный основному */}
+        </div>
+        <div className="main-content">
+          <div className="content-header">
+            <div className="content-header-left">
+              <img
+                src={LeftArrow}
+                className="content-header-back"
+                alt="Назад"
+                onClick={handleGoBack}
+              />
+              <h1 className='content-header-title'>Редактирование пользователя</h1>
+            </div>
+          </div>
+          <div className="edit-user-form">
+            <div style={{ textAlign: 'center', padding: '40px 20px', color: '#666' }}>
+              Пользователь не найден
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -70,7 +94,7 @@ const EditUserPage: React.FC<EditUserPageProps> = ({ users, onSaveUser }) => {
         <div className="sidebar-header">
           <div className="sidebar-title">
             <h1 className="title">Пользователи</h1>
-            <h3 className="mini-title">Активная вкладка</h3>
+            <p className='mini_title'>Активная вкладка</p>
           </div>
           <nav className="main-nav">
             <a href="#" className="nav-item">Главная</a>
@@ -99,7 +123,7 @@ const EditUserPage: React.FC<EditUserPageProps> = ({ users, onSaveUser }) => {
 
         <div className="sidebar-footer">
           <div className="user-info">
-            <div className="user-avatar"></div>
+            <div className="user-avatar">И</div>
             <div className="user-details">
               <strong>Иван (Desa1s13)</strong>
               <span>Руководитель</span>
@@ -108,20 +132,14 @@ const EditUserPage: React.FC<EditUserPageProps> = ({ users, onSaveUser }) => {
         </div>
       </div>
 
-
-
-
-
-
       <div className="main-content">
         <div className="content-header">
           <div className="content-header-left">
-            <img 
-              src={LeftArrow} 
-              className="content-header-back" 
-              alt="Назад" 
+            <img
+              src={LeftArrow}
+              className="content-header-back"
+              alt="Назад"
               onClick={handleGoBack}
-              style={{ cursor: 'pointer' }}
             />
             <h1 className='content-header-title'>Редактирование пользователя</h1>
           </div>
@@ -130,8 +148,7 @@ const EditUserPage: React.FC<EditUserPageProps> = ({ users, onSaveUser }) => {
         <div className="edit-user-form">
           <form onSubmit={handleSubmit}>
             <div className="form-group">
-              <label  htmlFor="fullName">ФИО</label>
-              <br />
+              <label htmlFor="fullName">ФИО</label>
               <input
                 type="text"
                 id="fullName"
@@ -139,12 +156,12 @@ const EditUserPage: React.FC<EditUserPageProps> = ({ users, onSaveUser }) => {
                 onChange={(e) => handleChange('fullName', e.target.value)}
                 required
                 className='input'
+                placeholder="Введите ФИО пользователя"
               />
             </div>
 
             <div className="form-group">
               <label className="Email" htmlFor="email">Email</label>
-              <br />
               <input
                 type="email"
                 id="email"
@@ -152,12 +169,12 @@ const EditUserPage: React.FC<EditUserPageProps> = ({ users, onSaveUser }) => {
                 onChange={(e) => handleChange('email', e.target.value)}
                 required
                 className='input'
+                placeholder="Введите email"
               />
             </div>
 
             <div className="form-group">
               <label htmlFor="phone">Телефон</label>
-              <br />
               <input
                 type="tel"
                 id="phone"
@@ -165,12 +182,12 @@ const EditUserPage: React.FC<EditUserPageProps> = ({ users, onSaveUser }) => {
                 onChange={(e) => handleChange('phone', e.target.value)}
                 required
                 className='input'
+                placeholder="Введите телефон"
               />
             </div>
 
             <div className="form-group">
               <label htmlFor="password">Пароль</label>
-              <br />
               <input
                 type="password"
                 id="password"
@@ -178,22 +195,21 @@ const EditUserPage: React.FC<EditUserPageProps> = ({ users, onSaveUser }) => {
                 onChange={(e) => handleChange('password', e.target.value)}
                 required
                 className='input'
+                placeholder="Введите пароль"
               />
             </div>
 
             <div className="form-group">
               <label htmlFor="status">Роль</label>
-              <br />
               <select
                 id="status"
                 value={formData.status}
                 onChange={(e) => handleChange('status', e.target.value)}
                 className='input'
               >
-                <option value="analytics">Аналитик</option>
-                <option value="supervisor">Руководитель</option>
-                <option value="Expert">Эксперт</option>
-
+                <option value="online">Аналитик</option>
+                <option value="offline">Руководитель</option>
+                <option value="online">Эксперт</option>
               </select>
             </div>
 

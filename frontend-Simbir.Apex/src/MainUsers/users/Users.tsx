@@ -4,7 +4,6 @@ import Cross from "../../assets/icon/icon-cross.png";
 import Pencil from "../../assets/icon/icon-pencil.png";
 import Plus from "../../assets/icon/icon-plus.png";
 import LeftArrow from "../../assets/icon/icon-left.png"
-import Analytics from '../../MainAnalytics/analytics/Analytics';
 import './Users.sass';
 
 export interface User {
@@ -57,7 +56,7 @@ const UsersPage: React.FC<UsersPageProps> = ({
         <div className="sidebar-header">
           <div className="sidebar-title">
             <h1 className="title">Пользователи</h1>
-            <h3 className="mini-title">Активная вкладка</h3>
+            <p className='mini_title'>Активная вкладка</p>
           </div>
           <nav className="main-nav">
             <a href="#" className="nav-item">Главная</a>
@@ -70,7 +69,7 @@ const UsersPage: React.FC<UsersPageProps> = ({
           <div className="section">
             <h3>Основное</h3>
             <ul>
-              <li><a href="#">Аналиитика</a></li>
+              <li><a href="#">Аналитика</a></li>
               <li><a href="#">Угрозы</a></li>
               <li><a href="#">Уведомления</a></li>
             </ul>
@@ -98,19 +97,19 @@ const UsersPage: React.FC<UsersPageProps> = ({
       <div className="main-content">
         <div className="content-header">
           <div className="content-header-left">
-            <img 
-              src={LeftArrow} 
-              className="content-header-back" 
-              alt="Назад" 
+            <img
+              src={LeftArrow}
+              className="content-header-back"
+              alt="Назад"
               onClick={handleGoBack}
               style={{ cursor: 'pointer' }}
             />
             <h1 className='content-header-title'>Пользователи</h1>
           </div>
-          <img 
-            src={Plus} 
-            className="content-header-plus" 
-            alt="Добавить" 
+          <img
+            src={Plus}
+            className="content-header-plus"
+            alt="Добавить"
             onClick={onCreateUser}
             style={{ cursor: 'pointer' }}
           />
@@ -151,17 +150,17 @@ const UsersPage: React.FC<UsersPageProps> = ({
                     </span>
                   </td>
                   <td className="actions-cell">
-                    <img 
-                      className='editing' 
-                      src={Pencil} 
-                      alt="Редактировать" 
+                    <img
+                      className='editing'
+                      src={Pencil}
+                      alt="Редактировать"
                       onClick={handleEditClick(user.id)}
                       style={{ cursor: 'pointer', marginRight: '10px' }}
                     />
-                    <img 
-                      className='cross' 
-                      src={Cross} 
-                      alt="Удалить" 
+                    <img
+                      className='cross'
+                      src={Cross}
+                      alt="Удалить"
                       onClick={handleDeleteClick(user.id)}
                       style={{ cursor: 'pointer' }}
                     />
