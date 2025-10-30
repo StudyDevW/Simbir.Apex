@@ -1,13 +1,9 @@
-import logging
 import os
 
 import pandas as pd
 from catboost import CatBoostClassifier
 from sklearn.metrics import roc_auc_score, classification_report
 
-from app.core.config import LOGGER_NAME, MODEL_EXPORT_FILE
-
-logger = logging.getLogger(LOGGER_NAME)
 RND_SEED = 42
 
 
@@ -40,7 +36,7 @@ def train_model(
     :param Y_val: validation labels
     :return: trained model
     """
-    logger.info(f"Start training CatBoost model...")
+    print(f"Start training CatBoost model...")
 
     model = CatBoostClassifier(
         iterations=500,
@@ -58,7 +54,7 @@ def train_model(
         eval_set=(X_val, Y_val),
         use_best_model=True
     )
-    logger.info("Model training done")
+    print("Model training done")
     return model
 
 
@@ -72,7 +68,7 @@ def evaluate_model(model: CatBoostClassifier,
     :param Y_test: test labels
     :return: AUC-ROC score
     """
-    logger.info("Evaluating model performance")
+    print("Evaluating model performance")
 
     Y_proba = model.predict_proba(X_test)[:, 1]
 
@@ -96,6 +92,6 @@ def export_model(model: CatBoostClassifier):
 
     try:
         model.save_model(MODEL_EXPORT_FILE)
-        logger.info(f"Model successfully saved in {MODEL_EXPORT_FILE}")
+        print(f"Model successfully saved in {MODEL_EXPORT_FILE}")
     except Exception as e:
-        logger.error(f"Error while saving model: {e}")
+        print(f"Error while saving model: {e}")

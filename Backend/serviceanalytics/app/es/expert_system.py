@@ -33,7 +33,7 @@ def get_recommendations(
     pred_threat = pred_alert.title
 
     for r in rules:
-        if r.get("threat_type", "") == pred_threat:
+        if r.get("threat_type", "") in pred_threat:
             return ResponseSchema(
                 predicted_for=time.to_pydatetime(),
                 probability=prob,

@@ -8,24 +8,51 @@ from typing import Optional
 
 import aiohttp
 import yaml
+from minio import Minio
 
-ANALYZER_URL_CACHE = None
-ES_CONFIG = None
+PORT = 8000
+ML_BASE_INTERVAL = 60  # minutes
+
+MODEL_NAME = "cbm-model.cbm"
+
 LOGGER_NAME = "service_analytics"
+
 LOGGER_CONFIG_FILE = "config/logger-config.yml"
 EXPERT_SYSTEM_CONFIG = "config/expert.yml"
-MODEL_EXPORT_FILE = "trained_models/model.cbm"
-PORT = 8000
+
+SERVICE_MANAGER_URL = os.environ.get('SERVICE_MANAGER_URL', None)
+
+MINIO_ENDPOINT = os.environ.get("MINIO_ENDPOINT", None)
+MINIO_ACCESS_KEY = os.environ.get("MINIO_ACCESS_KEY", None)
+MINIO_SECRET_KEY = os.environ.get("MINIO_SECRET_KEY", None)
+MINIO_BUCKET_NAME = "ml-models"
+MINIO_SECURE = False
+
+_ANALYZER_URL_CACHE = None
+_ES_CONFIG = None
 
 logger = logging.getLogger(LOGGER_NAME)
 
-try:
-    SERVICE_MANAGER_URL = os.environ['SERVICE_MANAGER_URL']
-except KeyError:
-    logger.critical("Environment var 'SERVICE_MANAGER_URL' not set")
-    SERVICE_MANAGER_URL = None
 
-ML_BASE_INTERVAL = 60  # minutes
+def get_minio_client() -> Minio | None:
+    """
+    Creates MinIO client
+    """
+    if not MINIO_ENDPOINT or not MINIO_ACCESS_KEY or not MINIO_SECRET_KEY:
+        logger.error("MinIO credentials not set, cannot create MinIO client")
+        return None
+    try:
+        client = Minio(
+            MINIO_ENDPOINT,
+            access_key=MINIO_ACCESS_KEY,
+            secret_key=MINIO_SECRET_KEY,
+            secure=MINIO_SECURE
+        )
+        return client
+    except Exception as e:
+        logger.error(f"Error while initializing MinIO client: {e}")
+        raise
+
 
 async def register_in_manager():
     """
@@ -45,7 +72,8 @@ async def register_in_manager():
 
     try:
         async with aiohttp.ClientSession() as session:
-            async with session.post(f"{SERVICE_MANAGER_URL}/api/main/insertservice?jsonData={json.dumps(service_data)}") as res:
+            async with session.post(
+                    f"{SERVICE_MANAGER_URL}/api/main/insertservice?jsonData={json.dumps(service_data)}") as res:
                 if res.status == 200:
                     logger.info("Service registered successfully")
                 else:
@@ -62,10 +90,10 @@ async def get_analyzer_url(force_refresh: bool = False) -> Optional[str]:
         logging.error(f"Service manager URL not set")
         return None
 
-    global ANALYZER_URL_CACHE
+    global _ANALYZER_URL_CACHE
 
-    if ANALYZER_URL_CACHE and not force_refresh:
-        return ANALYZER_URL_CACHE
+    if _ANALYZER_URL_CACHE and not force_refresh:
+        return _ANALYZER_URL_CACHE
 
     logger.info(f"Cache is invalidated. Checking service manager for new URL")
 
@@ -78,7 +106,7 @@ async def get_analyzer_url(force_refresh: bool = False) -> Optional[str]:
                     url = f"{ep.get("Address")}:{ep.get("Port")}"
 
                     if url:
-                        ANALYZER_URL_CACHE = url
+                        _ANALYZER_URL_CACHE = url
                         logger.info(f"Got new URL: {url}, caching it")
                         return url
                     else:
@@ -90,6 +118,7 @@ async def get_analyzer_url(force_refresh: bool = False) -> Optional[str]:
         logger.error(f"Failed to connect to service manager at {SERVICE_MANAGER_URL}.")
 
     return None
+
 
 def setup_logger():
     """
@@ -108,6 +137,7 @@ def setup_logger():
         print(f"WARNING: Logging config file not found at {LOGGER_CONFIG_FILE}. Using basic INFO config.")
         logging.basicConfig(level=logging.INFO)
 
+
 def setup_es_config():
     """
     Setting up expert system config
@@ -115,8 +145,8 @@ def setup_es_config():
     if os.path.exists(EXPERT_SYSTEM_CONFIG):
         with open(EXPERT_SYSTEM_CONFIG, "rt") as f:
             try:
-                global ES_CONFIG
-                ES_CONFIG = yaml.safe_load(f.read())
+                global _ES_CONFIG
+                _ES_CONFIG = yaml.safe_load(f.read())
                 logger.info(f"Expert system config loaded from: {EXPERT_SYSTEM_CONFIG}")
             except Exception as e:
                 logger.error(f"Error while set up config from file {EXPERT_SYSTEM_CONFIG}: {e}")
@@ -128,4 +158,4 @@ def get_es_config() -> dict | None:
     """
     Returns expert system config
     """
-    return ES_CONFIG
+    return _ES_CONFIG

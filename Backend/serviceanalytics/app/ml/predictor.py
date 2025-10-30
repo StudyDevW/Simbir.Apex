@@ -1,12 +1,11 @@
-import os
-
 import logging
+import tempfile
 from datetime import timedelta
 
 import pandas as pd
 from catboost import CatBoostClassifier
 
-from app.core.config import MODEL_EXPORT_FILE, LOGGER_NAME, ML_BASE_INTERVAL
+from app.core.config import LOGGER_NAME, ML_BASE_INTERVAL, get_minio_client, MINIO_BUCKET_NAME, MODEL_NAME
 from app.ml.features_config import LAG_INTERVAL, create_alerts_dataframe, aggregate_features_pred, \
     create_events_dataframe, append_events_to_exists_df
 from app.schemas.alert_schema import AlertSchema
@@ -18,23 +17,33 @@ logger = logging.getLogger(LOGGER_NAME)
 
 def load_model() -> CatBoostClassifier:
     """
-    Loading pretrained CatBoost model from file defined in ``serviceanalytics/app/core/config.py``
+    Loading pretrained CatBoost model from MinIO storage
 
     :return: ``CatBoostClassifier`` model.
     """
-    if not os.path.exists(MODEL_EXPORT_FILE):
-        logger.error(f"Model export file {MODEL_EXPORT_FILE} not found.")
-        raise FileNotFoundError(f"Model export file {MODEL_EXPORT_FILE} not found.")
+    logger.info(f"Loading model from MinIO...")
+    client = get_minio_client()
 
-    logger.info(f"Loading model from file {MODEL_EXPORT_FILE}...")
     try:
-        model = CatBoostClassifier().load_model(MODEL_EXPORT_FILE, format='cbm')
-        logger.info("Model successfully loaded")
-
-        return model
+        client.stat_object(MINIO_BUCKET_NAME, MODEL_NAME)
     except Exception as e:
-        logger.error(f"Error while loading model: {e}")
+        logger.error(f"Model not found in MinIO bucket: {e}")
         raise
+
+    with tempfile.NamedTemporaryFile(suffix='.cbm', delete=True) as tmp_file:
+        try:
+            client.fget_object(
+                MINIO_BUCKET_NAME,
+                MODEL_NAME,
+                tmp_file.name
+            )
+            model = CatBoostClassifier().load_model(tmp_file.name, format='cbm')
+            logger.info("Model successfully loaded")
+
+            return model
+        except Exception as e:
+            logger.error(f"Error while loading model: {e}")
+            raise
 
 
 def predict_alerts(
