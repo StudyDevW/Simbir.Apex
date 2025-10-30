@@ -1,4 +1,3 @@
-/*
 package simbir.apex.service.agent;
 
 import org.junit.jupiter.api.Test;
@@ -48,7 +47,7 @@ public class KafkaTest {
         for (Event event : events) {
             kafkaProducer.sendEvent(event);
         }
-        
+
         TimeUnit.SECONDS.sleep(1);
 
         Properties props = new Properties();
@@ -95,4 +94,3 @@ public class KafkaTest {
         );
     }
 }
-*/
