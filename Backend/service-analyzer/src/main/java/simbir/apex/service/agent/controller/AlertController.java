@@ -10,6 +10,7 @@ import simbir.apex.service.agent.service.AlertService;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/alerts")
@@ -30,7 +31,7 @@ public class AlertController {
      * Получить конкретный алерт по ID
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Alert> getAlertById(@PathVariable Long id) {
+    public ResponseEntity<Alert> getAlertById(@PathVariable UUID id) {
         return ResponseEntity.of(alertService.findById(id));
     }
 
@@ -38,7 +39,7 @@ public class AlertController {
      * Подтвердить алерт
      */
     @PostMapping("/{id}/confirm")
-    public ResponseEntity<Alert> confirmAlert(@PathVariable Long id) {
+    public ResponseEntity<Alert> confirmAlert(@PathVariable UUID id) {
         return ResponseEntity.ok(alertService.confirmAlert(id));
     }
 
@@ -46,7 +47,7 @@ public class AlertController {
      * Эскалировать алерт
      */
     @PostMapping("/{id}/escalate")
-    public ResponseEntity<Alert> escalateAlert(@PathVariable Long id) {
+    public ResponseEntity<Alert> escalateAlert(@PathVariable UUID id) {
         return ResponseEntity.ok(alertService.escalateAlert(id));
     }
 
@@ -54,7 +55,7 @@ public class AlertController {
      * Закрыть алерт с нотами
      */
     @PostMapping("/{id}/resolve")
-    public ResponseEntity<Alert> resolveAlert(@PathVariable Long id, @RequestParam(required = false) String notes) {
+    public ResponseEntity<Alert> resolveAlert(@PathVariable UUID id, @RequestParam(required = false) String notes) {
         return ResponseEntity.ok(alertService.resolveAlert(id, notes));
     }
 
@@ -62,7 +63,7 @@ public class AlertController {
      * Пометить как false positive
      */
     @PostMapping("/{id}/false-positive")
-    public ResponseEntity<Alert> markFalsePositive(@PathVariable Long id) {
+    public ResponseEntity<Alert> markFalsePositive(@PathVariable UUID id) {
         return ResponseEntity.ok(alertService.markFalsePositive(id));
     }
 

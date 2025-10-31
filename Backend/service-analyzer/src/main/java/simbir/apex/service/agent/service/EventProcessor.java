@@ -57,7 +57,7 @@ public class EventProcessor {
                                 .hostname(event.getDevice())
                                 .title(rule.getName())
                                 .description("Совпадение по правилу: " + rule.getLogic())
-                                .status(Status.NEW)
+                                .status(String.valueOf(Status.NEW))
                                 .severity(null)
                                 .rawData(rawDataJson)
                                 .createdAt(new Timestamp(System.currentTimeMillis()))

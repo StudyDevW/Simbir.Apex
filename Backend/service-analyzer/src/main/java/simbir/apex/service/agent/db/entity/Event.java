@@ -5,9 +5,10 @@ import lombok.*;
 import simbir.apex.service.agent.model.enums.EventSeverity;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Entity
-@Table(name = "events")
+@Table(name = "eventsTable")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -16,13 +17,15 @@ import java.util.Date;
 public class Event {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue
+    private UUID id;
 
+    @Column(name="is_Lan")
     private boolean isLan;
 
     private String device;
 
+    @Column(name="event_Id")
     private String eventId;
 
     @Enumerated(EnumType.STRING)

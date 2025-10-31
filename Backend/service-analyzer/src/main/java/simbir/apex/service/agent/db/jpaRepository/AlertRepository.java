@@ -1,13 +1,17 @@
 package simbir.apex.service.agent.db.jpaRepository;
 
-
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 import simbir.apex.service.agent.db.entity.Alert;
 
-import java.sql.Timestamp;
+
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
-public interface AlertRepository extends JpaRepository<Alert, Long> {
+@Repository
+public interface AlertRepository extends JpaRepository<Alert, UUID> {
 
-    List<Alert> findAllByCreatedAtBetween(Timestamp start, Timestamp end);
+    List<Alert> findAllByCreatedAtBetween(Date start, Date end);
+
 }

@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 /**
  * DTO для описания правила корреляции событий (шаблона угроз).
  * Пример logic:
@@ -18,7 +20,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class RuleDto {
 
-    private Long id;
+    private UUID id;
 
     /**
      * Условие проверки событий.
