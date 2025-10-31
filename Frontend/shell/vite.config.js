@@ -19,7 +19,7 @@ export default defineConfig({
         rules: 'http://localhost:5003/assets/remoteEntry.js',
         alerts: 'http://localhost:5004/assets/remoteEntry.js',
       },
-      shared: ['react','react-dom','react-router-dom']
+      shared: ['react', 'react-dom', 'react-router-dom']
     })
   ],
 });
