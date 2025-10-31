@@ -155,7 +155,7 @@ const EditUserPage: React.FC<EditUserPageProps> = ({ users, onSaveUser }) => {
                 value={formData.fullName}
                 onChange={(e) => handleChange('fullName', e.target.value)}
                 required
-                className='input'
+                className='form-group-input'
                 placeholder="Введите ФИО пользователя"
               />
             </div>
@@ -168,7 +168,7 @@ const EditUserPage: React.FC<EditUserPageProps> = ({ users, onSaveUser }) => {
                 value={formData.email}
                 onChange={(e) => handleChange('email', e.target.value)}
                 required
-                className='input'
+                className='form-group-input'
                 placeholder="Введите email"
               />
             </div>
@@ -181,7 +181,7 @@ const EditUserPage: React.FC<EditUserPageProps> = ({ users, onSaveUser }) => {
                 value={formData.phone}
                 onChange={(e) => handleChange('phone', e.target.value)}
                 required
-                className='input'
+                className='form-group-input'
                 placeholder="Введите телефон"
               />
             </div>
@@ -194,7 +194,7 @@ const EditUserPage: React.FC<EditUserPageProps> = ({ users, onSaveUser }) => {
                 value={formData.password}
                 onChange={(e) => handleChange('password', e.target.value)}
                 required
-                className='input'
+                className='form-group-input'
                 placeholder="Введите пароль"
               />
             </div>
@@ -205,7 +205,7 @@ const EditUserPage: React.FC<EditUserPageProps> = ({ users, onSaveUser }) => {
                 id="status"
                 value={formData.status}
                 onChange={(e) => handleChange('status', e.target.value)}
-                className='input'
+                className='form-group-status-input'
               >
                 <option value="online">Аналитик</option>
                 <option value="offline">Руководитель</option>

@@ -50,6 +50,9 @@ const UsersPage: React.FC<UsersPageProps> = ({
     navigate(-1);
   };
 
+  // Определяем, является ли устройство мобильным
+  const isMobile = window.innerWidth <= 767;
+
   return (
     <div className="users-page">
       <div className="sidebar">
@@ -105,14 +108,14 @@ const UsersPage: React.FC<UsersPageProps> = ({
               style={{ cursor: 'pointer' }}
             />
             <h1 className='content-header-title'>Пользователи</h1>
+            <img
+              src={Plus}
+              className="content-header-plus"
+              alt="Добавить"
+              onClick={onCreateUser}
+              style={{ cursor: 'pointer' }}
+            />
           </div>
-          <img
-            src={Plus}
-            className="content-header-plus"
-            alt="Добавить"
-            onClick={onCreateUser}
-            style={{ cursor: 'pointer' }}
-          />
         </div>
 
         <div className="users-table-container">
@@ -127,44 +130,78 @@ const UsersPage: React.FC<UsersPageProps> = ({
           </div>
 
           <table className="users-table">
-            <thead>
-              <tr>
-                <th>ФИО</th>
-                <th>Email</th>
-                <th>Телефон</th>
-                <th>Пароль</th>
-                <th>Статус</th>
-                <th>Действия</th>
-              </tr>
-            </thead>
+            {!isMobile && (
+              <thead>
+                <tr>
+                  <th>ФИО</th>
+                  <th>Email</th>
+                  <th>Телефон</th>
+                  <th>Пароль</th>
+                  <th>Статус</th>
+                  <th>Действия</th>
+                </tr>
+              </thead>
+            )}
             <tbody>
               {filteredUsers.map(user => (
                 <tr key={user.id}>
-                  <td>{user.fullName}</td>
-                  <td>{user.email}</td>
-                  <td>{user.phone}</td>
-                  <td>{user.password}</td>
-                  <td>
-                    <span className={`status ${user.status}`}>
-                      {user.status === 'online' ? 'В сети' : 'Не в сети'}
-                    </span>
-                  </td>
-                  <td className="actions-cell">
-                    <img
-                      className='editing'
-                      src={Pencil}
-                      alt="Редактировать"
-                      onClick={handleEditClick(user.id)}
-                      style={{ cursor: 'pointer', marginRight: '10px' }}
-                    />
-                    <img
-                      className='cross'
-                      src={Cross}
-                      alt="Удалить"
-                      onClick={handleDeleteClick(user.id)}
-                      style={{ cursor: 'pointer' }}
-                    />
-                  </td>
+                  {isMobile ? (
+                    <>
+                      <td data-label="ФИО:">{user.fullName}</td>
+                      <td data-label="Email:">{user.email}</td>
+                      <td data-label="Телефон:">{user.phone}</td>
+                      <td data-label="Пароль:">{user.password}</td>
+                      <td data-label="Статус:">
+                        <span className={`status ${user.status}`}>
+                          {user.status === 'online' ? 'В сети' : 'Не в сети'}
+                        </span>
+                      </td>
+                      <td className="actions-cell">
+                        <img
+                          className='editing'
+                          src={Pencil}
+                          alt="Редактировать"
+                          onClick={handleEditClick(user.id)}
+                          style={{ cursor: 'pointer' }}
+                        />
+                        <img
+                          className='cross'
+                          src={Cross}
+                          alt="Удалить"
+                          onClick={handleDeleteClick(user.id)}
+                          style={{ cursor: 'pointer' }}
+                        />
+                      </td>
+                    </>
+                  ) : (
+                    <>
+                      <td>{user.fullName}</td>
+                      <td>{user.email}</td>
+                      <td>{user.phone}</td>
+                      <td>{user.password}</td>
+                      <td>
+                        <span className={`status ${user.status}`}>
+                          {user.status === 'online' ? 'В сети' : 'Не в сети'}
+                        </span>
+                      </td>
+                      <td className="actions-cell">
+                        <img
+                          className='editing'
+                          src={Pencil}
+                          alt="Редактировать"
+                          onClick={handleEditClick(user.id)}
+                          style={{ cursor: 'pointer', marginRight: '10px' }}
+                        />
+                        <img
+                          className='cross'
+                          src={Cross}
+                          alt="Удалить"
+                          onClick={handleDeleteClick(user.id)}
+                          style={{ cursor: 'pointer' }}
+                        />
+                      </td>
+                    </>
+                  )}
                 </tr>
               ))}
             </tbody>
