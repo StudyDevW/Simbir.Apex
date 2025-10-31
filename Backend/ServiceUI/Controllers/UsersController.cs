@@ -40,12 +40,12 @@ namespace ServiceUI.Controllers
         }
 
         //ТОЛЬКО Руководитель 
-        [HttpPatch("Change")]
-        public async Task<IActionResult> ChangeUser([FromBody] UserChangeDTO dtoObj)
+        [HttpPatch("Change/{id}")]
+        public async Task<IActionResult> ChangeUser([FromBody] UserChangeDTO dtoObj, Guid id)
         {
             try
             {
-                await _serviceUI.ChangeUser(dtoObj, Request.Headers["Authorization"]);
+                await _serviceUI.ChangeUser(dtoObj, id, Request.Headers["Authorization"]);
                 return Ok("user_changed");
             }
             catch (Exception ex)
@@ -84,7 +84,7 @@ namespace ServiceUI.Controllers
             }
         }
 
-        [HttpGet("AllUsers")]
+        [HttpGet("All")]
         public async Task<IActionResult> GetUsers(/**/)
         {
             try

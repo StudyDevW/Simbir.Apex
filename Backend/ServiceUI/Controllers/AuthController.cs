@@ -32,7 +32,7 @@ namespace ServiceUI.Controllers
                 return Ok(auth);
             }
 
-            return Unauthorized();
+            return BadRequest();
         }
 
         [HttpGet("Validate")]

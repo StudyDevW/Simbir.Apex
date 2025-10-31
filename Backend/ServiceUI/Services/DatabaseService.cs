@@ -5,6 +5,7 @@ using Middleware_Components.JWT.DTO.CheckUsers;
 using ServiceUI.Interfaces;
 using ServiceUI.Tables;
 using System.Collections.Generic;
+using System.Data;
 
 namespace ServiceUI.Services
 {
@@ -156,6 +157,77 @@ namespace ServiceUI.Services
             else
                 throw new Exception("user_not_found");
 
+        }
+
+        public async Task RuleFillUp(TimedRuleDTO dtoObj)
+        {
+            RulesTable rulesTable = new RulesTable()
+            {
+                name = dtoObj.name,
+                description = dtoObj.description,
+                logic = dtoObj.logic,
+                severity = dtoObj.severity,
+                status = dtoObj.status,
+                created_at = dtoObj.created_at,
+                updated_at = null,
+                created_by = dtoObj.created_by
+            };
+
+            await _dbcontext.rulesTable.AddAsync(rulesTable);
+
+            await _dbcontext.SaveChangesAsync();
+
+        }
+
+        public async Task<GetRuleDTO?> GetRuleFromDB(Guid ruleId)
+        {
+            var selectedRule = await _dbcontext.rulesTable.Where(c => c.Id == ruleId).FirstOrDefaultAsync();
+
+            if (selectedRule != null)
+                return new GetRuleDTO()
+                {
+                    id = ruleId,
+                    name = selectedRule.name,
+                    description = selectedRule.description,
+                    logic = selectedRule.logic,
+                    severity = selectedRule.severity,
+                    status = selectedRule.status,
+                    created_by = selectedRule.created_by,
+                    created_at = selectedRule.created_at,
+                    updated_at = selectedRule.updated_at
+                };
+
+            return null;
+        }
+
+
+        public async Task<List<GetRuleDTO>> GetAllRulesFromDB()
+        {
+            List<GetRuleDTO> rulesAll = new List<GetRuleDTO>();
+
+            var selectedRules = await _dbcontext.rulesTable.ToListAsync();
+
+            if (selectedRules != null)
+                foreach (var rule in selectedRules)
+                {
+                    GetRuleDTO getRuleDTO = new GetRuleDTO()
+                    {
+                        id = rule.Id,
+                        name = rule.name,
+                        description = rule.description,
+                        logic = rule.logic,
+                        severity = rule.severity,
+                        status = rule.status,
+                        created_by = rule.created_by,
+                        created_at = rule.created_at,
+                        updated_at = rule.updated_at
+                    };
+
+                    rulesAll.Add(getRuleDTO);
+                }
+
+
+            return rulesAll;
         }
     }
 }

@@ -12,12 +12,22 @@ namespace ServiceUI.Interfaces
 
         public Task AddNewUser(UserAddDTO dtoObj, string token);
 
-        public Task ChangeUser(UserChangeDTO dtoObj, string token);
+        public Task ChangeUser(UserChangeDTO dtoObj, Guid id, string token);
 
         public Task DeleteUser(Guid idUser, string token);
 
         public Task<List<UserGetDTO>?> GetAllUsers(string token);
 
         public Task<UserGetDTO?> GetUser(Guid idUser, string token);
+
+        public Task<List<TimedRuleDTO>?> GetTimedRules(Guid idUser, string token);
+
+        public Task CreateRuleTimed(AddRuleDTO dtoObj, string token);
+
+        public Task AcceptRule(string ruleName, Guid idUser, string token);
+
+        public Task<GetRuleDTO?> GetRuleFromDB(Guid ruleId, string token);
+
+        public Task<List<GetRuleDTO>?> GetRulesFromDB(string token);
     }
 }

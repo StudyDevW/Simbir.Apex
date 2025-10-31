@@ -16,5 +16,11 @@ namespace ServiceUI.Interfaces
         public Task<List<UserGetDTO>?> GetAllUsers();
 
         public Task<UserGetDTO?> GetUser(Guid userId);
+
+        public Task RuleFillUp(TimedRuleDTO dtoObj);
+
+        public Task<GetRuleDTO?> GetRuleFromDB(Guid ruleId);
+
+        public Task<List<GetRuleDTO>> GetAllRulesFromDB();
     }
 }
