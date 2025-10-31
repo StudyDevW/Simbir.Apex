@@ -10,6 +10,10 @@ import aiohttp
 import yaml
 from minio import Minio
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
 PORT = 8000
 ML_BASE_INTERVAL = 60  # minutes
 
@@ -99,7 +103,7 @@ async def get_analyzer_url(force_refresh: bool = False) -> Optional[str]:
 
     try:
         async with aiohttp.ClientSession() as session:
-            async with session.get(f"{SERVICE_MANAGER_URL}/api/Main/GetServiceInfo/service-analyzer") as res:
+            async with session.get(f"{SERVICE_MANAGER_URL}/api/main/getserviceinfo/service-analyzer") as res:
                 if res.status == 200:
                     data = await res.json()
                     ep = data.get("EndPointService")
@@ -158,4 +162,7 @@ def get_es_config() -> dict | None:
     """
     Returns expert system config
     """
+    if not _ES_CONFIG:
+        logger.info("Expert system config not loaded, reloading...")
+        setup_es_config()
     return _ES_CONFIG

@@ -27,4 +27,5 @@ class AlertSchema(BaseModel):
     createdAt: datetime
     closedAt: Optional[datetime] = None
     resolutionNotes: Optional[str] = None
-    rawData: list[EventSchema]
+    rawData: str
+    rawDataParsed: Optional[list[EventSchema]] = None

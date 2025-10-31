@@ -1,3 +1,6 @@
+import json
+from datetime import datetime, timedelta
+
 import aiohttp
 import logging
 
@@ -23,34 +26,20 @@ async def fetch_alerts(time_period: int = config.ML_BASE_INTERVAL) -> list[Alert
         return None
 
     async with aiohttp.ClientSession() as session:
-        async with session.get(f"{url}/api/alerts/period/{time_period}") as res:
+        params = {
+            "start": datetime.now() - timedelta(minutes=time_period),
+            "end": datetime.now()
+        }
+        async with session.get(f"{url}/api/alerts/range", params=params) as res:
             data = await res.json()
             logger.info(f"Got {len(data)} alerts")
 
-            return [AlertSchema.model_validate(item) for item in data]
+            alerts = [AlertSchema.model_validate(item) for item in data]
 
+            for a in alerts:
+                a.rawDataParsed = [EventSchema.model_validate(json_parsed) for json_parsed in json.loads(a.rawData)]
 
-async def fetch_events(time_period: int = config.ML_BASE_INTERVAL) -> list[EventSchema] | None:
-    """
-    Fetch events from service analyzer for last ``time_period`` minutes
-    :param time_period: period in minutes, defaults to 60 minutes
-    :return: alert list
-    """
-    if time_period < 1:
-        return None
-    logger.info(f"Fetching events for last {time_period} minutes")
-
-    url = await config.get_analyzer_url()
-    if not url:
-        logger.error("Failed to get analyzer URL")
-        return None
-
-    async with aiohttp.ClientSession() as session:
-        async with session.get(f"{url}/api/events/period/{time_period}") as res:
-            data = await res.json()
-            logger.info(f"Got {len(data)} events")
-
-            return [EventSchema.model_validate(item) for item in data]
+            return alerts
 
 
 async def fetch_alerts_all_time() -> list[AlertSchema] | None:
@@ -69,4 +58,9 @@ async def fetch_alerts_all_time() -> list[AlertSchema] | None:
             data = await res.json()
             logger.info(f"Got {len(data)} alerts")
 
-            return [AlertSchema.model_validate(item) for item in data]
+            alerts = [AlertSchema.model_validate(item) for item in data]
+
+            for a in alerts:
+                a.rawDataParsed = [EventSchema.model_validate(json_parsed) for json_parsed in json.loads(a.rawData)]
+
+            return alerts

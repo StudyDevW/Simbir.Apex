@@ -7,7 +7,7 @@ from catboost import CatBoostClassifier
 
 from app.core.config import LOGGER_NAME, ML_BASE_INTERVAL, get_minio_client, MINIO_BUCKET_NAME, MODEL_NAME
 from app.ml.features_config import LAG_INTERVAL, create_alerts_dataframe, aggregate_features_pred, \
-    create_events_dataframe, append_events_to_exists_df
+    create_events_dataframe
 from app.schemas.alert_schema import AlertSchema
 
 from app.schemas.event_schema import EventSchema
@@ -48,20 +48,16 @@ def load_model() -> CatBoostClassifier:
 
 def predict_alerts(
         alert_data: list[AlertSchema],
-        events_data: list[EventSchema],
         model: CatBoostClassifier
 ) -> tuple[pd.Timestamp, float, int]:
     """
     Predicting alerts in next ``ML_BASE_INTERVAL``
     :param alert_data: list with ``AlertSchema`` for ``LAG_INTERVAL * ML_BASE_INTERVAL`` interval
-    :param events_data: list with ``EventSchema`` for ``LAG_INTERVAL * ML_BASE_INTERVAL`` interval
     :param model: pretrained ``CatBoostClassifier`` model
     :return: tuple with ``pd.Timestamp`` of next timestamp, ``float`` probability and ``int`` prediction
     """
     df_alerts = create_alerts_dataframe(alert_data)
-    df_events_from_alerts = create_events_dataframe(alert_data)
-
-    df_events = append_events_to_exists_df(df_events_from_alerts, events_data)
+    df_events = create_events_dataframe(alert_data)
 
     if df_events.empty and df_alerts.empty:
         logger.info("No new data in this period")

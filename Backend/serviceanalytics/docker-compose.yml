@@ -21,23 +21,13 @@ services:
       context: .
       dockerfile: Dockerfile
     environment:
-      MINIO_ENDPOINT: minio:9000
-      MINIO_ACCESS_KEY: minio_access_key
-      MINIO_SECRET_KEY: minio_secret_key
-    ports:
-      - "8000:8000"
-    depends_on:
-      - minio
-  trainer:
-    build:
-      context: .
-      dockerfile: trainer.Dockerfile
-    container_name: trainer
-    restart: "no"
-    environment:
+      SERVICE_MANAGER_URL: http://192.168.3.2:8080
+
       MINIO_ENDPOINT: minio:9000
       MINIO_ACCESS_KEY: minio_root_user
       MINIO_SECRET_KEY: minio_root_password
+    ports:
+      - "8000:8000"
     depends_on:
       - minio
 

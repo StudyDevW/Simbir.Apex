@@ -1,4 +1,5 @@
 import pandas as pd
+import pandas.api.types as ptypes
 import numpy as np
 
 from app.core.config import ML_BASE_INTERVAL
@@ -18,7 +19,7 @@ def create_alerts_dataframe(alerts: list[AlertSchema]) -> pd.DataFrame:
     if not alerts:
         return pd.DataFrame()
 
-    alerts_data = [alert.model_dump(exclude={'rawData'}) for alert in alerts]
+    alerts_data = [alert.model_dump(exclude={'rawData', 'rawDataParsed'}) for alert in alerts]
 
     df_alerts = pd.DataFrame(alerts_data)
 
@@ -39,7 +40,7 @@ def create_events_dataframe(alerts: list[AlertSchema]) -> pd.DataFrame:
 
     all_events_data = []
     for alert in alerts:
-        events = [event.model_dump() for event in alert.rawData]
+        events = [event.model_dump() for event in alert.rawDataParsed]
         all_events_data.extend(events)
 
     if not all_events_data:
@@ -52,6 +53,7 @@ def create_events_dataframe(alerts: list[AlertSchema]) -> pd.DataFrame:
 
     return df_events
 
+
 def append_events_to_exists_df(df: pd.DataFrame, events: list[EventSchema]) -> pd.DataFrame:
     """
     Appends events to existing DataFrame with events
@@ -62,12 +64,13 @@ def append_events_to_exists_df(df: pd.DataFrame, events: list[EventSchema]) -> p
     if not events:
         return df
 
-    df_events = pd.concat([df, pd.DataFrame(events)])
+    df_events_new = pd.DataFrame([e.model_dump() for e in events])
+    df_events = pd.concat([df, df_events_new])
 
     df_events['timestamp'] = pd.to_datetime(df_events['timestamp'])
     df_events = df_events.set_index('timestamp').sort_index()
 
-    df_events.drop(inplace=True)
+    df_events.drop_duplicates(inplace=True)
 
     return df_events
 
@@ -80,7 +83,8 @@ def aggregate_event_features(df_events: pd.DataFrame) -> pd.DataFrame:
     """
 
     def mode_value(x):
-        return x.mode()[0] if not x.empty else 'none'
+        m = x.mode()
+        return m.iloc[0] if not m.empty else 'none'
 
     def ratio_count(x, target_value):
         if x.empty or x.shape[0] == 0:
@@ -161,17 +165,17 @@ def aggregate_features_train(df_events: pd.DataFrame, df_alerts: pd.DataFrame) -
 
     df_final = df_final.rename(columns={'is_alert_future': 'is_alert'})
 
-    df_final = df_final.fillna({
-        col: 0.0 if df_final[col].dtype in [np.float64, np.int64] else 'none_missing'
-        for col in df_final.columns
-    })
+    for col in df_final.columns:
+        if pd.api.types.is_numeric_dtype(df_final[col]):
+            df_final[col] = df_final[col].fillna(0.0)
+        else:
+            df_final[col] = df_final[col].fillna('none_missing')
 
     df_final['hour_of_day'] = df_final.index.hour
     df_final['day_of_week'] = df_final.index.dayofweek
-    df_final['is_weekend'] = df_final['dayofweek'].apply(lambda x: 1 if x >= 5 else 0)
+    df_final['is_weekend'] = df_final['day_of_week'].apply(lambda x: 1 if x >= 5 else 0)
 
-    lag_features = [col for col in df_final.columns if
-                    col not in ['hour_of_day', 'day_of_week', 'is_weekend', 'is_alert']]
+    lag_features = [col for col in df_final.columns if col != 'is_alert']
 
     lag_features.append('is_alert')
 
@@ -180,7 +184,9 @@ def aggregate_features_train(df_events: pd.DataFrame, df_alerts: pd.DataFrame) -
             new_col_name = f'{feature}_lag_{lag}'
             df_final[new_col_name] = df_final[feature].shift(lag)
 
-            if df_final[feature].dtype == object:
+            if ptypes.is_numeric_dtype(df_final[feature]):
+                df_final[new_col_name].fillna(0.0, inplace=True)
+            else:
                 df_final[new_col_name].fillna('missing_lag', inplace=True)
 
     df_final = df_final.iloc[LAG_INTERVAL:].dropna(subset=['is_alert'])
@@ -188,7 +194,7 @@ def aggregate_features_train(df_events: pd.DataFrame, df_alerts: pd.DataFrame) -
     return df_final
 
 
-def aggregate_features_pred(df_events: pd.DataFrame, df_alerts: pd.DataFrame) -> pd.DataFrame:
+def aggregate_features_pred(df_events: pd.DataFrame, df_alerts: pd.DataFrame, feature_order: list[str] = None) -> pd.DataFrame:
     """
     Aggregates events and alerts for predictions, appends lags and time context
 
@@ -201,18 +207,17 @@ def aggregate_features_pred(df_events: pd.DataFrame, df_alerts: pd.DataFrame) ->
 
     df_final = df_features.merge(df_alerts_agg, left_index=True, right_index=True, how='outer')
 
-    df_final = df_final.fillna({
-        col: 0.0 if df_final[col].dtype in [np.float64, np.int64] else 'none_missing'
-        for col in df_final.columns
-    })
+    for col in df_final.columns:
+        if pd.api.types.is_numeric_dtype(df_final[col]):
+            df_final[col] = df_final[col].fillna(0.0)
+        else:
+            df_final[col] = df_final[col].fillna('none_missing')
 
     df_final['hour_of_day'] = df_final.index.hour
     df_final['day_of_week'] = df_final.index.dayofweek
-    df_final['is_weekend'] = df_final['dayofweek'].apply(lambda x: 1 if x >= 5 else 0)
+    df_final['is_weekend'] = df_final['day_of_week'].apply(lambda x: 1 if x >= 5 else 0)
 
-    lag_features = [col for col in df_final.columns if
-                    col not in ['hour_of_day', 'day_of_week', 'is_weekend', 'is_alert']]
-
+    lag_features = [col for col in df_final.columns if col != 'is_alert']
     lag_features.append('is_alert')
 
     for feature in lag_features:
@@ -220,13 +225,18 @@ def aggregate_features_pred(df_events: pd.DataFrame, df_alerts: pd.DataFrame) ->
             new_col_name = f'{feature}_lag_{lag}'
             df_final[new_col_name] = df_final[feature].shift(lag)
 
-            if df_final[feature].dtype == object:
+            if pd.api.types.is_numeric_dtype(df_final[feature]):
+                df_final[new_col_name].fillna(0.0, inplace=True)
+            else:
                 df_final[new_col_name].fillna('missing_lag', inplace=True)
 
     df_final = df_final.iloc[LAG_INTERVAL:]
 
-    X_inference = df_final.iloc[[-1]]
+    X_inference = df_final.iloc[[-1]].copy()
 
     X_inference = X_inference.drop(columns=['is_alert'])
+
+    if feature_order is not None:
+        X_inference = X_inference[feature_order]
 
     return X_inference

@@ -1,5 +1,3 @@
-import os
-
 import pandas as pd
 from catboost import CatBoostClassifier
 from sklearn.metrics import roc_auc_score, classification_report
@@ -39,14 +37,17 @@ def train_model(
     print(f"Start training CatBoost model...")
 
     model = CatBoostClassifier(
-        iterations=500,
-        learning_rate=0.05,
+        scale_pos_weight = (len(Y_train) - Y_train.sum()) / Y_train.sum(),
+        iterations=400,
+        learning_rate=0.08,
+        depth=3,
+        l2_leaf_reg=16,
         loss_function='Logloss',
-        eval_metric='F1',
+        eval_metric='AUC',
         random_seed=RND_SEED,
         verbose=True,
         cat_features=categorical_features,
-        early_stopping_rounds=50
+        early_stopping_rounds=100
     )
 
     model.fit(
@@ -81,17 +82,3 @@ def evaluate_model(model: CatBoostClassifier,
     print(classification_report(Y_test, Y_pred, zero_division=0))
 
     return roc_auc
-
-
-def export_model(model: CatBoostClassifier):
-    """
-    Exports trained model to a file
-    :param model: trained model
-    """
-    os.makedirs(MODEL_EXPORT_FILE, exist_ok=True)
-
-    try:
-        model.save_model(MODEL_EXPORT_FILE)
-        print(f"Model successfully saved in {MODEL_EXPORT_FILE}")
-    except Exception as e:
-        print(f"Error while saving model: {e}")
