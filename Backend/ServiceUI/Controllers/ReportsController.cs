@@ -19,21 +19,21 @@ namespace ServiceUI.Controllers
             _serviceUI = serviceUI;
         }
 
-        [HttpPost("Add")]
+        [HttpPost("Add/(NOTREADY)")]
         public async Task<IActionResult> AddReport()
         {
 
             return BadRequest();
         }
 
-        [HttpPatch("Change")]
+        [HttpPatch("Change/(NOTREADY)")]
         public async Task<IActionResult> ChangeReport()
         {
 
             return BadRequest();
         }
 
-        [HttpDelete("Delete/{id}")]
+        [HttpDelete("Delete/{id}/(NOTREADY)")]
         public async Task<IActionResult> DeleteReport(Guid id)
         {
 
@@ -41,14 +41,14 @@ namespace ServiceUI.Controllers
         }
 
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}/(NOTREADY)")]
         public async Task<IActionResult> GetReport(Guid id)
         {
 
             return BadRequest();
         }
 
-        [HttpGet("All")]
+        [HttpGet("All/(NOTREADY)")]
         public async Task<IActionResult> GetReports()
         {
 

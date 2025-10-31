@@ -19,12 +19,12 @@ namespace ServiceUI.Controllers
             _serviceUI = serviceUI;
         }
 
-        [HttpPost("Status/{id}")]
-        public async Task<IActionResult> AlertStatus(Guid id)
+        [HttpPost("Status/{alertId}/(NOTREADY)")]
+        public async Task<IActionResult> AlertStatus(Guid alertId)
         {
-
             return BadRequest();
         }
+
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAlert(Guid id)
@@ -54,7 +54,7 @@ namespace ServiceUI.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}/(NOTREADY)")]
         public async Task<IActionResult> AlertAdminDelete(Guid id)
         {
 

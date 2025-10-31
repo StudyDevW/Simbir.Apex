@@ -21,8 +21,6 @@ namespace ServiceUI.Controllers
         }
 
         //CRUD'S EXPERT 
-
-
         [HttpPost("TimedRules/Add")]
         public async Task<IActionResult> AddTimedRule(AddRuleDTO dtoObj)
         {
@@ -59,7 +57,11 @@ namespace ServiceUI.Controllers
             try
             {
                 var rules = await _serviceUI.GetTimedRules(userId, Request.Headers["Authorization"]);
-                return Ok(rules);
+
+                if (rules != null)
+                    return Ok(rules);
+
+                return BadRequest("rules_null");
             }
             catch (Exception ex)
             {
