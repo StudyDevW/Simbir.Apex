@@ -7,10 +7,10 @@ interface PaginatedResponse<T> {
 }
 
 class RulesApiService {
-  private readonly url = 'rules';
+  private readonly url = 'Rules';
 
   async getAll(params?: { page?: number }): Promise<PaginatedResponse<Rule>> {
-    return ApiClient.get(this.url, { params });
+    return ApiClient.get(`${this.url}/All`, { params });
   }
 
   async get(id: string): Promise<Rule> {
@@ -18,7 +18,7 @@ class RulesApiService {
   }
 
   async create(data: Partial<Rule>): Promise<Rule> {
-    return ApiClient.post(this.url, data);
+    return ApiClient.post(`${this.url}/TimedRules/Add`, data);
   }
 
   async update(id: string, data: Partial<Rule>): Promise<Rule> {
