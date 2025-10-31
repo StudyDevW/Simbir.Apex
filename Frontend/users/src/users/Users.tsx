@@ -50,13 +50,15 @@ const UsersPage: React.FC<UsersPageProps> = ({
     navigate(-1);
   };
 
+  const isMobile = window.innerWidth <= 767;
+
   return (
     <div className="users-page">
       <div className="sidebar">
         <div className="sidebar-header">
           <div className="sidebar-title">
             <h1 className="title">Пользователи</h1>
-            <h3 className="mini-title">Активная вкладка</h3>
+            <p className='mini_title'>Активная вкладка</p>
           </div>
           <nav className="main-nav">
             <a href="#" className="nav-item">Главная</a>
@@ -69,7 +71,7 @@ const UsersPage: React.FC<UsersPageProps> = ({
           <div className="section">
             <h3>Основное</h3>
             <ul>
-              <li><a href="#">Руководство</a></li>
+              <li><a href="#">Аналитика</a></li>
               <li><a href="#">Угрозы</a></li>
               <li><a href="#">Уведомления</a></li>
             </ul>
@@ -97,22 +99,22 @@ const UsersPage: React.FC<UsersPageProps> = ({
       <div className="main-content">
         <div className="content-header">
           <div className="content-header-left">
-            <img 
-              src={LeftArrow} 
-              className="content-header-back" 
-              alt="Назад" 
+            <img
+              src={LeftArrow}
+              className="content-header-back"
+              alt="Назад"
               onClick={handleGoBack}
               style={{ cursor: 'pointer' }}
             />
             <h1 className='content-header-title'>Пользователи</h1>
+            <img
+              src={Plus}
+              className="content-header-plus"
+              alt="Добавить"
+              onClick={onCreateUser}
+              style={{ cursor: 'pointer' }}
+            />
           </div>
-          <img 
-            src={Plus} 
-            className="content-header-plus" 
-            alt="Добавить" 
-            onClick={onCreateUser}
-            style={{ cursor: 'pointer' }}
-          />
         </div>
 
         <div className="users-table-container">
@@ -127,44 +129,78 @@ const UsersPage: React.FC<UsersPageProps> = ({
           </div>
 
           <table className="users-table">
-            <thead>
-              <tr>
-                <th>ФИО</th>
-                <th>Email</th>
-                <th>Телефон</th>
-                <th>Пароль</th>
-                <th>Статус</th>
-                <th>Действия</th>
-              </tr>
-            </thead>
+            {!isMobile && (
+              <thead>
+                <tr>
+                  <th>ФИО</th>
+                  <th>Email</th>
+                  <th>Телефон</th>
+                  <th>Пароль</th>
+                  <th>Статус</th>
+                  <th>Действия</th>
+                </tr>
+              </thead>
+            )}
             <tbody>
               {filteredUsers.map(user => (
                 <tr key={user.id}>
-                  <td>{user.fullName}</td>
-                  <td>{user.email}</td>
-                  <td>{user.phone}</td>
-                  <td>{user.password}</td>
-                  <td>
-                    <span className={`status ${user.status}`}>
-                      {user.status === 'online' ? 'В сети' : 'Не в сети'}
-                    </span>
-                  </td>
-                  <td className="actions-cell">
-                    <img 
-                      className='editing' 
-                      src={Pencil} 
-                      alt="Редактировать" 
-                      onClick={handleEditClick(user.id)}
-                      style={{ cursor: 'pointer', marginRight: '10px' }}
-                    />
-                    <img 
-                      className='cross' 
-                      src={Cross} 
-                      alt="Удалить" 
-                      onClick={handleDeleteClick(user.id)}
-                      style={{ cursor: 'pointer' }}
-                    />
-                  </td>
+                  {isMobile ? (
+                    <>
+                      <td data-label="ФИО:">{user.fullName}</td>
+                      <td data-label="Email:">{user.email}</td>
+                      <td data-label="Телефон:">{user.phone}</td>
+                      <td data-label="Пароль:">{user.password}</td>
+                      <td data-label="Статус:">
+                        <span className={`status ${user.status}`}>
+                          {user.status === 'online' ? 'В сети' : 'Не в сети'}
+                        </span>
+                      </td>
+                      <td className="actions-cell">
+                        <img
+                          className='editing'
+                          src={Pencil}
+                          alt="Редактировать"
+                          onClick={handleEditClick(user.id)}
+                          style={{ cursor: 'pointer' }}
+                        />
+                        <img
+                          className='cross'
+                          src={Cross}
+                          alt="Удалить"
+                          onClick={handleDeleteClick(user.id)}
+                          style={{ cursor: 'pointer' }}
+                        />
+                      </td>
+                    </>
+                  ) : (
+                    <>
+                      <td>{user.fullName}</td>
+                      <td>{user.email}</td>
+                      <td>{user.phone}</td>
+                      <td>{user.password}</td>
+                      <td>
+                        <span className={`status ${user.status}`}>
+                          {user.status === 'online' ? 'В сети' : 'Не в сети'}
+                        </span>
+                      </td>
+                      <td className="actions-cell">
+                        <img
+                          className='editing'
+                          src={Pencil}
+                          alt="Редактировать"
+                          onClick={handleEditClick(user.id)}
+                          style={{ cursor: 'pointer', marginRight: '10px' }}
+                        />
+                        <img
+                          className='cross'
+                          src={Cross}
+                          alt="Удалить"
+                          onClick={handleDeleteClick(user.id)}
+                          style={{ cursor: 'pointer' }}
+                        />
+                      </td>
+                    </>
+                  )}
                 </tr>
               ))}
             </tbody>

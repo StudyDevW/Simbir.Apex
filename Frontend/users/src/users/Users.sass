@@ -1,328 +1,577 @@
-.users-page 
-  margin: 0
-  padding: 0
+.users-page
+  height: 100%
   display: flex
+  flex-direction: column
   min-height: 100vh
   font-family: 'Arial', sans-serif
 
+  @media (max-width: 424px)
+    flex-direction: column
+    min-height: auto
 
-.sidebar 
-  width: 280px
-  background: black
-  border-radius: 3%
+    @media (min-width: 768px) and (max-width: 1023px)
+      flex-direction: row
+
+    @media (min-width: 1024px)
+      flex-direction: row
+
+.sidebar
+  width: 100%
+  background: #111111 !important
   color: white
   display: flex
   flex-direction: column
-  padding: 20px 0
 
+  @media (max-width: 424px)
+    height: auto
+    border-radius: 0
+    padding: 10px
 
-  .sidebar-header 
-    padding: 0 10px 20px
-    border-bottom: 1px solid #4a6278
+    @media (min-width: 425px) and (max-width: 767px)
+      height: auto
+      border-radius: 15px
+      margin: 10px
+
+    @media (min-width: 768px) and (max-width: 1023px)
+      width: 200px
+      height: auto
+      border-radius: 15px
+      margin: 10px
+
+    @media (min-width: 1024px) and (max-width: 1439px)
+      width: 230px
+      height: 880px
+      border-radius: 15px
+
+    @media (min-width: 1440px)
+      width: 250px
+      height: 900px
+      border-radius: 15px
+
+.sidebar-header
+  margin-top: 5%
+  padding: 0 10px 20px
+  border-bottom: 1px solid #4a6278
+
+  @media (max-width: 424px)
+    margin-top: 2%
+    padding: 0 5px 15px
 
     .sidebar-title
       background-color: #3498db
       display: flex
-      width: 98%
-      height: 47%
+      flex-direction: column
+      width: 100%
       color: white
-      margin-right: 20%
-      padding-left: 2%
       border-top-left-radius: 5%
       border-top-right-radius: 5%
       box-shadow: inset
-      
-    .title 
-      font-size: 26px
+
+      @media (max-width: 424px)
+        flex-direction: column
+        height: auto !important
+        padding: 10px 0
+
+    .title
       font-weight: bold
       margin-bottom: 30px
       color: #ecf0f1
-    
-    .mini-title
-      font-size: 12px
-      margin-top: 30%
+      padding-left: 3% !important
 
-    .main-nav 
+      @media (max-width: 424px)
+        font-size: 18px !important
+        margin-bottom: 15px
+        padding-left: 5% !important
+
+        @media (min-width: 425px) and (max-width: 767px)
+          font-size: 22px !important
+
+        @media (min-width: 768px)
+          font-size: 26px !important
+
+    .mini_title
+      padding-left: 50%
+      margin-top: 10% !important
+
+      @media (max-width: 424px)
+        font-size: 12px !important
+        padding-left: 40%
+        margin-top: 5% !important
+
+        @media (min-width: 425px) and (max-width: 767px)
+          font-size: 13px !important
+          padding-left: 45%
+
+    .main-nav
       display: flex
       flex-direction: column
-      padding-top: 5%
-      padding: 1%
-      gap: 2px
+      padding-top: 3%
+      gap: 20px
       font-size: 14px
       background-color: #245A8C
-      border-bottom-left-radius:  5%
-      border-bottom-right-radius:  5%
+      border-radius: 15px
 
-      .nav-item 
-        color: #bdc3c7
-        text-decoration: none
-        padding: 10px 15px
-        border-radius: 5px
-        transition: all 0.3s ease
+      @media (max-width: 424px)
+        gap: 10px
+        font-size: 12px
+        padding: 10px 0
 
-      .nav-item-active
-        color: white
-        text-decoration: none
-        padding: 10px 15px
-        border-radius: 5px
-        transition: all 0.3s ease
-       
-        
-      
-    
-  
+        @media (min-width: 425px) and (max-width: 767px)
+          gap: 15px
 
-  .sidebar-content 
-    flex: 1
-    padding: 20px
+    .nav-item, .nav-item-active
+      text-decoration: none
+      padding: 8px 15px
+      padding-left: 12% !important
+      transition: all 0.3s ease
+      color: #ecf0f1
+
+      @media (max-width: 424px)
+        padding: 6px 10px
+        padding-left: 8% !important
+
+.sidebar-content
+  flex: 1
+  padding: 20px
+  margin-left: 2%
+
+  @media (max-width: 424px)
+    padding: 10px
+    margin-left: 0
 
     .section
       margin-bottom: 30px
 
-      h3 
-        color: white
-        font-size: 14px
-        text-transform: uppercase
-        margin-bottom: 15px
-        font-weight: 600
-      
+      @media (max-width: 424px)
+        margin-bottom: 20px
 
-      ul 
-        list-style: none
-        padding: 0
-        margin: 0
+    h3
+      color: white
+      text-transform: uppercase
+      margin-bottom: 15px
+      font-weight: 600
 
-        li 
-          margin-bottom: 10px
+      @media (max-width: 424px)
+        font-size: 12px
+        margin-bottom: 10px
 
-          a 
-            color: white
-            text-decoration: none
-            padding: 8px 12px
-            display: block
-            border-radius: 4px
-            transition: all 0.3s ease
+        @media (min-width: 425px) and (max-width: 767px)
+          font-size: 13px
 
-            &:hover 
+        @media (min-width: 768px)
+          font-size: 14px
+
+    ul
+      list-style: none
+      padding: 0
+      margin: 0
+
+      li
+        margin-bottom: 10px
+
+        @media (max-width: 424px)
+          margin-bottom: 8px
+
+        a
+          color: white
+          text-decoration: none
+          padding: 8px 12px
+          display: block
+          border-radius: 4px
+          transition: all 0.3s ease
+          font-size: 13px
+
+          @media (max-width: 424px)
+            padding: 6px 8px
+            font-size: 12px
+
+            &:hover
               background-color: #34495e
               color: white
-            
-          
-        
-      
-    
-  
 
-  .sidebar-footer 
-    padding: 20px
+.sidebar-footer
+  padding: 20px
+  background-color: black
+  border-radius: 15px
 
-    .user-info 
+  @media (max-width: 424px)
+    padding: 15px
+    border-radius: 10px
+
+    .user-info
       display: flex
       align-items: center
       gap: 12px
 
-      .user-avatar 
-        width: 40px
-        height: 40px
-        background-color: white
-        border-radius: 50%
-        display: flex
-        align-items: center
-        justify-content: center
-        font-weight: bold
-      
+      @media (max-width: 424px)
+        gap: 8px
 
-      .user-details 
-        display: flex
-        flex-direction: column
+    .user-avatar
+      background-color: white
+      border-radius: 50%
+      display: flex
+      align-items: center
+      justify-content: center
+      font-weight: bold
 
-        strong 
-          font-size: 14px
-          margin-bottom: 2px
-        
+      @media (max-width: 424px)
+        width: 32px
+        height: 32px
+        font-size: 12px
 
-        span 
+        @media (min-width: 425px)
+          width: 40px
+          height: 40px
+
+    .user-details
+      display: flex
+      flex-direction: column
+
+      strong
+        margin-bottom: 2px
+
+        @media (max-width: 424px)
           font-size: 12px
+
+          @media (min-width: 425px)
+            font-size: 14px
+
+        span
           color: #bdc3c7
-        
-      
-    
 
-    .organization-info 
-      font-size: 12px
-      color: #95a5a6
-      text-align: center
-      padding: 10px
-      background-color: #34495e
-      border-radius: 4px
-    
-  
+          @media (max-width: 424px)
+            font-size: 10px
 
+            @media (min-width: 425px)
+              font-size: 12px
 
+.main-content
+  display: flex
+  flex-direction: column
+  align-items: center
+  justify-content: flex-start
+  width: 100%
+  padding: 20px 10px
 
-.main-content 
-  flex: 1
-  padding-top: 40px
-  padding-left: 100px
-  
+  @media (max-width: 767px)
+    padding-top: 20px
+    margin-left: 0
 
-  .content-header 
-    display: flex
-    justify-content: between
-    align-items: center
-    margin-bottom: 30px
+    @media (min-width: 768px) and (max-width: 1023px)
+      flex: 1
+      padding-top: 30px
+      margin-left: 0
+      max-width: calc(100% - 220px)
+
+    @media (min-width: 1024px)
+      flex: 1
+      padding-top: 40px
+      margin-left: 15%
+      max-width: 85%
+
+.content-header
+  display: flex
+  justify-content: space-between
+  align-items: center
+  padding: 0 20px
+  background-color: black
+  width: 100%
+  border-radius: 15px
+  margin-bottom: 20px
+
+  @media (max-width: 424px)
+    height: 50px
     padding: 0 10px
-    background-color: black
-    width: 91%
-    height: 70px
+    margin-bottom: 15px
+
+    @media (min-width: 425px) and (max-width: 767px)
+      height: 40px
+      margin-bottom: 20px
+
+    @media (min-width: 768px)
+      height: 30px
+      width: 88%
+      margin-bottom: 30px
 
     .content-header-title
       color: white
-      font-size: 26px
       font-weight: 600
       margin: 0
+      flex: 1
 
-    .content-header-left 
+      @media (max-width: 424px)
+        font-size: 18px !important
+
+        @media (min-width: 425px) and (max-width: 767px)
+          font-size: 22px !important
+
+        @media (min-width: 768px)
+          font-size: 26px !important
+
+    .content-header-left
       display: flex
       align-items: center
       gap: 16px
+      width: 100%
 
-      .content-header-back 
-        padding-left: 10px
-        width: 35px
-        height: 35px
-        cursor: pointer
-        transition: transform 0.2s ease
-        
-        &:hover 
-          transform: translateX(-2px)
-           
+      @media (max-width: 424px)
+        gap: 10px
 
-    .content-header-plus 
-      width: 33px
-      height: 33px
+    .content-header-back
       cursor: pointer
-      padding-left: 64%
-      transition: all 0.3s ease
-      
-      
-    
-  
-      
-  
+      transition: transform 0.2s ease
 
-  .users-table-container 
-    background: white
-    border-radius: 8px
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1)
-    overflow: hidden
-    width: 93%
+      @media (max-width: 424px)
+        width: 20px
+        height: 20px
+
+        @media (min-width: 425px) and (max-width: 767px)
+          width: 25px
+          height: 25px
+
+        @media (min-width: 768px)
+          width: 30px
+          height: 30px
+
+        &:hover
+          transform: translateX(-2px)
+
+    .content-header-plus
+      cursor: pointer
+      transition: all 0.3s ease
+      margin-right: 8% !important
+
+      @media (max-width: 424px)
+        width: 20px
+        height: 20px
+        margin-right: 0
+
+        @media (min-width: 425px) and (max-width: 767px)
+          width: 24px
+          height: 24px
+          margin-right: 2%
+
+        @media (min-width: 768px)
+          width: 28px
+          height: 28px
+          margin-right: 5%
+
+.users-table-container
+  background: white
+  border-radius: 8px
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1)
+  overflow: hidden
+  width: 100%
+
+  @media (min-width: 768px)
+    width: 90%
 
     .search-container
-
-      padding: 20px
+      width: 100%
+      padding: 12px 20px
+      margin: 0
       border-bottom: 1px solid #ecf0f1
+      background-color: #f8f9fa
+      display: flex
+      justify-content: center
 
-      .search-input 
-        width: 97%
-        padding: 12px 16px
-        border: 1px solid #bdc3c7
-        background-color: #D9D9D9
-        color: black
-        border-radius: 6px
-        font-size: 14px
-        transition: border-color 0.3s ease
+      @media (max-width: 424px)
+        padding: 8px 15px
 
-        &:focus 
+    .search-input
+      width: 100%
+      padding: 8px 14px
+      border: 1px solid #bdc3c7
+      background-color: white
+      color: black
+      border-radius: 6px
+      font-size: 13px
+      transition: border-color 0.3s ease
+
+      @media (min-width: 768px)
+        width: 92%
+
+        &:focus
           outline: none
           border-color: #3498db
           box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2)
-        
 
-        &::placeholder 
+        &::placeholder
           color: #95a5a6
-        
-      
-    
 
-    .users-table 
+    .users-table
       width: 100%
       border-collapse: collapse
+      font-size: 14px
 
-      thead 
-        background-color: #f8f9fa
+      @media (max-width: 424px)
+        font-size: 10px
 
-        th 
-          padding: 15px 20px
+        @media (min-width: 425px) and (max-width: 767px)
+          font-size: 12px
+
+        @media (min-width: 768px)
+          font-size: 18px
+
+    thead
+      background-color: #f8f9fa
+
+      @media (max-width: 767px)
+        display: none
+
+        th
+          padding: 12px 15px
           text-align: left
           font-weight: 600
-          color: #2c3e50
+          color: black
           border-bottom: 2px solid #ecf0f1
-          font-size: 14px
-        
-      .editing
-        padding-right: 15px
-        width: 24px
-        height: 24px
-        margin-bottom: 7px
 
-      .cross
-        width: 35px
-        height: 35px
-        padding-top: 8px
-        padding-right: 10px
+          @media (max-width: 767px)
+            display: none
 
+            @media (min-width: 768px) and (max-width: 1023px)
+              font-size: 14px
+              padding: 10px 12px
 
-      tbody 
-        tr 
+            @media (min-width: 1024px)
+              font-size: 16px
+
+    .editing
+      margin-bottom: 5px
+
+      @media (max-width: 424px)
+        width: 16px
+        height: 16px
+
+        @media (min-width: 425px) and (max-width: 767px)
+          width: 18px
+          height: 18px
+
+        @media (min-width: 768px)
+          width: 20px
+          height: 20px
+
+    .cross
+      padding-top: 6px
+
+      @media (max-width: 424px)
+        width: 20px
+        height: 20px
+
+        @media (min-width: 425px) and (max-width: 767px)
+          width: 24px
+          height: 24px
+
+        @media (min-width: 768px)
+          width: 28px
+          height: 28px
+
+    tbody
+      @media (max-width: 767px)
+        display: block
+
+        tr
           border-bottom: 1px solid #ecf0f1
           transition: background-color 0.3s ease
 
-          &:hover 
-            background-color: #f8f9fa
-          
+          @media (max-width: 767px)
+            display: block
+            margin-bottom: 15px
+            padding: 15px
+            border: 1px solid #ecf0f1
+            border-radius: 8px
+            background: #f8f9fa
 
-          &:last-child 
-            border-bottom: none
-          
+            @media (min-width: 768px)
+              display: table-row
 
-          td 
-            padding: 16px 20px
-            color: #2c3e50
-            font-size: 14px
+            &:hover
+              background-color: #f8f9fa
 
-            .status 
-              padding: 6px 12px
-              border-radius: 20px
+              @media (max-width: 767px)
+                background-color: #e9ecef
+
+            &:last-child
+              border-bottom: none
+
+        td
+          padding: 12px 15px
+          color: black
+          text-align: left
+
+          @media (max-width: 767px)
+            display: block
+            padding: 8px 0
+            border: none
+            text-align: left
+            font-size: 12px
+
+            @media (min-width: 768px) and (max-width: 1023px)
               font-size: 12px
+              padding: 10px 12px
+
+            @media (min-width: 1024px)
+              font-size: 14px
+
+            @media (max-width: 767px)
+              &:before
+                content: attr(data-label)
+                font-weight: bold
+                display: inline-block
+                width: 80px
+                color: #2c3e50
+                font-size: 11px
+
+            &.actions-cell
+              @media (max-width: 767px)
+                display: flex
+                justify-content: flex-start
+                gap: 15px
+                padding: 15px 0 5px 0
+                border-top: 1px solid #dee2e6
+
+                &:before
+                  display: none
+
+            .status
+              padding: 4px 10px
+              border-radius: 20px
               font-weight: 500
               text-transform: uppercase
+              display: inline-block
+              font-size: 11px
 
-              &.online 
-                background-color: #d4edda
-                color: #155724
-              
+              @media (max-width: 424px)
+                font-size: 9px
+                padding: 3px 8px
 
-              &.offline 
-                background-color: #f8d7da
-                color: #721c24
-              
+            &.online
+              background-color: #d4edda
+              color: #155724
 
-@media (max-width: 768px) 
-  .users-page 
-    flex-direction: column
-  
+            &.offline
+              background-color: #f8d7da
+              color: #721c24
 
-  .sidebar 
-    width: 100%
+@media (max-width: 320px)
+  .users-page
+    font-size: 12px
+
+    .sidebar-header .main-nav
+      font-size: 11px
+
+    .users-table-container .search-input
+      font-size: 12px
+
+    tbody td:before
+      width: 70px
+      font-size: 10px
+
+@media (min-width: 1024px) and (max-width: 1366px) and (orientation: landscape)
+  .sidebar
+    width: 220px
     height: auto
-  
 
-  .main-content 
-    padding: 20px
-  
-
-  .users-table 
-    display: block
-    overflow-x: auto
-  
+    .main-content
+      margin-left: 12%
+      max-width: 88%
