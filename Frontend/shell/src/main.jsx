@@ -10,6 +10,7 @@ import EventsPage from './pages/EventsPage';
 import UsersPage from './pages/UsersPage';
 import RulesPage from './pages/RulesPage.jsx';
 import AlertsPage from './pages/AlertsPage.jsx';
+import LoginPage from './pages/LoginPage.jsx';
 
 const routes = [
   {
@@ -32,6 +33,10 @@ const routes = [
   {
     path: '/alerts',
     element: <AlertsPage />,
+  },
+  {
+    path: '/login',
+    element: <LoginPage />,
   },
 ];
 

@@ -44,10 +44,24 @@ function responseErrorHandler(error) {
 export const ApiClient = axios.create({
     baseURL: 'http://localhost:3000/',
     timeout: 3000,
+    //TODO:
+    //withCredentials: true,
     headers: {
         Accept: 'application/json',
     },
 });
+
+let isRefreshing = false;
+let refreshSubscribers = [];
+
+function onRefreshed(newToken) {
+    refreshSubscribers.forEach((callback) => callback(newToken));
+    refreshSubscribers = [];
+}
+
+function addRefreshSubscriber(callback) {
+    refreshSubscribers.push(callback);
+}
 
 ApiClient.interceptors.request.use(
     (config) => {
@@ -60,4 +74,50 @@ ApiClient.interceptors.request.use(
     (error) => Promise.reject(error)
 );
 
-ApiClient.interceptors.response.use(responseHandler, responseErrorHandler);
+ApiClient.interceptors.response.use(
+    responseHandler,
+    async (error) => {
+        const originalRequest = error.config;
+
+        if (error.response?.status === 401 && !originalRequest._retry) {
+            originalRequest._retry = true;
+
+            if (isRefreshing) {
+                return new Promise((resolve) => {
+                    addRefreshSubscriber((newToken) => {
+                        originalRequest.headers.Authorization = `Bearer ${newToken}`;
+                        resolve(ApiClient(originalRequest));
+                    });
+                });
+            }
+
+            isRefreshing = true;
+
+            try {
+                const refreshResponse = await axios.post(
+                    'http://localhost:3000/Auth/Refresh',
+                    {},
+                    { withCredentials: true }
+                );
+
+                const newAccessToken = refreshResponse.data?.accessToken;
+                if (!newAccessToken) throw new Error('No access token in refresh response');
+
+                TokenService.setAccessToken(newAccessToken);
+                onRefreshed(newAccessToken);
+
+                originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+                return ApiClient(originalRequest);
+            } catch (refreshError) {
+                TokenService.clear();
+                toast.error('Сессия истекла. Войдите снова.', { id: 'SessionExpired' });
+                window.location.href = '/login';
+                return Promise.reject(refreshError);
+            } finally {
+                isRefreshing = false;
+            }
+        }
+
+        return responseErrorHandler(error);
+    }
+);
