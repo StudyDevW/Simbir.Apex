@@ -6,19 +6,8 @@
   display: flex
   font-family: 'Arial', sans-serif
 
-  @media (max-width: 1440px)
-    height: auto
-    min-height: 100vh
-
-  @media (max-width: 1024px)
-    height: auto
-    min-height: 100vh
-
   @media (max-width: 768px)
     flex-direction: column
-
-  @media (max-width: 425px)
-    min-height: 100vh
 
 .sidebar
   position: fixed
@@ -446,12 +435,12 @@
   height: 100%
 
   @media (max-width: 1440px)
-    padding: 2% 0 0 300px
-    width: calc(100% - 300px)
+    padding: 2% 0 0 0
+    width: 100%
 
   @media (max-width: 1024px)
-    padding: 2% 0 0 300px
-    width: calc(100% - 300px)
+    padding: 2% 0 0 0
+    width: 100%
 
   @media (max-width: 768px)
     padding: 70px 20px 20px
@@ -469,9 +458,7 @@
 .main-header
   background-color: black
   color: white
-  width: 75%
-  margin-left: 13%
-  height: 170px
+  width: 100%
   padding: 20px 50px
   border-radius: 15px
   display: flex
@@ -480,21 +467,13 @@
   position: relative
 
   @media (max-width: 1440px)
-    width: 80%
-    margin-left: 10%
-    height: 180px
     padding: 25px 40px
 
   @media (max-width: 1024px)
-    width: 90%
-    margin-left: 5%
-    height: 160px
     padding: 15px 30px
 
   @media (max-width: 768px)
     width: 100%
-    margin-left: 0
-    height: auto
     padding: 20px
     gap: 20px
 
@@ -708,7 +687,6 @@
 
 .events-section-title
   padding-top: 1.5%
-  padding-left: 13%
   font-size: 28px
   font-weight: bold
   margin: 0
@@ -716,17 +694,14 @@
   text-decoration: underline
 
   @media (max-width: 1440px)
-    padding-left: 10%
     font-size: 26px
     padding-top: 2%
 
   @media (max-width: 1024px)
-    padding-left: 5%
     font-size: 24px
     padding-top: 2%
 
   @media (max-width: 768px)
-    padding: 20px 0 0 0
     font-size: 24px
     text-align: center
 
@@ -744,23 +719,16 @@
   position: relative
   display: flex
   align-items: center
-  width: 81%
-  margin-left: 13%
+  width: 100%
   padding-top: 1%
 
   @media (max-width: 1440px)
-    width: 80%
-    margin-left: 10%
     padding-top: 0.5%
 
   @media (max-width: 1024px)
-    width: 90%
-    margin-left: 5%
     padding-top: 0.5%
 
   @media (max-width: 768px)
-    width: 100%
-    margin-left: 0
     padding-top: 0
 
   .search-input
@@ -829,8 +797,7 @@
 
 .data-table
   margin-top: 1%
-  width: 81%
-  margin-left: 13%
+  width: 100%
   border-collapse: collapse
   background: white
   border-radius: 3px
@@ -838,19 +805,13 @@
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1)
 
   @media (max-width: 1440px)
-    width: 80%
-    margin-left: 10%
     margin-top: 0.5%
     border-radius: 8px
 
   @media (max-width: 1024px)
-    width: 90%
-    margin-left: 5%
     margin-top: 0.5%
 
   @media (max-width: 768px)
-    width: 100%
-    margin-left: 0
     margin-top: 15px
 
   @media (max-width: 425px)
@@ -901,17 +862,14 @@
   font-size: 28px
   font-weight: bold
   padding-top: 3%
-  padding-left: 13%
   margin: 0
   text-decoration: underline
 
   @media (max-width: 1440px)
-    padding-left: 10%
     font-size: 26px
     padding-top: 2.5%
 
   @media (max-width: 1024px)
-    padding-left: 5%
     font-size: 24px
     padding-top: 2%
 
@@ -930,27 +888,20 @@
 .reports-section
   .reports-grid
     margin-top: 1%
-    max-width: 81%
-    margin-left: 13%
+    max-width: 100%
     display: grid
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr))
     gap: 20px
 
     @media (max-width: 1440px)
-      max-width: 80%
-      margin-left: 10%
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr))
       gap: 25px
 
     @media (max-width: 1024px)
-      max-width: 90%
-      margin-left: 5%
       grid-template-columns: repeat(auto-fit, minmax(180px, 1fr))
       gap: 15px
 
     @media (max-width: 768px)
-      max-width: 100%
-      margin-left: 0
       grid-template-columns: repeat(auto-fit, minmax(160px, 1fr))
       gap: 15px
 
@@ -964,7 +915,7 @@
 
   .report-card
     margin: 0
-    height: 80%
+    height: auto
     background: #E8E8E8
     border: 1px solid black
     border-radius: 8px
@@ -979,11 +930,9 @@
 
     @media (max-width: 1024px)
       padding: 12px 15px
-      height: auto
 
     @media (max-width: 768px)
       padding: 15px
-      height: auto
 
     @media (max-width: 425px)
       padding: 12px
@@ -1086,10 +1035,6 @@
     height: 100vh
     overflow-y: auto
 
-  .main-header
-    height: auto
-    min-height: 140px
-
   .stats-section
     margin-top: auto
 
@@ -1105,13 +1050,6 @@
 @media (max-width: 1440px) and (max-height: 858px)
   .sidebar
     height: 100vh
-
-  .main-header
-    height: 160px
-
-  .main
-    max-height: 100vh
-    overflow-y: auto
 
   .reports-grid
     margin-bottom: 20px

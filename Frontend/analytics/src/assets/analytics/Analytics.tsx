@@ -1,31 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './Analytics.sass';
 import Grafic from "../../img/icon/icon-grafic.png"
 import Glass from "../../img/icon/icon-glass.png"
 
 const Analytics: React.FC = () => {
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-    const closeMobileMenu = () => {
-        setIsMobileMenuOpen(false);
-    };
-
     return (
         <>
-            <button
-                className="mobile-menu-btn"
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            >
-                ☰
-            </button>
-
-            <div
-                className={`mobile-overlay ${isMobileMenuOpen ? 'active' : ''}`}
-                onClick={closeMobileMenu}
-            />
-
             <div className="analytics">
-                <main className='main' onClick={() => isMobileMenuOpen && closeMobileMenu()}>
+                <main className='main'>
                     <div className="main-header">
                         <div className="main-header-content">
                             <div className="text-content">

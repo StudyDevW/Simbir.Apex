@@ -11,6 +11,7 @@ import UsersPage from './pages/UsersPage';
 import RulesPage from './pages/RulesPage.jsx';
 import AlertsPage from './pages/AlertsPage.jsx';
 import LoginPage from './pages/LoginPage.jsx';
+import AnalyticsPage from './pages/AnalyticsPage.jsx';
 
 const routes = [
   {
@@ -37,6 +38,10 @@ const routes = [
   {
     path: '/login',
     element: <LoginPage />,
+  },
+  {
+    path: '/analytics',
+    element: <AnalyticsPage />,
   },
 ];
 
