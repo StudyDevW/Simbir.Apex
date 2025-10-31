@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { Modal, Button, Form } from "react-bootstrap";
+import React, { useState } from "react";
 import Cross from "../assets/icon/icon-cross.png";
 import Pencil from "../assets/icon/icon-pencil.png";
 import Plus from "../assets/icon/icon-plus.png";
@@ -14,6 +13,47 @@ export interface User {
   password: string;
   status: "online" | "offline";
 }
+
+const useModal = () => {
+  const [isModalShow, setModalShow] = useState(false);
+  const showModal = () => setModalShow(true);
+  const hideModal = () => setModalShow(false);
+  return { isModalShow, showModal, hideModal };
+};
+
+interface ModalFormProps {
+  show: boolean;
+  title: string;
+  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  onClose: () => void;
+  children: React.ReactNode;
+}
+
+const ModalForm: React.FC<ModalFormProps> = ({ show, title, onSubmit, onClose, children }) => {
+  if (!show) return null;
+
+  return (
+    <div className="modal-overlay">
+      <div className="modal-window">
+        <div className="modal-header">
+          <h2>{title}</h2>
+          <button className="modal-close" onClick={onClose}>
+            ✕
+          </button>
+        </div>
+        <form onSubmit={onSubmit} className="modal-body">
+          {children}
+          <div className="modal-footer">
+            <button type="submit" className="btn-primary">Сохранить</button>
+            <button type="button" className="btn-secondary" onClick={onClose}>
+              Отмена
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
 
 const Users: React.FC = () => {
   const [users, setUsers] = useState<User[]>([
@@ -44,8 +84,15 @@ const Users: React.FC = () => {
   ]);
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [showModal, setShowModal] = useState(false);
+  const { isModalShow, showModal, hideModal } = useModal();
   const [editingUser, setEditingUser] = useState<User | null>(null);
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: "",
+    phone: "",
+    password: "",
+    status: "online" as "online" | "offline",
+  });
 
   const filteredUsers = users.filter(
     (user) =>
@@ -59,33 +106,59 @@ const Users: React.FC = () => {
     }
   };
 
-  const handleSave = (data: Omit<User, "id">) => {
+  const handleSave = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!formData.fullName || !formData.email || !formData.phone || !formData.password) {
+      alert("Все поля обязательны для заполнения");
+      return;
+    }
+
     if (editingUser) {
       setUsers((prev) =>
-        prev.map((u) => (u.id === editingUser.id ? { ...editingUser, ...data } : u))
+        prev.map((u) => (u.id === editingUser.id ? { ...editingUser, ...formData } : u))
       );
     } else {
       const newUser: User = {
         id: users.length > 0 ? Math.max(...users.map((u) => u.id)) + 1 : 1,
-        ...data,
+        ...formData,
       };
       setUsers((prev) => [...prev, newUser]);
     }
-    setShowModal(false);
+
+    hideModal();
     setEditingUser(null);
+    setFormData({
+      fullName: "",
+      email: "",
+      phone: "",
+      password: "",
+      status: "online",
+    });
   };
 
   const handleOpenCreate = () => {
     setEditingUser(null);
-    setShowModal(true);
+    setFormData({
+      fullName: "",
+      email: "",
+      phone: "",
+      password: "",
+      status: "online",
+    });
+    showModal();
   };
 
   const handleOpenEdit = (user: User) => {
     setEditingUser(user);
-    setShowModal(true);
+    setFormData({
+      fullName: user.fullName,
+      email: user.email,
+      phone: user.phone,
+      password: user.password,
+      status: user.status,
+    });
+    showModal();
   };
-
-  const isMobile = window.innerWidth <= 767;
 
   return (
     <div className="users-page">
@@ -116,18 +189,16 @@ const Users: React.FC = () => {
           </div>
 
           <table className="users-table">
-            {!isMobile && (
-              <thead>
-                <tr>
-                  <th>ФИО</th>
-                  <th>Email</th>
-                  <th>Телефон</th>
-                  <th>Пароль</th>
-                  <th>Статус</th>
-                  <th>Действия</th>
-                </tr>
-              </thead>
-            )}
+            <thead>
+              <tr>
+                <th>ФИО</th>
+                <th>Email</th>
+                <th>Телефон</th>
+                <th>Пароль</th>
+                <th>Статус</th>
+                <th>Действия</th>
+              </tr>
+            </thead>
             <tbody>
               {filteredUsers.map((user) => (
                 <tr key={user.id}>
@@ -163,133 +234,68 @@ const Users: React.FC = () => {
         </div>
       </div>
 
-      <UserModal
-        show={showModal}
-        onHide={() => {
-          setShowModal(false);
+      <ModalForm
+        show={isModalShow}
+        title={editingUser ? "Редактирование пользователя" : "Создание пользователя"}
+        onClose={() => {
+          hideModal();
           setEditingUser(null);
         }}
-        title={editingUser ? "Редактирование пользователя" : "Создание пользователя"}
-        initialData={editingUser || undefined}
         onSubmit={handleSave}
-      />
+      >
+        <div className="form-group">
+          <label>ФИО</label>
+          <input
+            type="text"
+            value={formData.fullName}
+            onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Email</label>
+          <input
+            type="email"
+            value={formData.email}
+            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Телефон</label>
+          <input
+            type="tel"
+            value={formData.phone}
+            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Пароль</label>
+          <input
+            type="password"
+            value={formData.password}
+            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Роль</label>
+          <select
+            value={formData.status}
+            onChange={(e) => setFormData({ ...formData, status: e.target.value as "online" | "offline" })}
+          >
+            <option value="online">Аналитик</option>
+            <option value="offline">Руководитель</option>
+            <option value="online">Эксперт</option>
+          </select>
+        </div>
+      </ModalForm>
     </div>
-  );
-};
-
-interface UserModalProps {
-  show: boolean;
-  onHide: () => void;
-  title: string;
-  initialData?: Partial<User>;
-  onSubmit: (data: Omit<User, "id">) => void;
-}
-
-const UserModal: React.FC<UserModalProps> = ({
-  show,
-  onHide,
-  title,
-  initialData = {},
-  onSubmit,
-}) => {
-  const [formData, setFormData] = useState({
-    fullName: initialData.fullName || "",
-    email: initialData.email || "",
-    phone: initialData.phone || "",
-    password: initialData.password || "",
-    status: (initialData.status as "online" | "offline") || "online",
-  });
-
-  useEffect(() => {
-    setFormData({
-      fullName: initialData.fullName || "",
-      email: initialData.email || "",
-      phone: initialData.phone || "",
-      password: initialData.password || "",
-      status: (initialData.status as "online" | "offline") || "online",
-    });
-  }, [initialData]);
-
-  const handleChange = (field: keyof typeof formData, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSubmit(formData);
-  };
-
-  return (
-    <Modal show={show} onHide={onHide} centered>
-      <Modal.Header closeButton>
-        <Modal.Title>{title}</Modal.Title>
-      </Modal.Header>
-
-      <Form onSubmit={handleSubmit}>
-        <Modal.Body>
-          <Form.Group className="mb-3">
-            <Form.Label>ФИО</Form.Label>
-            <Form.Control
-              type="text"
-              value={formData.fullName}
-              onChange={(e) => handleChange("fullName", e.target.value)}
-              required
-            />
-          </Form.Group>
-
-          <Form.Group className="mb-3">
-            <Form.Label>Email</Form.Label>
-            <Form.Control
-              type="email"
-              value={formData.email}
-              onChange={(e) => handleChange("email", e.target.value)}
-              required
-            />
-          </Form.Group>
-
-          <Form.Group className="mb-3">
-            <Form.Label>Телефон</Form.Label>
-            <Form.Control
-              type="tel"
-              value={formData.phone}
-              onChange={(e) => handleChange("phone", e.target.value)}
-              required
-            />
-          </Form.Group>
-
-          <Form.Group className="mb-3">
-            <Form.Label>Пароль</Form.Label>
-            <Form.Control
-              type="password"
-              value={formData.password}
-              onChange={(e) => handleChange("password", e.target.value)}
-              required
-            />
-          </Form.Group>
-
-          <Form.Group className="mb-3">
-            <Form.Label>Роль</Form.Label>
-            <Form.Select
-              value={formData.status}
-              onChange={(e) => handleChange("status", e.target.value)}
-            >
-              <option value="online">Аналитик</option>
-              <option value="offline">Руководитель</option>
-              <option value="online">Эксперт</option>
-            </Form.Select>
-          </Form.Group>
-        </Modal.Body>
-
-        <Modal.Footer>
-          <Button variant="secondary" onClick={onHide}>
-            Отмена
-          </Button>
-          <Button variant="primary" type="submit">
-            Сохранить
-          </Button>
-        </Modal.Footer>
-      </Form>
-    </Modal>
   );
 };
 
