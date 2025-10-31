@@ -4,6 +4,7 @@ using Middleware_Components.JWT.DTO.CheckUsers;
 using Middleware_Components.Services;
 using ServiceUI.Interfaces;
 
+
 namespace ServiceUI.Services
 {
     public class UIService : IUIService
@@ -176,7 +177,7 @@ namespace ServiceUI.Services
             }
         }
 
-        public async Task ChangeUser(UserChangeDTO dtoObj, string token)
+        public async Task ChangeUser(UserChangeDTO dtoObj, Guid id, string token)
         {
             var validation = await _jwt.AccessTokenValidation(token);
 
@@ -187,7 +188,7 @@ namespace ServiceUI.Services
             else if (validation.TokenHasSuccess())
             {
                 if (validation.token_success!.userRoles!.Equals("MANAGER") || validation.token_success!.userRoles!.Equals("SUPER_USER"))
-                    await _database.ChangeUser(dtoObj, validation.token_success!.Id);
+                    await _database.ChangeUser(dtoObj, id);
                 else
                     throw new Exception("role_invalid");
             }
@@ -237,6 +238,118 @@ namespace ServiceUI.Services
             else if (validation.TokenHasSuccess())
             {
                 return await _database.GetUser(idUser);
+            }
+
+            return null;
+        }
+
+        public async Task CreateRuleTimed(AddRuleDTO dtoObj, string token)
+        {
+            var validation = await _jwt.AccessTokenValidation(token);
+
+            if (validation.TokenHasError())
+            {
+                throw new Exception("token_invalid");
+            }
+            else if (validation.TokenHasSuccess())
+            {
+                List<TimedRuleDTO> rulesForApprove = new List<TimedRuleDTO>();
+
+                var rulesIfCached = _cache.GetKeyFromStorage<List<TimedRuleDTO>>($"rule_for_alert_{validation.token_success!.Id}");
+
+                if (rulesIfCached != null)
+                    rulesForApprove = rulesIfCached;
+
+                TimedRuleDTO rulesTableToCache = new TimedRuleDTO()
+                {
+                    name = dtoObj.name,
+                    description = dtoObj.description,
+                    logic = dtoObj.logic,
+                    severity = dtoObj.severity,
+                    status = dtoObj.status,
+                    created_by = validation.token_success!.Id,
+                    created_at = DateTime.UtcNow
+                };
+
+                rulesForApprove.Add(rulesTableToCache);
+
+                _cache.WriteKeyInStorage<List<TimedRuleDTO>>(
+                    validation.token_success!.Id, 
+                    $"rule_for_alert_{validation.token_success!.Id}",
+                    rulesForApprove, 
+                    DateTime.UtcNow.AddDays(1)
+                );
+            }
+        }
+
+        public async Task<List<TimedRuleDTO>?> GetTimedRules(Guid idUser, string token)
+        {
+            var validation = await _jwt.AccessTokenValidation(token);
+
+            if (validation.TokenHasError())
+            {
+                throw new Exception("token_invalid");
+            }
+            else if (validation.TokenHasSuccess())
+            {
+                return _cache.GetKeyFromStorage<List<TimedRuleDTO>>($"rule_for_alert_{idUser}");
+            }
+
+            return null;
+        } 
+
+        public async Task AcceptRule(string ruleName, Guid idUser, string token)
+        {
+            var validation = await _jwt.AccessTokenValidation(token);
+
+            if (validation.TokenHasError())
+            {
+                throw new Exception("token_invalid");
+            }
+            else if (validation.TokenHasSuccess())
+            {
+                var rulesIfCached = _cache.GetKeyFromStorage<List<TimedRuleDTO>>($"rule_for_alert_{idUser}");
+
+                if (rulesIfCached != null)
+                {
+                    foreach (var rule in rulesIfCached)
+                        if (rule.name == ruleName)
+                           await _database.RuleFillUp(rule);
+                }
+                else
+                {
+                    throw new Exception("rule_not_found");
+                }
+            }
+        }
+
+        public async Task<GetRuleDTO?> GetRuleFromDB(Guid ruleId, string token)
+        {
+            var validation = await _jwt.AccessTokenValidation(token);
+
+            if (validation.TokenHasError())
+            {
+                throw new Exception("token_invalid");
+            }
+            else if (validation.TokenHasSuccess())
+            {
+                return await _database.GetRuleFromDB(ruleId);
+            }
+
+            return null;
+        }
+
+        public async Task<List<GetRuleDTO>?> GetRulesFromDB(string token)
+        {
+            var validation = await _jwt.AccessTokenValidation(token);
+
+            if (validation.TokenHasError())
+            {
+                throw new Exception("token_invalid");
+            }
+            else if (validation.TokenHasSuccess())
+            {
+                return await _database.GetAllRulesFromDB();
             }
 
             return null;
