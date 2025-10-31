@@ -29,15 +29,29 @@ namespace ServiceUI.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAlert(Guid id)
         {
-
-            return BadRequest();
+            try
+            {
+                var rules = await _serviceUI.GetAlertFromDB(id, Request.Headers["Authorization"]);
+                return Ok(rules);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("All")]
         public async Task<IActionResult> GetAlerts()
         {
-
-            return BadRequest();
+            try
+            {
+                var rules = await _serviceUI.GetAlertsFromDB(Request.Headers["Authorization"]);
+                return Ok(rules);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpDelete("{id}")]

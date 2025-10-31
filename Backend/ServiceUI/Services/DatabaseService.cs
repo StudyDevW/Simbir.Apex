@@ -229,5 +229,61 @@ namespace ServiceUI.Services
 
             return rulesAll;
         }
+
+        public async Task<GetAlertDTO?> GetAlertFromDB(Guid alertId)
+        {
+            var selectedAlert = await _dbcontext.alertsTable.Where(c => c.Id == alertId).FirstOrDefaultAsync();
+
+            if (selectedAlert != null)
+                return new GetAlertDTO()
+                {
+                    id = alertId,
+                    rule_id = selectedAlert.Id,
+                    assigned_to = selectedAlert.assigned_to,
+                    hostname = selectedAlert.hostname,
+                    title = selectedAlert.title,
+                    description = selectedAlert.description,
+                    status = selectedAlert.status,
+                    severity = selectedAlert.severity,
+                    raw_data = selectedAlert.raw_data,  
+                    created_at = selectedAlert.created_at,
+                    closed_at = selectedAlert.closed_at,
+                    resolution_notes = selectedAlert.resolution_notes
+                };
+
+            return null;
+        }
+
+        public async Task<List<GetAlertDTO>> GetAllAlertsFromDB()
+        {
+            List<GetAlertDTO> alertsAll = new List<GetAlertDTO>();
+
+            var selectedAlerts = await _dbcontext.alertsTable.ToListAsync();
+
+            if (selectedAlerts != null)
+                foreach (var alert in selectedAlerts)
+                {
+                    GetAlertDTO getAlertDTO = new GetAlertDTO()
+                    {
+                        id = alert.Id,
+                        rule_id = alert.Id,
+                        assigned_to = alert.assigned_to,
+                        hostname = alert.hostname,
+                        title = alert.title,
+                        description = alert.description,
+                        status = alert.status,
+                        severity = alert.severity,
+                        raw_data = alert.raw_data,
+                        created_at = alert.created_at,
+                        closed_at = alert.closed_at,
+                        resolution_notes = alert.resolution_notes
+                    };
+
+                    alertsAll.Add(getAlertDTO);
+                }
+
+
+            return alertsAll;
+        }
     }
 }

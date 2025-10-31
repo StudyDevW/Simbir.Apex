@@ -29,5 +29,9 @@ namespace ServiceUI.Interfaces
         public Task<GetRuleDTO?> GetRuleFromDB(Guid ruleId, string token);
 
         public Task<List<GetRuleDTO>?> GetRulesFromDB(string token);
+
+        public Task<GetAlertDTO?> GetAlertFromDB(Guid alertId, string token);
+
+        public Task<List<GetAlertDTO>?> GetAlertsFromDB(string token);
     }
 }

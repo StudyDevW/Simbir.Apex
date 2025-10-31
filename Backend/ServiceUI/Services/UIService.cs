@@ -354,5 +354,37 @@ namespace ServiceUI.Services
 
             return null;
         }
+
+        public async Task<GetAlertDTO?> GetAlertFromDB(Guid alertId, string token)
+        {
+            var validation = await _jwt.AccessTokenValidation(token);
+
+            if (validation.TokenHasError())
+            {
+                throw new Exception("token_invalid");
+            }
+            else if (validation.TokenHasSuccess())
+            {
+                return await _database.GetAlertFromDB(alertId);
+            }
+
+            return null;
+        }
+
+        public async Task<List<GetAlertDTO>?> GetAlertsFromDB(string token)
+        {
+            var validation = await _jwt.AccessTokenValidation(token);
+
+            if (validation.TokenHasError())
+            {
+                throw new Exception("token_invalid");
+            }
+            else if (validation.TokenHasSuccess())
+            {
+                return await _database.GetAllAlertsFromDB();
+            }
+
+            return null;
+        }
     }
 }
