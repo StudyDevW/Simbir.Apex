@@ -1,41 +1,55 @@
 package simbir.apex.service.agent.db.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
-import simbir.apex.service.agent.model.enums.Status;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.sql.Timestamp;
+import java.util.Date;
+import java.util.UUID;
 
 @Entity
-@Table(name = "alerts")
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Table(name = "alertsTable")
 @Builder
 public class Alert {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue
+    private UUID id;
 
-    private Long ruleId; // nullable
-    private String assignedTo; // nullable
+    @Column(name = "rule_id")
+    private UUID ruleId;
+
+    @Column(name = "assigned_to")
+    private UUID assignedTo;
+
+    @Column(nullable = false)
     private String hostname;
+
+    @Column(nullable = false)
     private String title;
+
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String description;
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private String status;
 
-    private String severity; // nullable
+    private String severity;
 
-    @Column(columnDefinition = "TEXT")
-    private String rawData; // JSON сериализация списка событий
+    @Column(nullable = false, columnDefinition = "TEXT", name = "raw_data ")
+    private String rawData;
 
-    @Builder.Default
-    private Timestamp createdAt = new Timestamp(System.currentTimeMillis());
+    @Column(nullable = false, name = "created_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
 
-    private Timestamp closedAt; // nullable
-    private String resolutionNotes; // nullable
+    @Column(name = "closed_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date closedAt;
+
+    @Column(name = "resolution_notes")
+    private String resolutionNotes;
 }

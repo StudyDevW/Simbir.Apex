@@ -8,15 +8,16 @@ import simbir.apex.service.agent.model.enums.Status;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class AlertDto {
-    private Long id;
-    private Long ruleId;
-    private Long assignedTo;
+    private UUID id;
+    private UUID ruleId;
+    private UUID assignedTo;
     private String hostname;
     private String title;
     private String description;
