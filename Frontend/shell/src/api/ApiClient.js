@@ -41,8 +41,10 @@ function responseErrorHandler(error) {
     return Promise.reject(error.message);
 }
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 export const ApiClient = axios.create({
-    baseURL: 'http://localhost:3000/',
+    baseURL: API_BASE_URL,
     timeout: 3000,
     //TODO:
     //withCredentials: true,
@@ -95,7 +97,7 @@ ApiClient.interceptors.response.use(
 
             try {
                 const refreshResponse = await axios.post(
-                    'http://localhost:3000/Auth/Refresh',
+                    `${API_BASE_URL}/Auth/Refresh`,
                     {},
                     { withCredentials: true }
                 );
