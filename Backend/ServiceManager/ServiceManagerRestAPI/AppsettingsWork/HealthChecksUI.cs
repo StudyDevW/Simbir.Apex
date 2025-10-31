@@ -41,7 +41,7 @@ namespace ServiceManagerRestAPI.AppsettingsWork {
             string address = serviceModel.EndPointService.Address.ToString();
             string port = serviceModel.EndPointService.Port.ToString();
 
-            checkService.Uri = $"https://{address}:{port}";
+            checkService.Uri = $"http://{address}:{port}";
 
             for (int record = 0, listLen = config.HealthChecksUI.HealthChecks.Count(); record < listLen; ++record) {
                 if (config.HealthChecksUI.HealthChecks[record].Name == checkService.Name) {

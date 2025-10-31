@@ -1,4 +1,4 @@
-services:
+﻿services:
   simbirapex.backend.serviceui: 
     image: ${DOCKER_REGISTRY-}serviceui_apex:1.0
     container_name: Simbir.Apex.ServiceUI
@@ -19,17 +19,37 @@ services:
     image: ${DOCKER_REGISTRY-}servicemanager_apex:1.0
     container_name: Simbir.Apex.ServiceManager
     depends_on:
-      postgres_db:
+      postgres_db_manager:
         condition: service_healthy
     build:
       context: ./Backend/ServiceManager
       dockerfile: ServiceManagerRestAPI/Dockerfile
     environment:
+      SUPERUSER_NAME: ${SUPERUSER_NAME}
+      SUPERUSER_PASSWORD: ${SUPERUSER_PASSWORD}
       RSA_PUBLIC_KEY: ${RSA_PUBLIC_KEY}
       RSA_PRIVATE_KEY: ${RSA_PRIVATE_KEY}
-      DATABASE_CONNECT: ${DATABASE_CONNECT}
+      DATABASE_CONNECT_M: ${DATABASE_CONNECT_M}
     ports:
        - "8081:80"
+    restart: unless-stopped
+  simbirapex.backend.servicecollector:
+    image: ${DOCKER_REGISTRY-}servicecollector_apex:1.0
+    container_name: Simbir.Apex.ServiceCollector
+    depends_on:
+      kafka:
+        condition: service_healthy
+      rabbitmq_broker:
+        condition: service_started
+    build:
+      context: ./Backend/servicecollector
+    environment:
+      SPRING_RABBITMQ_HOST: ${SPRING_RABBITMQ_HOST}
+      SPRING_RABBITMQ_PORT: ${SPRING_RABBITMQ_PORT}
+      SPRING_RABBITMQ_USERNAME: ${SPRING_RABBITMQ_USERNAME}
+      SPRING_RABBITMQ_PASSWORD: ${SPRING_RABBITMQ_PASSWORD}
+    ports:
+      - "8084:80"
     restart: unless-stopped
   postgres_db:
     image: postgres:17.0-bookworm
@@ -48,6 +68,40 @@ services:
       timeout: 60s
       retries: 5
       start_period: 80s
+  postgres_db_manager:
+    image: postgres:17.0-bookworm
+    container_name: Simbir.Apex.PostgreSQL.Manager
+    environment:
+        POSTGRES_DB: ${POSTGRES_DB_M}
+        POSTGRES_USER: ${POSTGRES_USER}
+        POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5433:80"
+    volumes:
+      - ./postgres_data2:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "-d", "db_prod"]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 80s
+  postgres_db_analyzer:
+    image: postgres:17.0-bookworm
+    container_name: Simbir.Apex.PostgreSQL.Analyzer
+    environment:
+        POSTGRES_DB: ${POSTGRES_DB_A}
+        POSTGRES_USER: ${POSTGRES_USER}
+        POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5434:80"
+    volumes:
+      - ./postgres_data3:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "-d", "db_prod"]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 80s    
   pgadmin:
     image: dpage/pgadmin4:latest
     container_name: Simbir.Apex.PgAdmin
@@ -60,6 +114,8 @@ services:
       - ./pgadmin_data:/var/lib/pgadmin
     depends_on:
       - postgres_db
+      - postgres_db_manager
+      - postgres_db_analyzer
     healthcheck:
       test: ["CMD", "wget", "-O", "-", "http://localhost:80/misc/ping"]
       interval: 10s
@@ -106,7 +162,7 @@ services:
       - 5672:5672
       - 15672:15672
 
-#Сбор и визуализация логов
+#РЎР±РѕСЂ Рё РІРёР·СѓР°Р»РёР·Р°С†РёСЏ Р»РѕРіРѕРІ
   grafana:
     container_name: Simbir.Apex.Metrics.Grafana
     image: grafana/grafana:latest
@@ -127,6 +183,38 @@ services:
     ports:
       - "3100:3100"
     command: -config.file=/etc/loki/local-config.yaml
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka
+    hostname: kafka
+    ports:
+      - "9092:9092"
+      - "9093:9093"
+    environment:
+      CLUSTER_ID: "uw3T0RXpRYq4YvppNxcyqQ"
+
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_NODE_ID: 1
+
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT'
+      KAFKA_LISTENERS: PLAINTEXT://kafka:29092,CONTROLLER://kafka:29093,PLAINTEXT_HOST://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:29093
+
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+
+      KAFKA_LOG_DIRS: '/tmp/kraft-combined-logs'
+    volumes:
+      - ./kafka_data:/tmp/kraft-storage
+    healthcheck:
+      test: [ "CMD", "/usr/bin/kafka-broker-api-versions", "--bootstrap-server", "localhost:9092" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
 
 volumes:
   rabbitmq_broker: 

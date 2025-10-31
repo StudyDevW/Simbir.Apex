@@ -1,0 +1,112 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: alex
+      changes:
+        - createTable:
+            tableName: alerts
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: rule_id
+                  type: BIGINT
+                  constraints:
+                    nullable: true
+              - column:
+                  name: assigned_to
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: hostname
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: title
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: TEXT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: severity
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: raw_data
+                  type: TEXT
+                  constraints:
+                    nullable: true
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: closed_at
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: true
+              - column:
+                  name: resolution_notes
+                  type: TEXT
+                  constraints:
+                    nullable: true
+
+  - changeSet:
+      id: 2
+      author: alex
+      changes:
+        - createTable:
+            tableName: events
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: is_lan
+                  type: BOOLEAN
+                  constraints:
+                    nullable: false
+                    defaultValueBoolean: false
+              - column:
+                  name: device
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: event_id
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: severity
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: timestamp
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false

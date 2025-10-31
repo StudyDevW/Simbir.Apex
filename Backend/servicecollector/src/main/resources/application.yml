@@ -1,0 +1,26 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: collector
+  rabbitmq:
+    host: ${SPRING_RABBITMQ_HOST:localhost}
+    port: ${SPRING_RABBITMQ_PORT:5672}
+    username: ${SPRING_RABBITMQ_USERNAME:user}
+    password: ${SPRING_RABBITMQ_PASSWORD:password}
+  kafka:
+    consumer:
+      auto-offset-reset: earliest
+      group-id: collector-group
+      bootstrap-servers: ${BOOTSTRAP_SERVERS:localhost:9092}
+
+
+app:
+  manager:
+    url: ${MANAGER_URL:localhost}
+    port: ${MANAGER_PORT:8081}
+  rabbitmq:
+    exchange: events.exchange
+    queue: events.queue
+    routing-key: events.key
