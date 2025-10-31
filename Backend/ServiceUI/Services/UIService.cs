@@ -245,6 +245,8 @@ namespace ServiceUI.Services
 
         public async Task CreateRuleTimed(AddRuleDTO dtoObj, string token)
         {
+            List<TimedRuleDTO> rulesForApprove = new List<TimedRuleDTO>();
+
             var validation = await _jwt.AccessTokenValidation(token);
 
             if (validation.TokenHasError())
@@ -253,32 +255,38 @@ namespace ServiceUI.Services
             }
             else if (validation.TokenHasSuccess())
             {
-                List<TimedRuleDTO> rulesForApprove = new List<TimedRuleDTO>();
-
-                var rulesIfCached = _cache.GetKeyFromStorage<List<TimedRuleDTO>>($"rule_for_alert_{validation.token_success!.Id}");
-
-                if (rulesIfCached != null)
-                    rulesForApprove = rulesIfCached;
-
-                TimedRuleDTO rulesTableToCache = new TimedRuleDTO()
+                try
                 {
-                    name = dtoObj.name,
-                    description = dtoObj.description,
-                    logic = dtoObj.logic,
-                    severity = dtoObj.severity,
-                    status = dtoObj.status,
-                    created_by = validation.token_success!.Id,
-                    created_at = DateTime.UtcNow
-                };
+                    var rulesIfCached = _cache.GetKeyFromStorage<List<TimedRuleDTO>>($"rule_for_alert_{validation.token_success!.Id}");
 
-                rulesForApprove.Add(rulesTableToCache);
+                    if (rulesIfCached != null)
+                        rulesForApprove = rulesIfCached;
 
-                _cache.WriteKeyInStorage<List<TimedRuleDTO>>(
-                    validation.token_success!.Id, 
-                    $"rule_for_alert_{validation.token_success!.Id}",
-                    rulesForApprove, 
-                    DateTime.UtcNow.AddDays(1)
-                );
+                    TimedRuleDTO rulesTableToCache = new TimedRuleDTO()
+                    {
+                        name = dtoObj.name,
+                        description = dtoObj.description,
+                        logic = dtoObj.logic,
+                        severity = dtoObj.severity,
+                        status = dtoObj.status,
+                        created_by = validation.token_success!.Id,
+                        created_at = DateTime.UtcNow
+                    };
+
+                    rulesForApprove.Add(rulesTableToCache);
+
+                    _logger.LogInformation($"ID TOKEN SUCCESS: {validation.token_success!.Id}");
+
+                    _cache.WriteKeyInStorageObject<List<TimedRuleDTO>>(
+                        $"rule_for_alert_{validation.token_success!.Id}",
+                        rulesForApprove,
+                        DateTime.UtcNow.AddDays(1)
+                    );
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.Message);
+                }
             }
         }
 
@@ -292,7 +300,9 @@ namespace ServiceUI.Services
             }
             else if (validation.TokenHasSuccess())
             {
-                return _cache.GetKeyFromStorage<List<TimedRuleDTO>>($"rule_for_alert_{idUser}");
+                var rulesCached = _cache.GetKeyFromStorage<List<TimedRuleDTO>>($"rule_for_alert_{idUser}");
+
+                return rulesCached;
             }
 
             return null;
