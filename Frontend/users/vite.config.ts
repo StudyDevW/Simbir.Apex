@@ -9,7 +9,7 @@ export default defineConfig({
       name: 'users',
       filename: 'remoteEntry.js',
       exposes: {
-        './Users': './src/App.tsx',
+        './Users': './src/Users/Users.tsx',
       },
       shared: ['react', 'react-dom', 'react-router-dom']
     })
