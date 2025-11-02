@@ -49,8 +49,57 @@
       SPRING_RABBITMQ_USERNAME: ${SPRING_RABBITMQ_USERNAME}
       SPRING_RABBITMQ_PASSWORD: ${SPRING_RABBITMQ_PASSWORD}
     ports:
+      - "8082:80"
+    restart: unless-stopped
+  simbirapex.backend.serviceagent:
+    image: ${DOCKER_REGISTRY-}serviceagent_apex:1.0
+    container_name: Simbirapex.Apex.ServiceAgent
+    depends_on:
+      kafka:
+        condition: service_healthy
+    build: 
+      context: ./Backend/service-agent
+    environment:
+      BOOTSTRAP_SERVERS: ${BOOTSTRAP_SERVERS}
+    ports:
+      - "8083:80"
+    restart: unless-stopped
+  simbirapex.backend.serviceanalyzer:
+    image: ${DOCKER_REGISTRY-}serviceanalyzer_apex:1.0
+    container_name: Simbirapex.Apex.ServiceAnalyzer
+    depends_on:
+      rabbitmq_broker:
+        condition: service_started
+      postgres_db:
+        condition: service_healthy
+    build: 
+      context: ./Backend/service-analyzer
+    environment:
+      SPRING_RABBITMQ_HOST: ${SPRING_RABBITMQ_HOST}
+      SPRING_RABBITMQ_PORT: ${SPRING_RABBITMQ_PORT}
+      SPRING_RABBITMQ_USERNAME: ${SPRING_RABBITMQ_USERNAME}
+      SPRING_RABBITMQ_PASSWORD: ${SPRING_RABBITMQ_PASSWORD}
+      DATABASE_CONNECT: ${DATABASE_CONNECT}
+    ports:
       - "8084:80"
     restart: unless-stopped
+  simbirapex.backend.serviceanalytics:
+    image: ${DOCKER_REGISTRY-}serviceanalytics_apex:1.0
+    container_name: Simbirapex.Apex.ServiceAnalytics
+    depends_on:
+      minio:
+        condition: service_healthy
+    build: 
+      context: ./Backend/serviceanalytics
+    environment:
+      SERVICE_MANAGER_URL: ${SERVICE_MANAGER_URL}
+      MINIO_ENDPOINT: ${MINIO_ENDPOIN}
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
+    ports:
+      - "8085:80"
+    restart: unless-stopped
+
   postgres_db:
     image: postgres:17.0-bookworm
     container_name: Simbir.Apex.PostgreSQL
@@ -85,23 +134,6 @@
       timeout: 60s
       retries: 5
       start_period: 80s
-  postgres_db_analyzer:
-    image: postgres:17.0-bookworm
-    container_name: Simbir.Apex.PostgreSQL.Analyzer
-    environment:
-        POSTGRES_DB: ${POSTGRES_DB_A}
-        POSTGRES_USER: ${POSTGRES_USER}
-        POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    ports:
-      - "5434:80"
-    volumes:
-      - ./postgres_data3:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready", "-d", "db_prod"]
-      interval: 30s
-      timeout: 60s
-      retries: 5
-      start_period: 80s    
   pgadmin:
     image: dpage/pgadmin4:latest
     container_name: Simbir.Apex.PgAdmin
@@ -115,7 +147,6 @@
     depends_on:
       - postgres_db
       - postgres_db_manager
-      - postgres_db_analyzer
     healthcheck:
       test: ["CMD", "wget", "-O", "-", "http://localhost:80/misc/ping"]
       interval: 10s
@@ -214,7 +245,25 @@
       timeout: 5s
       retries: 10
       start_period: 30s
+  minio:
+    container_name: minio
+    image: minio/minio:latest
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: minio_root_user
+      MINIO_ROOT_PASSWORD: minio_root_password
+    command: server /data --console-address ":9001"
+    volumes:
+      - minio_data:/data
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9000/minio/health/live" ]
+      interval: 30s
+      timeout: 20s
+      retries: 3
 
 volumes:
   rabbitmq_broker: 
   grafana_data:
+  minio_data:
