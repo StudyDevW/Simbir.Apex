@@ -162,7 +162,6 @@
       - 5672:5672
       - 15672:15672
 
-#РЎР±РѕСЂ Рё РІРёР·СѓР°Р»РёР·Р°С†РёСЏ Р»РѕРіРѕРІ
   grafana:
     container_name: Simbir.Apex.Metrics.Grafana
     image: grafana/grafana:latest

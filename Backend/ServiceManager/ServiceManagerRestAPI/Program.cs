@@ -38,8 +38,6 @@ namespace ServiceManagerRestAPI {
                 Version = "v1",
             }));
 
-            builder.Services.AddHealthChecksUI().AddInMemoryStorage();
-
             APIRoot.GetConfiguration(builder.Configuration);
 
             var app = builder.Build();
@@ -66,7 +64,6 @@ namespace ServiceManagerRestAPI {
 
 
             app.MapControllers();
-            app.MapHealthChecksUI();
 
             app.Use(async (context, next) => {
                 if (context.Request.Path == "/") {
