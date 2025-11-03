@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Middleware_Components.DTO.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,7 +23,7 @@ namespace Middleware_Components.DTO
 
         public string status { get; set; }
 
-        public string severity { get; set; }
+        public SeverityStatus severity { get; set; }
 
         public string raw_data { get; set; }
 

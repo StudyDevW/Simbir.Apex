@@ -1,4 +1,6 @@
-﻿using ServiceUI.Tables.Helpers;
+﻿using Middleware_Components.DTO.Enums;
+using ServiceUI.Tables.Helpers;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ServiceUI.Tables
 {
@@ -16,7 +18,7 @@ namespace ServiceUI.Tables
 
         public string status { get; set; }
 
-        public string severity { get; set; }
+        public SeverityStatus severity { get; set; }
 
         public string raw_data { get; set; }
 

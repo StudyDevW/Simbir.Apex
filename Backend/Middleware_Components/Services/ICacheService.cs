@@ -35,5 +35,7 @@ namespace Middleware_Components.Services
         public T GetKeyFromStorage<T>(Guid id_user, string type);
 
         public T GetKeyFromStorage<T>(string storage_desc);
+
+        public DateTime GetKeyExpirationTime(string key);
     }
 }

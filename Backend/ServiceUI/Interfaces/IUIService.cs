@@ -6,9 +6,9 @@ namespace ServiceUI.Interfaces
     {
         public Task<string?> ClientSignOut(string bearer_key);
 
-        public Task<AuthPairTokens?> AuthPart(string username, string password);
+        public Task<AuthTokenInfoWR?> AuthPart(string username, string password);
 
-        public Task<AuthPairTokens?> RefreshClientSession(string refreshTokenDTO);
+        public Task<AuthTokenInfoWR?> RefreshClientSession(string refreshTokenDTO);
 
         public Task AddNewUser(UserAddDTO dtoObj, string token);
 
@@ -33,5 +33,9 @@ namespace ServiceUI.Interfaces
         public Task<GetAlertDTO?> GetAlertFromDB(Guid alertId, string token);
 
         public Task<List<GetAlertDTO>?> GetAlertsFromDB(string token);
+
+        public Task<GetEventDTO?> GetEventFromDB(Guid eventId, string token);
+
+        public Task<List<GetEventDTO>?> GetEventsFromDB(string token);
     }
 }

@@ -50,9 +50,25 @@ namespace Middleware_Components.Cache
 
         public bool SetData<T>(string key, T value, DateTimeOffset expirationTime)
         {
-            var expiryTime = expirationTime.DateTime.Subtract(DateTime.Now);
+            var expiryTime = expirationTime.DateTime.Subtract(DateTime.UtcNow);
 
             return _cacheDb.StringSet(key, JsonSerializer.Serialize(value), expiryTime);
+        }
+
+        public DateTime GetKeyExpirationTime(string key)
+        {
+            var ttl = _cacheDb.KeyTimeToLive(key);
+
+            // Ульяновская временная зона (UTC+4)
+            var ulyanovskTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Russian Standard Time");
+
+            if (ttl.HasValue)
+            {
+                var utcExpiration = DateTime.UtcNow.Add(ttl.Value);
+                return TimeZoneInfo.ConvertTimeFromUtc(utcExpiration, ulyanovskTimeZone).AddHours(1);
+            }
+
+            return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, ulyanovskTimeZone).AddHours(1);
         }
 
         public void WriteKeyInStorage(Guid id_user, string type, string key, DateTime extime)

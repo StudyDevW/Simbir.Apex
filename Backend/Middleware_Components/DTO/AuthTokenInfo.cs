@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Middleware_Components.DTO
 {
-    public class AuthPairTokens
+    public class AuthTokenInfo
     {
-        public string? accessToken { get; set; }
+        public string accessToken { get; set; }
 
-        public string? refreshToken { get; set; }
+        public DateTime expires_at { get; set; }
     }
 }

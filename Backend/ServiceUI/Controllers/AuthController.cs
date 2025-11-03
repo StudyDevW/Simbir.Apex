@@ -25,11 +25,28 @@ namespace ServiceUI.Controllers
         [HttpPost("SignIn")]
         public async Task<IActionResult> SignInFunc([FromBody] AuthDTO dtoObj)
         {
-            var auth = await _serviceUI.AuthPart(dtoObj.name, dtoObj.password);
-
-            if (auth != null)
+            try
             {
-                return Ok(auth);
+                var auth = await _serviceUI.AuthPart(dtoObj.name, dtoObj.password);
+
+                if (auth != null)
+                {
+                    //Запись в куки refresh токена
+                    Response.Cookies.Append("refreshToken", auth.refreshToken, new CookieOptions
+                    {
+                        HttpOnly = true,
+                        Secure = true,
+                        SameSite = SameSiteMode.Strict,
+                        Expires = DateTime.UtcNow.AddDays(7)
+                    });
+
+                    return Ok(new AuthTokenInfo() { accessToken = auth.accessToken, expires_at = auth.expires_at });
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
 
             return BadRequest();
@@ -75,13 +92,28 @@ namespace ServiceUI.Controllers
         }
 
         [HttpPost("Refresh")]
-        public async Task<IActionResult> UserRefreshTokens([FromBody] AuthRefreshTokens dtoObj)
+        public async Task<IActionResult> UserRefreshTokens()
         {
-            var refreshInfo = await _serviceUI.RefreshClientSession(dtoObj.refreshToken);
+            var refreshTokenCookies = Request.Cookies["refreshToken"];
+
+            if (refreshTokenCookies == null)
+                return Unauthorized("token_not_found");
+
+            _logger.LogWarning($"(DEBUG) REFRESH FROM COOKIES: {refreshTokenCookies}");
+
+            var refreshInfo = await _serviceUI.RefreshClientSession(refreshTokenCookies);
 
             if (refreshInfo != null)
             {
-                return Ok(refreshInfo);
+                Response.Cookies.Append("refreshToken", refreshInfo.refreshToken, new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.Strict,
+                    Expires = DateTime.UtcNow.AddDays(7)
+                });
+
+                return Ok(new AuthTokenInfo() { accessToken = refreshInfo.accessToken, expires_at = refreshInfo.expires_at });
             }
 
             return Unauthorized();
