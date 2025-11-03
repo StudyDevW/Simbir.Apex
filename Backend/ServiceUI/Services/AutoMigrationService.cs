@@ -40,6 +40,7 @@ namespace ServiceUI.Services
                 "rulesTable",
                 "reportsTable",
                 "alertsTable",
+                "eventsTable",
                 "alertCommentsTable"
             };
 
@@ -49,6 +50,7 @@ namespace ServiceUI.Services
                 "rulesTable",
                 "reportsTable",
                 "alertsTable",
+                "eventsTable",
                 "alertCommentsTable"
             };
 

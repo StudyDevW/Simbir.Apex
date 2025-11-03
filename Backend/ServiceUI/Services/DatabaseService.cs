@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Middleware_Components.DTO;
 using Middleware_Components.JWT.DTO.CheckUsers;
 using ServiceUI.Interfaces;
@@ -284,6 +285,46 @@ namespace ServiceUI.Services
 
 
             return alertsAll;
+        }
+
+        public async Task<GetEventDTO?> GetEventFromDB(Guid eventId)
+        {
+            var selectedEvent = await _dbcontext.eventsTable.Where(c => c.Id == eventId).FirstOrDefaultAsync();
+
+            if (selectedEvent != null)
+                return new GetEventDTO()
+                {
+                    id = eventId,
+                    isLan = selectedEvent.isLan,
+                    device = selectedEvent.device,
+                    timestamp = selectedEvent.timestamp
+                };
+
+            return null;
+        }
+
+        public async Task<List<GetEventDTO>> GetAllEventsFromDB()
+        {
+            List<GetEventDTO> eventsAll = new List<GetEventDTO>();
+
+            var selectedEvents = await _dbcontext.eventsTable.ToListAsync();
+
+            if (selectedEvents != null)
+                foreach (var event_ in selectedEvents)
+                {
+                    GetEventDTO getAlertDTO = new GetEventDTO()
+                    {
+                        id = event_.Id,
+                        isLan = event_.isLan,
+                        device = event_.device,
+                        timestamp = event_.timestamp
+                    };
+
+                    eventsAll.Add(getAlertDTO);
+                }
+
+
+            return eventsAll;
         }
     }
 }

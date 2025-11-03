@@ -26,5 +26,9 @@ namespace ServiceUI.Interfaces
         public Task<GetAlertDTO?> GetAlertFromDB(Guid alertId);
 
         public Task<List<GetAlertDTO>> GetAllAlertsFromDB();
+
+        public Task<GetEventDTO?> GetEventFromDB(Guid eventId);
+
+        public Task<List<GetEventDTO>> GetAllEventsFromDB();
     }
 }

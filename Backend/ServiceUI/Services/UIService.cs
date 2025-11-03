@@ -409,5 +409,38 @@ namespace ServiceUI.Services
 
             return null;
         }
+
+        public async Task<GetEventDTO?> GetEventFromDB(Guid eventId, string token)
+        {
+            var validation = await _jwt.AccessTokenValidation(token);
+
+            if (validation.TokenHasError())
+            {
+                throw new Exception("token_invalid");
+            }
+            else if (validation.TokenHasSuccess())
+            {
+                return await _database.GetEventFromDB(eventId);
+            }
+
+            return null;
+        }
+
+        public async Task<List<GetEventDTO>?> GetEventsFromDB(string token)
+        {
+            var validation = await _jwt.AccessTokenValidation(token);
+
+            if (validation.TokenHasError())
+            {
+                throw new Exception("token_invalid");
+            }
+            else if (validation.TokenHasSuccess())
+            {
+                return await _database.GetAllEventsFromDB();
+            }
+
+            return null;
+        }
+
     }
 }
