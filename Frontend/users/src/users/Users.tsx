@@ -167,13 +167,6 @@ const Users: React.FC = () => {
           <div className="content-header-left">
             <img src={LeftArrow} className="content-header-back" alt="Назад" />
             <h1 className="content-header-title">Пользователи</h1>
-            <img
-              src={Plus}
-              className="content-header-plus"
-              alt="Добавить"
-              onClick={handleOpenCreate}
-              style={{ cursor: "pointer" }}
-            />
           </div>
         </div>
 
@@ -185,6 +178,13 @@ const Users: React.FC = () => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="search-input"
+            />
+            <img
+              src={Plus}
+              className="content-header-plus"
+              alt="Добавить"
+              onClick={handleOpenCreate}
+              style={{ cursor: "pointer" }}
             />
           </div>
 
