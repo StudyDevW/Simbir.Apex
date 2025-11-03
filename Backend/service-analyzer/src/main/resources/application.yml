@@ -1,11 +1,18 @@
 server:
-  port: 8080
+  port: ${SERVER_PORT:8080}
 
 spring:
   application:
-    name: collector
+    name: analyzer
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://postgres_db:5432/simbirapex}
+    username: ${SPRING_DATASOURCE_USERNAME:practice_user}
+    password: ${SPRING_DATASOURCE_PASSWORD:root}
+  jpa:
+    hibernate:
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:none}
   rabbitmq:
-    host: ${SPRING_RABBITMQ_HOST:localhost}
+    host: ${SPRING_RABBITMQ_HOST:rabbitmq}
     port: ${SPRING_RABBITMQ_PORT:5672}
     username: ${SPRING_RABBITMQ_USERNAME:user}
     password: ${SPRING_RABBITMQ_PASSWORD:password}

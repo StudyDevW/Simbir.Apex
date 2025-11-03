@@ -5,8 +5,8 @@ services:
     image: rabbitmq:3-management
     container_name: rabbitmq_new
     ports:
-      - "5672:5672"      # порт для подключения Spring Boot
-      - "15672:15672"    # менеджмент UI
+      - "5672:5672"
+      - "15672:15672"
     environment:
       RABBITMQ_DEFAULT_USER: user
       RABBITMQ_DEFAULT_PASS: password
@@ -17,47 +17,36 @@ services:
       retries: 10
       start_period: 30s
 
-  postgres:
-    image: postgres:15
-    container_name: postgres
+  analyzer:
+    build:
+      context: ./Backend/serviceanalytics
+      dockerfile: Dockerfile
+    container_name: Simbir.Apex.Analyzer
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      postgres_db:
+        condition: service_healthy
     environment:
-      POSTGRES_DB: collector
-      POSTGRES_USER: collector
-      POSTGRES_PASSWORD: collector
-    ports:
-      - "5432:5432"
-    volumes:
-      - pg_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD", "pg_isready", "-U", "collector"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-      start_period: 30s
+      # Подключение к PostgreSQL
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres_db:5432/simbirapex
+      SPRING_DATASOURCE_USERNAME: practice_user
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_JPA_HIBERNATE_DDL_AUTO: none
 
-  app:
-    build: .
-    container_name: collector-app
-    ports:
-      - "8080:8080"
-    environment:
       # RabbitMQ
       SPRING_RABBITMQ_HOST: rabbitmq
       SPRING_RABBITMQ_PORT: 5672
       SPRING_RABBITMQ_USERNAME: user
       SPRING_RABBITMQ_PASSWORD: password
 
-      # PostgreSQL
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/collector
-      SPRING_DATASOURCE_USERNAME: collector
-      SPRING_DATASOURCE_PASSWORD: collector
-      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      # Настройки приложения
+      SERVER_PORT: 8080
 
-    depends_on:
-      rabbitmq:
-        condition: service_healthy
-      postgres:
-        condition: service_healthy
+    ports:
+      - "8090:8080"
+    networks:
+      - default
 
 volumes:
   pg_data:

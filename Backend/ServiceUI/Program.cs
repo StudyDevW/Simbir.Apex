@@ -1,4 +1,4 @@
-using DotNetEnv;
+﻿using DotNetEnv;
 using DotNetEnv.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -120,6 +120,7 @@ namespace ServiceUI
 
             builder.Services.AddSingleton<ICacheService, CacheSDK>();
 
+            builder.Services.AddSingleton<IServiceManager, ServiceManager>();
 
             builder.Services.AddCors(options =>
             {
@@ -129,17 +130,18 @@ namespace ServiceUI
                                       .AllowAnyHeader());
             });
 
-
             var app = builder.Build();
 
             using (var serviceScope = app.Services.CreateScope())
             {
                 var migrations = serviceScope.ServiceProvider.GetService<IAutoMigrationService>();
+                
+                var frrequest = serviceScope.ServiceProvider.GetService<IServiceManager>();
 
                 if (migrations != null)
                     await migrations.EnsureDatabaseInitializedAsync();
+                if (frrequest != null) { await frrequest.ServiceInit(); }
             }
-
 
             app.UseCors("AllowOrigin");
 

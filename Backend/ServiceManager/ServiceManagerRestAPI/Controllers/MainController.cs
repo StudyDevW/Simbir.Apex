@@ -2,7 +2,6 @@
 using Contracts.BusinessLogicContracts;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using ServiceManagerRestAPI.AppsettingsWork;
 
 namespace ServiceManagerRestAPI.Controllers {
 
@@ -11,7 +10,6 @@ namespace ServiceManagerRestAPI.Controllers {
     public class MainController : ControllerBase {
         private readonly ISimbirServiceLogic simbirServiceLogic;
         private readonly JsonSerializerSettings jsonSettings;
-        private readonly AppsettingsWorkService appsettingsService;
         public MainController(ISimbirServiceLogic simbirServiceLogicImp)
         {
             simbirServiceLogic = simbirServiceLogicImp;
@@ -19,18 +17,16 @@ namespace ServiceManagerRestAPI.Controllers {
             jsonSettings.Converters.Add(new IPEndPointConverter());
             jsonSettings.Converters.Add(new IPAddressConverter());
             jsonSettings.Formatting = Formatting.Indented;
-            appsettingsService = new();
         }
 
         [HttpPost]
-        public IActionResult InsertService(string jsonData) 
+        public IActionResult InsertService([FromBody]string jsonData) 
         {
             SimbirServiceBindingModel? insertModel;
             try {
                 insertModel = JsonConvert.DeserializeObject<SimbirServiceBindingModel>(jsonData, jsonSettings);
                 if (insertModel == null) { return NoContent(); }
                 simbirServiceLogic.InsertService(insertModel);
-                appsettingsService.AddUpdateAppsettings(insertModel);
                 return Ok("Данные заполнены");
             }
             catch (Exception ex) {
@@ -46,7 +42,6 @@ namespace ServiceManagerRestAPI.Controllers {
                 updateModel = JsonConvert.DeserializeObject<SimbirServiceBindingModel>(jsonData, jsonSettings);
                 if (updateModel == null) { return NoContent(); }
                 simbirServiceLogic.UpdateService(updateModel);
-                appsettingsService.AddUpdateAppsettings(updateModel);
                 return Ok("Данные обновлены");
             }
             catch (Exception ex) {

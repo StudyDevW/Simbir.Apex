@@ -1,20 +1,22 @@
-FROM maven:3.9.6-eclipse-temurin-21 AS build
+# ===== Сборка Maven =====
+FROM maven:3.9-eclipse-temurin-23 AS builder
 
 WORKDIR /app
-
-# Копируем только pom.xml и тянем зависимости заранее (кэшируется)
 COPY pom.xml .
-RUN mvn dependency:go-offline
+RUN mvn -B dependency:go-offline
 
-# Копируем исходники и собираем jar
 COPY src ./src
-RUN mvn clean package -DskipTests
 
-# Финальный образ для запуска
+RUN mvn -B clean package -DskipTests
+
+# ===== Финальный образ =====
 FROM eclipse-temurin:21-jre-alpine
 
 WORKDIR /app
-COPY --from=build /app/target/*.jar app.jar
 
-EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+COPY --from=builder /app/target/*-jar-with-dependencies.jar app.jar
+
+EXPOSE 80
+EXPOSE 443
+
+ENTRYPOINT ["java", "-jar", "app.jar"]
