@@ -6,9 +6,9 @@ namespace ServiceUI.Interfaces
     {
         public Task<string?> ClientSignOut(string bearer_key);
 
-        public Task<AuthPairTokens?> AuthPart(string username, string password);
+        public Task<AuthTokenInfoWR?> AuthPart(string username, string password);
 
-        public Task<AuthPairTokens?> RefreshClientSession(string refreshTokenDTO);
+        public Task<AuthTokenInfoWR?> RefreshClientSession(string refreshTokenDTO);
 
         public Task AddNewUser(UserAddDTO dtoObj, string token);
 

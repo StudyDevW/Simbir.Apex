@@ -23,7 +23,7 @@ namespace ServiceUI.Services
         }
         
         //AUTH PARTS
-        private async Task<AuthPairTokens?> GenerateTokens(AuthCheckInfo check)
+        private async Task<AuthTokenInfoWR?> GenerateTokens(AuthCheckInfo check)
         {
             if (check.check_success == null)
                 return null;
@@ -42,31 +42,42 @@ namespace ServiceUI.Services
                 _cache.WriteKeyInStorage(check.check_success.Id, "accessTokens", accessToken, DateTime.UtcNow.AddMinutes(10));
                 _cache.WriteKeyInStorage(check.check_success.Id, "refreshTokens", refreshToken, DateTime.UtcNow.AddDays(7));
 
-                AuthPairTokens pair_tokens = new AuthPairTokens()
+                var accessTokenOut = _cache.GetKeyFromStorage(check.check_success.Id, "accessTokens")!;
+                var refreshTokenOut = _cache.GetKeyFromStorage(check.check_success.Id, "refreshTokens")!;
+
+                AuthTokenInfoWR out_tokens = new AuthTokenInfoWR()
                 {
-                    accessToken = _cache.GetKeyFromStorage(check.check_success.Id, "accessTokens"),
-                    refreshToken = _cache.GetKeyFromStorage(check.check_success.Id, "refreshTokens")
+                    accessToken = accessTokenOut,
+                    refreshToken = refreshTokenOut,
+                    expires_at = _cache.GetKeyExpirationTime($"accessTokens_storage_{check.check_success.Id}")
                 };
 
+                _logger.LogWarning($"(DEBUG) REFRESH: {_cache.GetKeyFromStorage(check.check_success.Id, "refreshTokens")!}");
                 _logger.LogInformation($"Пользователь {check.check_success.Id} успешно вошел!");
 
-                return pair_tokens;
+                return out_tokens;
             }
             else
             {
                 var validation = await _jwt.AccessTokenValidation(
                    $"Bearer {_cache.GetKeyFromStorage(check.check_success.Id, "accessTokens")}"
-               );
+                );
 
                 if (validation.TokenHasSuccess())
                 {
-                    AuthPairTokens pair_tokens = new AuthPairTokens()
+                    var accessTokenOut = _cache.GetKeyFromStorage(check.check_success.Id, "accessTokens")!;
+                    var refreshTokenOut = _cache.GetKeyFromStorage(check.check_success.Id, "refreshTokens")!;
+
+                    AuthTokenInfoWR out_tokens = new AuthTokenInfoWR()
                     {
-                        accessToken = _cache.GetKeyFromStorage(check.check_success.Id, "accessTokens"),
-                        refreshToken = _cache.GetKeyFromStorage(check.check_success.Id, "refreshTokens")
+                        accessToken = accessTokenOut,
+                        refreshToken = refreshTokenOut,
+                        expires_at = _cache.GetKeyExpirationTime($"accessTokens_storage_{check.check_success.Id}")
                     };
 
-                    return pair_tokens;
+                    _logger.LogWarning($"(DEBUG) REFRESH <-->: {_cache.GetKeyFromStorage(check.check_success.Id, "refreshTokens")!}");
+
+                    return out_tokens;
                 }
             }
 
@@ -97,7 +108,7 @@ namespace ServiceUI.Services
             return null;
         }
 
-        public async Task<AuthPairTokens?> AuthPart(string username, string password)
+        public async Task<AuthTokenInfoWR?> AuthPart(string username, string password)
         {
             var checkSuccess = await _database.CheckUserAuth(username, password);
 
@@ -112,7 +123,7 @@ namespace ServiceUI.Services
             return tokensOut;
         }
 
-        public async Task<AuthPairTokens?> RefreshClientSession(string refreshTokenDTO)
+        public async Task<AuthTokenInfoWR?> RefreshClientSession(string refreshTokenDTO)
         {
             var validation = await _jwt.RefreshTokenValidation(refreshTokenDTO);
 
@@ -142,18 +153,20 @@ namespace ServiceUI.Services
                 _cache.WriteKeyInStorage(authsuccess.Id, "accessTokens", accessToken, DateTime.UtcNow.AddMinutes(10));
                 _cache.WriteKeyInStorage(authsuccess.Id, "refreshTokens", refreshToken, DateTime.UtcNow.AddDays(7));
 
+                var accessTokenOut = _cache.GetKeyFromStorage(authsuccess.Id, "accessTokens")!;
 
+                var refreshTokenOut = _cache.GetKeyFromStorage(authsuccess.Id, "refreshTokens")!;
 
-                AuthPairTokens pair_tokens = new AuthPairTokens()
+                AuthTokenInfoWR out_tokens = new AuthTokenInfoWR()
                 {
-                    accessToken = _cache.GetKeyFromStorage(authsuccess.Id, "accessTokens"),
-                    refreshToken = _cache.GetKeyFromStorage(authsuccess.Id, "refreshTokens")
+                    accessToken = accessTokenOut,
+                    refreshToken = refreshTokenOut,
+                    expires_at = _cache.GetKeyExpirationTime($"accessTokens_storage_{authsuccess.Id}")
                 };
-
 
                 _logger.LogInformation($"Токены для id: {validation.token_success.Id} обновлены!");
 
-                return pair_tokens;
+                return out_tokens;
             }
 
             return null;
