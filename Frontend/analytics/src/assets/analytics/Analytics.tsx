@@ -3,52 +3,7 @@ import './Analytics.sass';
 import Grafic from "../../img/icon/icon-grafic.png"
 import Glass from "../../img/icon/icon-glass.png"
 
-export type UUID = string;
 
-export type EventCategory =
-    | "unknown"
-    | "auth"
-    | "file_system"
-    | "process"
-    | "hardware"
-    | "network";
-
-export type EventSeverity =
-    | "low"
-    | "medium"
-    | "high";
-
-export type AlertStatus =
-    | 'open'
-    | 'closed'
-    | 'in_progress';
-
-export interface EventSchema {
-    id: UUID;
-    category: EventCategory;
-    ip: string;
-    isLan: boolean;
-    device: string;
-    eventId: string;
-    severity: EventSeverity;
-    timestamp: Date;
-}
-
-export type Analytics = {
-    id: number;
-    ruleId: number;
-    assignedTo?: number;
-    hostname: string;
-    title: string;
-    description: string;
-    status: AlertStatus;
-    severity: string;
-    createdAt: Date;
-    closedAt?: Date;
-    resolutionNotes?: string;
-    rawData: string;
-    rawDataParsed?: EventSchema[];
-};
 
 const Analytics: React.FC = () => {
     return (
