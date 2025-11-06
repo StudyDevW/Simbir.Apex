@@ -1,5 +1,5 @@
 server:
-  port: ${SERVER_PORT:8080}
+  port: ${SERVER_PORT:8084}
 
 spring:
   application:
@@ -12,7 +12,7 @@ spring:
     hibernate:
       ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:none}
   rabbitmq:
-    host: ${SPRING_RABBITMQ_HOST:rabbitmq}
+    host: ${SPRING_RABBITMQ_HOST:rabbitmq_broker}
     port: ${SPRING_RABBITMQ_PORT:5672}
     username: ${SPRING_RABBITMQ_USERNAME:user}
     password: ${SPRING_RABBITMQ_PASSWORD:password}

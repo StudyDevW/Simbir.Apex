@@ -1,5 +1,7 @@
 package simbir.apex.service.agent.db.entity;
 
+import simbir.apex.service.agent.model.enums.EventSeverity;
+
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -33,11 +35,11 @@ public class Alert {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String description;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String status;
 
-    private String severity;
+    @Enumerated(EnumType.STRING)
+    private EventSeverity severity;
 
     @Column(nullable = false, columnDefinition = "TEXT", name = "raw_data ")
     private String rawData;

@@ -1,11 +1,11 @@
 server:
-  port: 8080
+  port: 8082
 
 spring:
   application:
     name: collector
   rabbitmq:
-    host: ${SPRING_RABBITMQ_HOST:localhost}
+    host: ${SPRING_RABBITMQ_HOST:rabbitmq_broker}
     port: ${SPRING_RABBITMQ_PORT:5672}
     username: ${SPRING_RABBITMQ_USERNAME:user}
     password: ${SPRING_RABBITMQ_PASSWORD:password}
@@ -13,12 +13,12 @@ spring:
     consumer:
       auto-offset-reset: earliest
       group-id: collector-group
-      bootstrap-servers: ${BOOTSTRAP_SERVERS:localhost:9092}
+      bootstrap-servers: ${BOOTSTRAP_SERVERS:kafka:9092}
 
 
 app:
   manager:
-    url: ${MANAGER_URL:localhost}
+    url: ${MANAGER_URL:simbirapex.backend.servicemanager}
     port: ${MANAGER_PORT:8081}
   rabbitmq:
     exchange: events.exchange
