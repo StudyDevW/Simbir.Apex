@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.UUID;
 
 @Entity
-@Table(name = "eventsTable")
+@Table(name = "\"eventsTable\"")
 @Getter
 @Setter
 @NoArgsConstructor

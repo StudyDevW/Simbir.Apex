@@ -1,5 +1,6 @@
 package simbir.apex.service.collector.dtos;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,6 +11,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AppInfoDto {
-    private String serviceName;
-    private EndpointService endpointService;
+    private String ServiceName;
+
+    private IPEndPoint EndPointService;
+
+    private int Id;
 }

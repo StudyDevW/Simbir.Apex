@@ -11,7 +11,7 @@ import simbir.apex.service.agent.service.EventProcessor;
 @RequiredArgsConstructor
 public class RabbitConsumer {
 
-    private EventProcessor eventProcessor;
+    private final EventProcessor eventProcessor; 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     /**
