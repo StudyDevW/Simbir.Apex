@@ -74,6 +74,7 @@
         condition: service_healthy
     build: 
       context: ./Backend/service-analyzer
+      dockerfile: Dockerfile
     environment:
       SPRING_RABBITMQ_HOST: ${SPRING_RABBITMQ_HOST}
       SPRING_RABBITMQ_PORT: ${SPRING_RABBITMQ_PORT}

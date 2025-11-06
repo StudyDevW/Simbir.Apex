@@ -379,3 +379,5 @@ FodyWeavers.xsd
 .vs
 
 .env
+
+.env_backup
