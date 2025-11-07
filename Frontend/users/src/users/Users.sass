@@ -1,0 +1,597 @@
+.users-page
+  width: 100%
+  height: 100%
+  margin: 0
+  padding: 0
+  display: flex
+  flex-direction: column
+  min-height: 100vh
+  font-family: 'Arial', sans-serif
+
+.sidebar
+  width: 100%
+  background: #111111 !important
+  color: white
+  display: flex
+  flex-direction: column
+
+.sidebar-header
+  margin-top: 5%
+  padding: 0 10px 20px
+  border-bottom: 1px solid #4a6278
+
+.sidebar-title
+  background-color: #3498db
+  display: flex
+  flex-direction: column
+  width: 100%
+  color: white
+  border-top-left-radius: 5%
+  border-top-right-radius: 5%
+  box-shadow: inset
+
+.title
+  font-weight: bold
+  margin-bottom: 30px
+  color: #ecf0f1
+  padding-left: 3% !important
+
+.mini_title
+  padding-left: 50%
+  margin-top: 10% !important
+
+.main-nav
+  display: flex
+  flex-direction: column
+  padding-top: 3%
+  gap: 20px
+  font-size: 14px
+  background-color: #245A8C
+  border-radius: 15px
+
+.nav-item, .nav-item-active
+  text-decoration: none
+  padding: 8px 15px
+  padding-left: 12% !important
+  transition: all 0.3s ease
+  color: #ecf0f1
+
+.sidebar-content
+  flex: 1
+  padding: 20px
+  margin-left: 2%
+
+.section
+  margin-bottom: 30px
+
+h3
+  color: white
+  text-transform: uppercase
+  margin-bottom: 15px
+  font-weight: 600
+
+ul
+  list-style: none
+  padding: 0
+  margin: 0
+
+li
+  margin-bottom: 10px
+
+a
+  color: white
+  text-decoration: none
+  padding: 8px 12px
+  display: block
+  border-radius: 4px
+  transition: all 0.3s ease
+
+.sidebar-footer
+  padding: 20px
+  background-color: black
+  border-radius: 15px
+
+.user-info
+  display: flex
+  align-items: center
+  gap: 12px
+
+.user-avatar
+  background-color: white
+  border-radius: 50%
+  display: flex
+  align-items: center
+  justify-content: center
+  font-weight: bold
+
+.user-details
+  display: flex
+  flex-direction: column
+
+strong
+  margin-bottom: 2px
+
+.main-content
+  display: flex
+  flex-direction: column
+  align-items: center
+  justify-content: flex-start
+  width: 100%
+  margin: 0
+
+.content-header
+  display: flex
+  justify-content: space-between
+  align-items: center
+  padding: 0 20px
+  background-color: black
+  width: 78%
+  height: 80px
+  margin-left: 8%
+  border-radius: 15px
+  margin-bottom: 20px
+
+.content-header-title
+  color: white
+  font-weight: 600
+  margin: 0
+  width: 100px
+  flex: 1
+
+.content-header-left
+  display: flex
+  align-items: center
+  gap: 16px
+  width: 100%
+
+.content-header-back
+  cursor: pointer
+  transition: transform 0.2s ease
+
+  &:hover
+    transform: translateX(-2px)
+
+.content-header-plus
+  cursor: pointer
+  transition: all 0.3s ease
+  margin-left: 0.4% !important
+
+.users-table-container
+  background: white
+  border-radius: 8px
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1)
+  overflow: hidden
+  width: 100%
+
+.search-container
+  width: 100%
+  padding: 12px 0px
+  margin: 0
+  border-bottom: 1px solid #ecf0f1
+  background-color: #f8f9fa
+  display: flex
+  justify-content: center
+
+.search-input
+  width: 92%
+  margin: 0
+  padding: 8px 10px
+  border: 1px solid #bdc3c7
+  background-color: white
+  color: black
+  border-radius: 6px
+  font-size: 13px
+  transition: border-color 0.3s ease
+
+  &:focus
+    outline: none
+    border-color: #3498db
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2)
+
+  &::placeholder
+    color: #95a5a6
+
+.users-table
+  width: 100%
+  border-collapse: collapse
+  font-size: 14px
+
+thead
+  background-color: #f8f9fa
+
+th
+  padding: 12px 15px
+  text-align: left
+  font-weight: 600
+  color: black
+  border-bottom: 2px solid #ecf0f1
+
+.editing
+  margin-top: 15px
+  width: 30px
+  height: 30px
+
+.cross
+  padding-top: 6px
+  width: 50px
+  height: 50px
+
+tbody
+  tr
+    border-bottom: 1px solid #ecf0f1
+    transition: background-color 0.3s ease
+
+    &:hover
+      background-color: #f8f9fa
+
+    &:last-child
+      border-bottom: none
+
+td
+  padding: 12px 15px
+  color: black
+  text-align: left
+
+  &.actions-cell
+    display: flex
+    justify-content: flex-start
+    gap: 15px
+
+.status
+  padding: 4px 10px
+  border-radius: 20px
+  font-weight: 500
+  text-transform: uppercase
+  display: inline-block
+  font-size: 11px
+
+.online
+  background-color: #d4edda
+  color: #155724
+
+.offline
+  background-color: #f8d7da
+  color: #721c24
+
+.modal-overlay
+  position: fixed
+  top: 0
+  left: 0
+  width: 100%
+  height: 100%
+  background: rgba(0, 0, 0, 0.5)
+  display: flex
+  align-items: center
+  justify-content: center
+  z-index: 1000
+
+.modal-window
+  background: #fff
+  border-radius: 12px
+  padding: 24px
+  width: 420px
+  box-shadow: 0 0 20px rgba(0,0,0,0.3)
+  animation: fadeIn 0.2s ease-in-out
+
+.modal-header
+  display: flex
+  justify-content: space-between
+  align-items: center
+  margin-bottom: 16px
+
+.modal-close
+  background: none
+  border: none
+  font-size: 20px
+  cursor: pointer
+
+.modal-body .form-group
+  margin-bottom: 12px
+  display: flex
+  flex-direction: column
+
+.modal-body input, .modal-body select
+  padding: 8px
+  border: 1px solid #ccc
+  border-radius: 6px
+
+.modal-footer
+  display: flex
+  justify-content: flex-end
+  gap: 8px
+  margin-top: 16px
+
+.btn-primary
+  background: #007bff
+  color: white
+  border: none
+  padding: 8px 16px
+  border-radius: 6px
+  cursor: pointer
+
+.btn-secondary
+  background: #ddd
+  border: none
+  padding: 8px 16px
+  border-radius: 6px
+  cursor: pointer
+
+@keyframes fadeIn
+  from
+    opacity: 0
+    transform: translateY(-10px)
+  to
+    opacity: 1
+    transform: translateY(0)
+
+@media (max-width: 374px)
+  .users-page
+    font-size: 12px
+
+  .sidebar-header
+    margin-top: 8%
+    padding: 0 8px 15px
+
+  .title
+    margin-bottom: 20px
+    font-size: 14px
+
+  .mini_title
+    padding-left: 40%
+    margin-top: 8% !important
+    font-size: 12px
+
+  .main-nav
+    gap: 12px
+    font-size: 12px
+    border-radius: 10px
+
+  .nav-item, .nav-item-active
+    padding: 6px 10px
+    padding-left: 8% !important
+
+  .sidebar-content
+    padding: 12px
+    margin-left: 0
+
+  .section
+    margin-bottom: 20px
+
+  h3
+    font-size: 13px
+    margin-bottom: 10px
+
+  a
+    padding: 6px 8px
+    font-size: 11px
+
+  .sidebar-footer
+    padding: 12px
+    border-radius: 10px
+
+  .user-info
+    gap: 8px
+
+  .user-avatar
+    width: 32px
+    height: 32px
+    font-size: 12px
+
+  .content-header
+    width: 95%
+    margin-left: 2.5%
+    height: 60px
+    padding: 0 12px
+    border-radius: 10px
+
+  .content-header-title
+    font-size: 14px
+
+  .search-input
+    width: 90%
+    padding: 6px 8px
+    font-size: 12px
+
+  .users-table
+    font-size: 11px
+
+  th, td
+    padding: 8px 10px
+
+  .editing
+    width: 20px
+    height: 20px
+    margin-top: 10px
+
+  .cross
+    width: 35px
+    height: 35px
+    padding-top: 4px
+
+  .status
+    padding: 3px 6px
+    font-size: 9px
+
+  .modal-window
+    width: 95%
+    padding: 16px
+    margin: 10px
+
+  .modal-body input, .modal-body select
+    padding: 6px
+    font-size: 12px
+
+@media (min-width: 375px) and (max-width: 424px)
+  .users-page
+    font-size: 13px
+
+  .sidebar-header
+    margin-top: 7%
+    padding: 0 10px 18px
+
+  .title
+    margin-bottom: 25px
+    font-size: 15px
+
+  .mini_title
+    padding-left: 45%
+    margin-top: 9% !important
+    font-size: 13px
+
+  .main-nav
+    gap: 15px
+    font-size: 13px
+
+  .nav-item, .nav-item-active
+    padding: 7px 12px
+    padding-left: 10% !important
+
+  .sidebar-content
+    padding: 15px
+    margin-left: 1%
+
+  .content-header
+    width: 92%
+    margin-left: 4%
+    height: 65px
+
+  .search-input
+    width: 91%
+
+  .users-table
+    font-size: 12px
+
+  th, td
+    padding: 10px 12px
+
+  .modal-window
+    width: 90%
+    padding: 20px
+
+@media (min-width: 425px) and (max-width: 767px)
+  .content-header
+    width: 90%
+    margin-left: 5%
+    height: 70px
+
+  .search-input
+    width: 91%
+
+  .modal-window
+    width: 85%
+    max-width: 380px
+
+@media (min-width: 768px) and (max-width: 1023px)
+  .users-page
+    flex-direction: row
+
+  .sidebar
+    width: 250px
+    min-height: 100vh
+
+  .main-content
+    flex: 1
+    margin-left: 0
+
+  .content-header
+    width: 90%
+    margin-left: 5%
+    margin-top: 20px
+
+  .search-input
+    width: 94%
+
+  .users-table
+    font-size: 13px
+
+  th, td
+    padding: 10px 12px
+
+  .modal-window
+    width: 80%
+    max-width: 400px
+
+@media (min-width: 1024px) and (max-width: 1439px)
+  .users-page
+    flex-direction: row
+
+  .sidebar
+    width: 280px
+    min-height: 100vh
+
+  .main-content
+    flex: 1
+    margin-left: 0
+
+  .content-header
+    width: 85%
+    margin-left: 7.5%
+
+  .search-input
+    width: 93%
+
+@media (min-width: 1440px)
+  .users-page
+    flex-direction: row
+
+  .sidebar
+    width: 300px
+    min-height: 100vh
+
+  .main-content
+    flex: 1
+    margin-left: 0
+
+  .content-header
+    width: 82%
+    margin-left: 9%
+
+  .search-input
+    width: 94%
+
+  .users-table
+    font-size: 15px
+
+  th, td
+    padding: 14px 18px
+
+@media (max-width: 767px)
+  .users-table-container
+    overflow-x: auto
+
+  .users-table
+    min-width: 500px
+
+  thead th
+    white-space: nowrap
+
+  tbody td
+    white-space: nowrap
+
+  .actions-cell
+    gap: 8px !important
+
+@media (max-width: 320px)
+  .content-header-left
+    gap: 8px
+
+  .content-header-title
+    font-size: 13px
+
+  .user-details
+    font-size: 11px
+
+  strong, span
+    font-size: 11px
+
+@media (max-height: 500px) and (orientation: landscape)
+  .sidebar
+    overflow-y: auto
+
+  .content-header
+    height: 50px
+    margin-bottom: 10px
+
+  .users-table-container
+    max-height: 60vh
+    overflow-y: auto

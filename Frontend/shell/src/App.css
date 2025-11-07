@@ -1,0 +1,9 @@
+#root {
+    display: flex;
+    gap: 20px;
+    margin: 20px;
+}
+.outlet {
+    flex: 1;
+    padding: 20px;
+}
