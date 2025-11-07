@@ -4,6 +4,7 @@ services:
       context: ./shell
       dockerfile: Dockerfile
     container_name: frontend-shell
+    env_file: ./shell/.env
     ports:
       - "5000:5000"    
 

@@ -17,6 +17,7 @@ const Navigation = () => {
 
   const additionalTabs = [
     { name: 'Настройки', path: '/settings' },
+    { name: 'Личный кабинет', path: '/profile' },
   ];
 
   return (
