@@ -1,10 +1,10 @@
 import { ApiClient } from 'shell/api';
 
 class EventsApiService {
-    url = 'events';
+    url = 'Events';
 
     async getAll(params = {}) {
-        return ApiClient.get(this.url, { params });
+        return ApiClient.get(`${this.url}/All`, { params });
     }
 
     async getDevices() {

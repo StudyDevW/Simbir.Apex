@@ -1,13 +1,14 @@
 {
   "name": "events",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite --port 5001 --strictPort",
     "build": "vite build",
+    "preview": "vite preview --port 5001 --strictPort --host",
+    "start": "vite preview --port 5001 --strictPort --host",
     "lint": "eslint .",
-    "preview": "vite preview --port 5001 --strictPort",
     "rest": "json-server data.json"
   },
   "dependencies": {

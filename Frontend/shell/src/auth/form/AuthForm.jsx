@@ -9,12 +9,12 @@ const AuthForm = () => {
       <Card className="p-4 shadow" style={{ width: '380px', borderRadius: '16px' }}>
         <h4 className="text-center mb-4">Вход в систему</h4>
         <Form onSubmit={handleSubmit}>
-          <Form.Group className="mb-3" controlId="username">
+          <Form.Group className="mb-3" controlId="name">
             <Form.Label>Имя пользователя</Form.Label>
             <Form.Control
               type="text"
-              name="username"
-              value={credentials.username}
+              name="name"
+              value={credentials.name}
               onChange={handleChange}
               placeholder="Введите имя пользователя"
               required
