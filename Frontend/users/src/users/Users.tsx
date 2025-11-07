@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import Cross from "../assets/icon/icon-cross.png";
 import Pencil from "../assets/icon/icon-pencil.png";
 import Plus from "../assets/icon/icon-plus.png";
-import LeftArrow from "../assets/icon/icon-left.png";
 import "./Users.sass";
 
 export interface User {
@@ -11,7 +10,7 @@ export interface User {
   email: string;
   phone: string;
   password: string;
-  status: "online" | "offline";
+  role: "Аналитик" | "Руководитель" | "Эксперт";
 }
 
 const useModal = () => {
@@ -63,7 +62,7 @@ const Users: React.FC = () => {
       email: "eremeev531@gmail.com",
       phone: "+7(962)-876-80-87",
       password: "qwert123",
-      status: "online",
+      role: "Аналитик",
     },
     {
       id: 2,
@@ -71,7 +70,7 @@ const Users: React.FC = () => {
       email: "markovA01@gmail.com",
       phone: "+7(937)-823-84-32",
       password: "helmik789",
-      status: "offline",
+      role: "Эксперт",
     },
     {
       id: 3,
@@ -79,7 +78,7 @@ const Users: React.FC = () => {
       email: "orleevKKK@gmail.com",
       phone: "+7(905)-421-92-92",
       password: "gamalion456",
-      status: "online",
+      role: "Аналитик",
     },
   ]);
 
@@ -91,7 +90,7 @@ const Users: React.FC = () => {
     email: "",
     phone: "",
     password: "",
-    status: "online" as "online" | "offline",
+    role: "Аналитик" as "Аналитик" | "Руководитель" | "Эксперт",
   });
 
   const filteredUsers = users.filter(
@@ -132,7 +131,7 @@ const Users: React.FC = () => {
       email: "",
       phone: "",
       password: "",
-      status: "online",
+      role: "Аналитик",
     });
   };
 
@@ -143,7 +142,7 @@ const Users: React.FC = () => {
       email: "",
       phone: "",
       password: "",
-      status: "online",
+      role: "Эксперт",
     });
     showModal();
   };
@@ -155,7 +154,7 @@ const Users: React.FC = () => {
       email: user.email,
       phone: user.phone,
       password: user.password,
-      status: user.status,
+      role: user.role,
     });
     showModal();
   };
@@ -163,12 +162,12 @@ const Users: React.FC = () => {
   return (
     <div className="users-page">
       <div className="main-content">
-        <div className="content-header">
+        {/* <div className="content-header">
           <div className="content-header-left">
             <img src={LeftArrow} className="content-header-back" alt="Назад" />
             <h1 className="content-header-title">Пользователи</h1>
           </div>
-        </div>
+        </div> */}
 
         <div className="users-table-container">
           <div className="search-container">
@@ -195,7 +194,7 @@ const Users: React.FC = () => {
                 <th>Email</th>
                 <th>Телефон</th>
                 <th>Пароль</th>
-                <th>Статус</th>
+                <th>Роли</th>
                 <th>Действия</th>
               </tr>
             </thead>
@@ -207,8 +206,8 @@ const Users: React.FC = () => {
                   <td>{user.phone}</td>
                   <td>{user.password}</td>
                   <td>
-                    <span className={`status ${user.status}`}>
-                      {user.status === "online" ? "В сети" : "Не в сети"}
+                    <span className={`role ${user.role}`}>
+                      {user.role === "Аналитик" ? "Аналитик" : "Эксперт"}
                     </span>
                   </td>
                   <td className="actions-cell">
@@ -286,12 +285,12 @@ const Users: React.FC = () => {
         <div className="form-group">
           <label>Роль</label>
           <select
-            value={formData.status}
-            onChange={(e) => setFormData({ ...formData, status: e.target.value as "online" | "offline" })}
+            value={formData.role}
+            onChange={(e) => setFormData({ ...formData, role: e.target.value as "Аналитик" | "Эксперт" | "Руководитель" })}
           >
-            <option value="online">Аналитик</option>
-            <option value="offline">Руководитель</option>
-            <option value="online">Эксперт</option>
+            <option value="Аналитик">Аналитик</option>
+            <option value="Эксперт">Руководитель</option>
+            <option value="Руководитель">Эксперт</option>
           </select>
         </div>
       </ModalForm>
