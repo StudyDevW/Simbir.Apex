@@ -216,7 +216,7 @@
     command: -config.file=/etc/loki/local-config.yaml
   kafka:
     image: confluentinc/cp-kafka:latest
-    container_name: kafka
+    container_name: Simbir.Apex.Kafka
     hostname: kafka
     ports:
       - "9092:9092"
@@ -247,7 +247,7 @@
       retries: 10
       start_period: 30s
   minio:
-    container_name: minio
+    container_name: Simbir.Apex.Minio
     image: minio/minio:latest
     ports:
       - "9000:9000"

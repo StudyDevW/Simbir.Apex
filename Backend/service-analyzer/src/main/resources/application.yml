@@ -11,6 +11,12 @@ spring:
   jpa:
     hibernate:
       ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:none}
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate:
+        globally_quoted_identifiers: true
+        hbm2ddl.auto: validate  # только валидация, без создания таблиц
   rabbitmq:
     host: ${SPRING_RABBITMQ_HOST:rabbitmq_broker}
     port: ${SPRING_RABBITMQ_PORT:5672}

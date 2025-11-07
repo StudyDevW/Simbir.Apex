@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.UUID;
 
 @Entity
-@Table(name = "\"eventsTable\"")
+@Table(name = "eventsTable")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -18,14 +18,16 @@ public class Event {
 
     @Id
     @GeneratedValue
+    @Column(name="Id")
     private UUID id;
 
-    @Column(name="is_Lan")
+    @Column(name="isLan")
     private boolean isLan;
 
+    @Column(name="device")
     private String device;
 
-    @Column(name="event_Id")
+    @Column(name="eventId")
     private String eventId;
 
     @Enumerated(EnumType.STRING)

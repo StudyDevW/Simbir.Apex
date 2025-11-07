@@ -21,4 +21,4 @@ if __name__ == "__main__":
 
     logger.info("Starting analytics service...")
 
-    uvicorn.run("main:app", host="0.0.0.0", port=config.PORT, reload=True, log_config=config.LOGGER_CONFIG_FILE)
+    uvicorn.run("main:app", host="0.0.0.0", port=80, reload=True, log_config=config.LOGGER_CONFIG_FILE)

@@ -67,21 +67,30 @@ async def register_in_manager():
         return None
 
     service_data = {
-        "serviceName": "service-analytics",
-        "EndpointService": {
+        "ServiceName": "ServiceAnalytics",
+        "EndPointService": {
             "Address": socket.gethostbyname(socket.getfqdn()),
             "Port": PORT
-        }
+        },
+        "Id": 0
     }
 
     try:
         async with aiohttp.ClientSession() as session:
+
+            first_json = json.dumps(service_data)
+            second_json = json.dumps(first_json)  # двойная сериализация
+
             async with session.post(
-                    f"{SERVICE_MANAGER_URL}/api/main/insertservice?jsonData={json.dumps(service_data)}") as res:
+                f"http://{SERVICE_MANAGER_URL}/api/Main/InsertService",
+                data=second_json,
+                headers={"Content-Type": "application/json"}
+            ) as res:
                 if res.status == 200:
                     logger.info("Service registered successfully")
                 else:
-                    logger.error(f"Service manager error: {res.json()}")
+                    error_text = await res.text()
+                    logger.error(f"Service manager error: {error_text}")
     except aiohttp.ClientConnectorError:
         logger.error(f"Failed to connect to service manager at {SERVICE_MANAGER_URL}.")
 

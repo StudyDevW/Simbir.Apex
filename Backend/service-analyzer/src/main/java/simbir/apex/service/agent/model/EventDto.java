@@ -20,8 +20,12 @@ public class EventDto {
     @JsonProperty("Id") 
     private UUID id;
     private boolean isLan;
+    @JsonProperty("Device") 
     private String device;
+    @JsonProperty("EventId") 
     private String eventId;
+    @JsonProperty("Severity") 
     private EventSeverity severity;
+    @JsonProperty("Timestamp") 
     private Date timestamp;
 }
