@@ -20,7 +20,7 @@ namespace ServiceUI.Interfaces
 
         public Task<UserGetDTO?> GetUser(Guid idUser, string token);
 
-        public Task<List<TimedRuleDTO>?> GetTimedRules(Guid idUser, string token);
+        public Task<List<List<TimedRuleDTO>?>> GetTimedRules(string token);
 
         public Task CreateRuleTimed(AddRuleDTO dtoObj, string token);
 
@@ -37,5 +37,7 @@ namespace ServiceUI.Interfaces
         public Task<GetEventDTO?> GetEventFromDB(Guid eventId, string token);
 
         public Task<List<GetEventDTO>?> GetEventsFromDB(string token);
+
+        public Task<MeDTO> GetInfoMe(string token);
     }
 }

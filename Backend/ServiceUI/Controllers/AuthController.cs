@@ -19,7 +19,7 @@ namespace ServiceUI.Controllers
         {
             _logger = LoggerFactory.Create(builder => builder.AddConsole()).CreateLogger("ServiceUI | controller-logger");
             _jwt = jwt;
-            _serviceUI = serviceUI; 
+            _serviceUI = serviceUI;
         }
 
         [HttpPost("SignIn")]
@@ -119,5 +119,26 @@ namespace ServiceUI.Controllers
             return Unauthorized();
         }
 
+        [HttpGet("Me")]
+        public async Task<IActionResult> GetInfoMe()
+        {
+            try
+            {
+                var meInfo = await _serviceUI.GetInfoMe(Request.Headers["Authorization"]);
+
+                if (meInfo != null)
+                {
+                    return Ok(meInfo);
+                }
+
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                return Unauthorized();
+            }
+
+          
+        }
     }
 }

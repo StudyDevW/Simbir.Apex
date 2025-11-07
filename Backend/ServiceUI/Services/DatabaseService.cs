@@ -297,7 +297,8 @@ namespace ServiceUI.Services
                     id = eventId,
                     isLan = selectedEvent.isLan,
                     device = selectedEvent.device,
-                    timestamp = selectedEvent.timestamp
+                    timestamp = selectedEvent.timestamp,
+                    severity = selectedEvent.severity.ToString()
                 };
 
             return null;
@@ -317,7 +318,8 @@ namespace ServiceUI.Services
                         id = event_.Id,
                         isLan = event_.isLan,
                         device = event_.device,
-                        timestamp = event_.timestamp
+                        timestamp = event_.timestamp,
+                        severity = event_.severity.ToString()
                     };
 
                     eventsAll.Add(getAlertDTO);
@@ -325,6 +327,44 @@ namespace ServiceUI.Services
 
 
             return eventsAll;
+        }
+
+        public async Task<List<Guid>> CollectAllIdUsers()
+        {
+            List<Guid> idsOut = new List<Guid>();
+
+            var selectedUsers = await _dbcontext.usersTable.ToListAsync();
+
+            foreach (var user in selectedUsers)
+                idsOut.Add(user.Id);
+
+            return idsOut;
+        }
+
+        public async Task<MeDTO?> GetMeInfo(Guid userId)
+        {
+            var selectedUser = await _dbcontext.usersTable.Where(c => c.Id == userId).FirstOrDefaultAsync();
+
+            if (selectedUser != null)
+            {
+                MeDTO dtoUser = new MeDTO()
+                {
+                    id = userId,
+                    first_name = selectedUser.first_name,
+                    last_name = selectedUser.last_name,
+                    username = selectedUser.username,
+                    phone_number = selectedUser.phone_number,
+                    photo_url = selectedUser.photo_url,
+                    last_login = selectedUser.last_login,
+                    created_at = selectedUser.created_at,
+                    roles = selectedUser.roles,
+                    status = selectedUser.status
+                };
+
+                return dtoUser;
+            }
+
+            return null;
         }
     }
 }

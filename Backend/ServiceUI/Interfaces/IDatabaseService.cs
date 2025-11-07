@@ -30,5 +30,9 @@ namespace ServiceUI.Interfaces
         public Task<GetEventDTO?> GetEventFromDB(Guid eventId);
 
         public Task<List<GetEventDTO>> GetAllEventsFromDB();
+
+        public Task<List<Guid>> CollectAllIdUsers();
+
+        public Task<MeDTO?> GetMeInfo(Guid userId);
     }
 }

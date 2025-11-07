@@ -51,12 +51,12 @@ namespace ServiceUI.Controllers
             }
         }
 
-        [HttpGet("TimedRules/{userId}")]
-        public async Task<IActionResult> GetTimedRules(Guid userId)
+        [HttpGet("TimedRules/All")]
+        public async Task<IActionResult> GetTimedRules()
         {
             try
             {
-                var rules = await _serviceUI.GetTimedRules(userId, Request.Headers["Authorization"]);
+                var rules = await _serviceUI.GetTimedRules(Request.Headers["Authorization"]);
 
                 if (rules != null)
                     return Ok(rules);

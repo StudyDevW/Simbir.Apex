@@ -303,7 +303,7 @@ namespace ServiceUI.Services
             }
         }
 
-        public async Task<List<TimedRuleDTO>?> GetTimedRules(Guid idUser, string token)
+        public async Task<List<List<TimedRuleDTO>?>> GetTimedRules(string token)
         {
             var validation = await _jwt.AccessTokenValidation(token);
 
@@ -313,9 +313,16 @@ namespace ServiceUI.Services
             }
             else if (validation.TokenHasSuccess())
             {
-                var rulesCached = _cache.GetKeyFromStorage<List<TimedRuleDTO>>($"rule_for_alert_{idUser}");
+                var allRulesCached = new List<List<TimedRuleDTO>?>();
 
-                return rulesCached;
+                foreach (var userId in await _database.CollectAllIdUsers())
+                {
+                    var rulesCached = _cache.GetKeyFromStorage<List<TimedRuleDTO>>($"rule_for_alert_{userId}");
+
+                    allRulesCached.Add(rulesCached);
+                }
+
+                return allRulesCached;
             }
 
             return null;
@@ -405,6 +412,22 @@ namespace ServiceUI.Services
             else if (validation.TokenHasSuccess())
             {
                 return await _database.GetAllAlertsFromDB();
+            }
+
+            return null;
+        }
+
+        public async Task<MeDTO> GetInfoMe(string token)
+        {
+            var validation = await _jwt.AccessTokenValidation(token);
+
+            if (validation.TokenHasError())
+            {
+                throw new Exception("token_invalid");
+            }
+            else if (validation.TokenHasSuccess())
+            {
+                return await _database.GetMeInfo(validation.token_success.Id);
             }
 
             return null;

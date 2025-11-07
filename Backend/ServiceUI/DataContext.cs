@@ -38,7 +38,7 @@ namespace ServiceUI
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<UsersTable>().HasData(new UsersTable() {
-                Id = Guid.NewGuid(),
+                Id = Guid.Parse("34e833c4-f431-41ad-b202-adc5ceb8eecd"),
                 first_name = "test",
                 last_name = "user",
                 phone_number = null,
@@ -50,6 +50,33 @@ namespace ServiceUI
                 created_at = DateTime.UtcNow,
                 last_login = DateTime.UtcNow
             });
+
+            modelBuilder.Entity<RulesTable>().HasData(
+                new RulesTable()
+                {
+                    Id = Guid.NewGuid(),
+                    description = "testruledesc",
+                    name = "testrulename",
+                    severity = "HIGH",
+                    logic = "\"logic\": \"action=LOGIN_FAIL;count=5\"",
+                    created_at= DateTime.UtcNow,
+                    status = "APPROVED",
+                    updated_at = DateTime.UtcNow,
+                    created_by = Guid.Parse("34e833c4-f431-41ad-b202-adc5ceb8eecd")
+                },
+                new RulesTable()
+                {
+                    Id = Guid.NewGuid(),
+                    description = "testruledesc_second",
+                    name = "testrulename_second",
+                    severity = "HIGH",
+                    logic = "\"logic\": \"action=LOGIN_SUCCESS;sequence=FILE_DELETE;count=1\"",
+                    created_at = DateTime.UtcNow,
+                    status = "APPROVED",
+                    updated_at = DateTime.UtcNow,
+                    created_by = Guid.Parse("34e833c4-f431-41ad-b202-adc5ceb8eecd")
+                }
+            );
 
             modelBuilder.Entity<EventsTable>()
                 .Property(e => e.severity)
