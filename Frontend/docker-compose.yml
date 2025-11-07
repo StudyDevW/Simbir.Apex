@@ -1,0 +1,48 @@
+services:
+  shell:
+    build:
+      context: ./shell
+      dockerfile: Dockerfile
+    container_name: frontend-shell
+    ports:
+      - "5000:5000"    
+
+  events:
+    build:
+      context: ./events
+      dockerfile: Dockerfile
+    container_name: frontend-events
+    ports:
+      - "5001:5001"    
+
+  alerts:
+    build:
+      context: ./alerts
+      dockerfile: Dockerfile
+    container_name: frontend-alerts
+    ports:
+      - "5004:5004"    
+
+  rules:
+    build:
+      context: ./rules
+      dockerfile: Dockerfile
+    container_name: frontend-rules
+    ports:
+      - "5003:5003"    
+
+  users:
+    build:
+      context: ./users
+      dockerfile: Dockerfile
+    container_name: frontend-users
+    ports:
+      - "5002:5002"    
+
+  analytics:
+    build:
+      context: ./analytics
+      dockerfile: Dockerfile
+    container_name: frontend-analytics
+    ports:
+      - "5005:5005"    
