@@ -3,6 +3,7 @@ import { Button, Card, Row, Col, Spinner } from "react-bootstrap";
 import { ApiClient } from "../api/ApiClient";
 import toast from "react-hot-toast";
 
+//TODO: доделать
 const ProfilePage = () => {
   const [user, setUser] = useState({});
   const [loading, setLoading] = useState(true);

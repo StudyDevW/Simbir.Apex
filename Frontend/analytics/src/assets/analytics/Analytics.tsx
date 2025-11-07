@@ -3,7 +3,10 @@ import './Analytics.sass';
 import Grafic from "../../img/icon/icon-grafic.png"
 import Glass from "../../img/icon/icon-glass.png"
 
-
+//заглушка для сборки
+export interface Analytics {
+  description: string;
+}
 
 const Analytics: React.FC = () => {
     return (

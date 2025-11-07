@@ -13,6 +13,7 @@ import AlertsPage from './pages/AlertsPage.jsx';
 import LoginPage from './pages/LoginPage.jsx';
 import AnalyticsPage from './pages/AnalyticsPage.jsx';
 import ProfilePage from './pages/ProfilePage.jsx';
+import ProtectedRoute from './components/ProtectedRoute.jsx';
 
 const routes = [
   {
@@ -22,18 +23,42 @@ const routes = [
   },
   {
     path: '/events',
-    element: <EventsPage />,
+    //TODO: заменить на:
+    // element: (
+    //   <ProtectedRoute>
+    //     <EventsPage />
+    //   </ProtectedRoute>
+    // ),
+    element: <EventsPage />
   },
   {
     path: '/users',
+    //TODO: заменить на:
+    // element: (
+    //   <ProtectedRoute>
+    //     <UsersPage />
+    //   </ProtectedRoute>
+    // ),
     element: <UsersPage />,
   },
   {
     path: '/rules',
+    //TODO: заменить на:
+    // element: (
+    //   <ProtectedRoute>
+    //     <RulesPage />
+    //   </ProtectedRoute>
+    // ),
     element: <RulesPage />,
   },
   {
     path: '/alerts',
+    //TODO: заменить на:
+    // element: (
+    //   <ProtectedRoute>
+    //     <AlertsPage />
+    //   </ProtectedRoute>
+    // ),
     element: <AlertsPage />,
   },
   {
@@ -42,10 +67,22 @@ const routes = [
   },
   {
     path: '/analytics',
+    //TODO: заменить на:
+    // element: (
+    //   <ProtectedRoute>
+    //     <AnalyticsPage />
+    //   </ProtectedRoute>
+    // ),
     element: <AnalyticsPage />,
   },
   {
     path: '/profile',
+    //TODO: заменить на:
+    // element: (
+    //   <ProtectedRoute>
+    //     <EventsPage />
+    //   </ProtectedRoute>
+    // ),
     element: <ProfilePage />,
   },
 ];
