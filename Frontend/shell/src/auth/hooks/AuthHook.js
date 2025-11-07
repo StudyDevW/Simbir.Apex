@@ -6,7 +6,7 @@ import toast from 'react-hot-toast';
 
 const useAuthForm = () => {
     const [credentials, setCredentials] = useState({
-        username: '',
+        name: '',
         password: '',
     });
 

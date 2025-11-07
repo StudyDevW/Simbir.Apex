@@ -1,10 +1,10 @@
 import { ApiClient } from 'shell/api';
 
 class AlertsApiService {
-    url = 'alerts';
+    url = 'Alerts';
 
     async getAll(params = {}) {
-        return ApiClient.get(this.url, { params });
+        return ApiClient.get(`${this.url}/All`, { params });
     }
 
     async get(id) {
