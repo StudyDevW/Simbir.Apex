@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq_new
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: password
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  analyzer:
+    build:
+      context: ./Backend/serviceanalytics
+      dockerfile: Dockerfile
+    container_name: Simbir.Apex.Analyzer
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      postgres_db:
+        condition: service_healthy
+    environment:
+      # Подключение к PostgreSQL
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres_db:5432/simbirapex
+      SPRING_DATASOURCE_USERNAME: practice_user
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_JPA_HIBERNATE_DDL_AUTO: none
+
+      # RabbitMQ
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: user
+      SPRING_RABBITMQ_PASSWORD: password
+
+      # Настройки приложения
+      SERVER_PORT: 8080
+
+    ports:
+      - "8090:8080"
+    networks:
+      - default
+
+volumes:
+  pg_data:

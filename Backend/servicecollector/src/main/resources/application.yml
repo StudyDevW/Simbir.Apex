@@ -1,0 +1,26 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: collector
+  rabbitmq:
+    host: ${rabbitmq_broker}
+    port: ${5672}
+    username: ${guest}
+    password: ${guest}
+  kafka:
+    consumer:
+      auto-offset-reset: earliest
+      group-id: collector-group
+      bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:kafka:29092}
+
+
+app:
+  manager:
+    url: ${MANAGER_URL:simbirapex.backend.servicemanager}
+    port: ${MANAGER_PORT:80}
+  rabbitmq:
+    exchange: events.exchange
+    queue: events.queue
+    routing-key: events.key
