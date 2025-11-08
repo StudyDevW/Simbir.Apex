@@ -125,9 +125,15 @@ namespace ServiceUI
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowOrigin",
-                    builder => builder.WithOrigins("http://localhost:4001", "http://localhost")
+                    builder => builder.WithOrigins("http://localhost:5000", "http://localhost")
                                       .AllowAnyMethod()
-                                      .AllowAnyHeader());
+                                      .AllowAnyHeader()
+                                      .AllowCredentials());
+
+                options.AddPolicy("AllowAll",
+                 builder => builder.AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod());
             });
 
             var app = builder.Build();

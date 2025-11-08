@@ -15,7 +15,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AlertService {
 
-    private AlertRepository alertRepository;
+    private final AlertRepository alertRepository;
 
     public Alert sendAlert(Alert alert) {
         return alertRepository.save(alert);

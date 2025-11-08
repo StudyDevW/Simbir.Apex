@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -20,25 +20,21 @@ import java.util.UUID;
 @Builder
 public class RuleDto {
 
-    private UUID id;
+    private UUID Id;
 
-    /**
-     * Условие проверки событий.
-     * Может содержать:
-     * - простое условие: action=LOGIN_FAIL
-     * - несколько условий через запятую: type=FILE_ACCESS,action=DELETE
-     * - счётчик повторов: count=10
-     * - возможные последовательности: sequence=LOGIN_SUCCESS
-     */
-    private String logic;
-
-    /**
-     * Имя правила (для читаемости в UI или в логах).
-     */
     private String name;
 
-    /**
-     * Краткое описание (опционально, может быть null).
-     */
     private String description;
+
+    private String logic;
+
+    private String severity;
+
+    private String status;
+
+    private UUID created_by;
+
+    private Date created_at;
+
+    private Date updated_at;
 }

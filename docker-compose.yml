@@ -263,6 +263,55 @@
       interval: 30s
       timeout: 20s
       retries: 3
+      
+  shell:
+    build:
+      context: ./Frontend/shell
+      dockerfile: Dockerfile
+    container_name: frontend-shell
+    env_file: ./Frontend/shell/.env
+    ports:
+      - "5000:5000"    
+
+  events:
+    build:
+      context: ./Frontend/events
+      dockerfile: Dockerfile
+    container_name: frontend-events
+    ports:
+      - "5001:5001"    
+
+  alerts:
+    build:
+      context: ./Frontend/alerts
+      dockerfile: Dockerfile
+    container_name: frontend-alerts
+    ports:
+      - "5004:5004"    
+
+  rules:
+    build:
+      context: ./Frontend/rules
+      dockerfile: Dockerfile
+    container_name: frontend-rules
+    ports:
+      - "5003:5003"    
+
+  users:
+    build:
+      context: ./Frontend/users
+      dockerfile: Dockerfile
+    container_name: frontend-users
+    ports:
+      - "5002:5002"    
+
+  analytics:
+    build:
+      context: ./Frontend/analytics
+      dockerfile: Dockerfile
+    container_name: frontend-analytics
+    ports:
+      - "5005:5005"    
 
 volumes:
   rabbitmq_broker: 

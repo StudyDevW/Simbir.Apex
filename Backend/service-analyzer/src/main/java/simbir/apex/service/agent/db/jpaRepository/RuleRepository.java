@@ -13,6 +13,6 @@ import java.util.UUID;
 @Repository
 public interface RuleRepository extends JpaRepository<Rule, UUID> {
 
-    @Query("SELECT new simbir.apex.service.agent.model.RuleDto(r.id, r.logic, r.name, r.description) FROM Rule r")
+    @Query("SELECT new simbir.apex.service.agent.model.RuleDto(r.Id, r.name, r.description, r.logic, r.severity, r.status, r.created_by, r.created_at, r.updated_at) FROM Rule r")
     List<RuleDto> findAllAsDto();
 }

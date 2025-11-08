@@ -9,6 +9,9 @@ import simbir.apex.service.agent.model.RuleDto;
 import simbir.apex.service.agent.model.enums.Status;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.Timestamp;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -20,8 +23,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class EventProcessor {
 
-    private  RuleService ruleService;
-    private  AlertService alertService;
+    private final Logger logger = LoggerFactory.getLogger(EventProcessor.class);
+
+    private final RuleService ruleService;
+    private final AlertService alertService;
     private final EventService eventService;
 
     private Map<String, Deque<EventDto>> eventHistory = new ConcurrentHashMap<>();
@@ -49,6 +54,8 @@ public class EventProcessor {
                     );
 
                     try {
+                        logger.info("Trying to create new alert {}", rule.getName());
+
                         String rawDataJson = objectMapper.writeValueAsString(history);
 
                         Alert alert = Alert.builder()
@@ -58,11 +65,11 @@ public class EventProcessor {
                                 .title(rule.getName())
                                 .description("Совпадение по правилу: " + rule.getLogic())
                                 .status(String.valueOf(Status.NEW))
-                                .severity(null)
+                                .severity(event.getSeverity())
                                 .rawData(rawDataJson)
                                 .createdAt(new Timestamp(System.currentTimeMillis()))
                                 .closedAt(null)
-                                .resolutionNotes(null)
+                                .resolutionNotes("Сработало правило: " + rule.getName() + ". Логика: " + rule.getLogic())
                                 .build();
 
                         alertService.sendAlert(alert);
@@ -87,7 +94,7 @@ public class EventProcessor {
             String sequence = params.get("sequence");
             int count = Integer.parseInt(params.getOrDefault("count", "1"));
 
-            boolean baseMatch = (action == null || action.equals(event.getEventId()));
+            boolean baseMatch = (action == null || action.equalsIgnoreCase(event.getEventId()));
             if (!baseMatch) return false;
 
             eventHistory.computeIfAbsent(rule.getName(), k -> new ArrayDeque<>()).add(event);

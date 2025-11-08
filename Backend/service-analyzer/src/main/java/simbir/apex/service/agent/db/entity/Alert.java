@@ -6,18 +6,22 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-
+import lombok.*;
 import java.util.Date;
 import java.util.UUID;
 
 @Entity
+@Table(name = "alertsTable")
 @Getter
 @Setter
-@Table(name = "alertsTable")
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class Alert {
+
     @Id
     @GeneratedValue
+    @Column(name = "Id")
     private UUID id;
 
     @Column(name = "rule_id")
@@ -41,7 +45,7 @@ public class Alert {
     @Enumerated(EnumType.STRING)
     private EventSeverity severity;
 
-    @Column(nullable = false, columnDefinition = "TEXT", name = "raw_data ")
+    @Column(nullable = false, columnDefinition = "TEXT", name = "raw_data")
     private String rawData;
 
     @Column(nullable = false, name = "created_at")

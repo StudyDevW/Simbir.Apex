@@ -298,7 +298,8 @@ namespace ServiceUI.Services
                     isLan = selectedEvent.isLan,
                     device = selectedEvent.device,
                     timestamp = selectedEvent.timestamp,
-                    severity = selectedEvent.severity.ToString()
+                    severity = selectedEvent.severity.ToString(),
+                    category = selectedEvent.eventId
                 };
 
             return null;
@@ -319,7 +320,8 @@ namespace ServiceUI.Services
                         isLan = event_.isLan,
                         device = event_.device,
                         timestamp = event_.timestamp,
-                        severity = event_.severity.ToString()
+                        severity = event_.severity.ToString(),
+                        category = event_.eventId
                     };
 
                     eventsAll.Add(getAlertDTO);

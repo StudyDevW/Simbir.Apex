@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
+import java.util.Date;
 
 @Entity
 @Table(name = "rulesTable")
@@ -15,20 +16,32 @@ public class Rule {
 
     @Id
     @GeneratedValue
-    private UUID id;
+    @Column(name="Id")
+    private UUID Id;
 
+    @Column(name="name")
     private String name;
+
+    @Column(name="description")
     private String description;
+
+    @Column(name="logic")
     private String logic;
+
+    @Column(name="severity")
     private String severity;
+
+    @Column(name="status")
     private String status;
 
     @Column(name = "created_by")
-    private UUID createdBy;
+    private UUID created_by;
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    @Column(nullable = false, name = "created_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date created_at;
 
     @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updated_at;
 }

@@ -18,6 +18,8 @@ namespace Middleware_Components.DTO
 
         public string severity { get; set; }
 
+        public string category { get; set; }
+
         public DateTime timestamp { get; set; }
     }
 }
