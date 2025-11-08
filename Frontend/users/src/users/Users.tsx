@@ -3,6 +3,9 @@ import Cross from "../assets/icon/icon-cross.png";
 import Pencil from "../assets/icon/icon-pencil.png";
 import Plus from "../assets/icon/icon-plus.png";
 import "./Users.sass";
+import useUsers from "../hooks/UsersHook";
+import usePagination from 'shell/pagination/usePagination';
+import UsersApiService from "../service/UsersApiServe";
 
 export interface User {
   id: number;
@@ -55,33 +58,6 @@ const ModalForm: React.FC<ModalFormProps> = ({ show, title, onSubmit, onClose, c
 };
 
 const Users: React.FC = () => {
-  const [users, setUsers] = useState<User[]>([
-    {
-      id: 1,
-      fullName: "Еремеев Ф.Б.",
-      email: "eremeev531@gmail.com",
-      phone: "+7(962)-876-80-87",
-      password: "qwert123",
-      role: "Аналитик",
-    },
-    {
-      id: 2,
-      fullName: "Марков А.М.",
-      email: "markovA01@gmail.com",
-      phone: "+7(937)-823-84-32",
-      password: "helmik789",
-      role: "Эксперт",
-    },
-    {
-      id: 3,
-      fullName: "Орлеев К.С.",
-      email: "orleevKKK@gmail.com",
-      phone: "+7(905)-421-92-92",
-      password: "gamalion456",
-      role: "Аналитик",
-    },
-  ]);
-
   const [searchTerm, setSearchTerm] = useState("");
   const { isModalShow, showModal, hideModal } = useModal();
   const [editingUser, setEditingUser] = useState<User | null>(null);
@@ -93,38 +69,58 @@ const Users: React.FC = () => {
     role: "Аналитик" as "Аналитик" | "Руководитель" | "Эксперт",
   });
 
+  const { currentPage } = usePagination();
+  const { users, handleUsersChange } = useUsers(currentPage);
+
   const filteredUsers = users.filter(
     (user) =>
       user.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleDeleteUser = (userId: number) => {
+  const handleDeleteUser = async (userId: number) => {
     if (window.confirm("Вы уверены, что хотите удалить пользователя?")) {
-      setUsers((prev) => prev.filter((u) => u.id !== userId));
+      try {
+        await UsersApiService.delete(userId.toString());
+        handleUsersChange();
+      } catch (error) {
+        console.error("Ошибка при удалении пользователя:", error);
+        alert("Не удалось удалить пользователя");
+      }
     }
   };
 
-  const handleSave = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSaveUser = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!formData.fullName || !formData.email || !formData.phone || !formData.password) {
       alert("Все поля обязательны для заполнения");
       return;
     }
 
-    if (editingUser) {
-      setUsers((prev) =>
-        prev.map((u) => (u.id === editingUser.id ? { ...editingUser, ...formData } : u))
-      );
-    } else {
-      const newUser: User = {
-        id: users.length > 0 ? Math.max(...users.map((u) => u.id)) + 1 : 1,
-        ...formData,
-      };
-      setUsers((prev) => [...prev, newUser]);
-    }
+    try {
+      if (editingUser) {
+        await UsersApiService.update(editingUser.id.toString(), formData);
+      } else {
+        await UsersApiService.create(formData);
+      }
 
-    hideModal();
+      handleUsersChange();
+      hideModal();
+      setEditingUser(null);
+      setFormData({
+        fullName: "",
+        email: "",
+        phone: "",
+        password: "",
+        role: "Аналитик",
+      });
+    } catch (error) {
+      console.error("Ошибка при сохранении пользователя:", error);
+      alert("Не удалось сохранить пользователя");
+    }
+  };
+
+  const handleCreateUser = () => {
     setEditingUser(null);
     setFormData({
       fullName: "",
@@ -133,21 +129,10 @@ const Users: React.FC = () => {
       password: "",
       role: "Аналитик",
     });
-  };
-
-  const handleOpenCreate = () => {
-    setEditingUser(null);
-    setFormData({
-      fullName: "",
-      email: "",
-      phone: "",
-      password: "",
-      role: "Эксперт",
-    });
     showModal();
   };
 
-  const handleOpenEdit = (user: User) => {
+  const handleEditUser = (user: User) => {
     setEditingUser(user);
     setFormData({
       fullName: user.fullName,
@@ -159,16 +144,21 @@ const Users: React.FC = () => {
     showModal();
   };
 
+  const handleCloseModal = () => {
+    hideModal();
+    setEditingUser(null);
+    setFormData({
+      fullName: "",
+      email: "",
+      phone: "",
+      password: "",
+      role: "Аналитик",
+    });
+  };
+
   return (
     <div className="users-page">
       <div className="main-content">
-        {/* <div className="content-header">
-          <div className="content-header-left">
-            <img src={LeftArrow} className="content-header-back" alt="Назад" />
-            <h1 className="content-header-title">Пользователи</h1>
-          </div>
-        </div> */}
-
         <div className="users-table-container">
           <div className="search-container">
             <input
@@ -182,7 +172,7 @@ const Users: React.FC = () => {
               src={Plus}
               className="content-header-plus"
               alt="Добавить"
-              onClick={handleOpenCreate}
+              onClick={handleCreateUser}
               style={{ cursor: "pointer" }}
             />
           </div>
@@ -207,7 +197,7 @@ const Users: React.FC = () => {
                   <td>{user.password}</td>
                   <td>
                     <span className={`role ${user.role}`}>
-                      {user.role === "Аналитик" ? "Аналитик" : "Эксперт"}
+                      {user.role === "Аналитик" ? "Аналитик" : user.role === "Руководитель" ? "Руководитель" : "Эксперт"}
                     </span>
                   </td>
                   <td className="actions-cell">
@@ -215,7 +205,7 @@ const Users: React.FC = () => {
                       className="editing"
                       src={Pencil}
                       alt="Редактировать"
-                      onClick={() => handleOpenEdit(user)}
+                      onClick={() => handleEditUser(user)}
                       style={{ cursor: "pointer", marginRight: "10px" }}
                     />
                     <img
@@ -236,11 +226,8 @@ const Users: React.FC = () => {
       <ModalForm
         show={isModalShow}
         title={editingUser ? "Редактирование пользователя" : "Создание пользователя"}
-        onClose={() => {
-          hideModal();
-          setEditingUser(null);
-        }}
-        onSubmit={handleSave}
+        onClose={handleCloseModal}
+        onSubmit={handleSaveUser}
       >
         <div className="form-group">
           <label>ФИО</label>
@@ -289,8 +276,8 @@ const Users: React.FC = () => {
             onChange={(e) => setFormData({ ...formData, role: e.target.value as "Аналитик" | "Эксперт" | "Руководитель" })}
           >
             <option value="Аналитик">Аналитик</option>
-            <option value="Эксперт">Руководитель</option>
-            <option value="Руководитель">Эксперт</option>
+            <option value="Руководитель">Руководитель</option>
+            <option value="Эксперт">Эксперт</option>
           </select>
         </div>
       </ModalForm>
