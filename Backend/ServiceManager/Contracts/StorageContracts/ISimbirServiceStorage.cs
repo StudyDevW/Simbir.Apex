@@ -7,5 +7,6 @@ namespace Contracts.StorageContracts {
         public void DeleteDbServiceInfo(int deleteModelId);
         public void GetServiceDbInfo(out List<SimbirServiceBindingModel> recordList);
         public void GetServiceDbInfo(out SimbirServiceBindingModel record, int serviceId);
+        public void GetServiceDbInfo(out SimbirServiceBindingModel record, string serviceName);
     }
 }
