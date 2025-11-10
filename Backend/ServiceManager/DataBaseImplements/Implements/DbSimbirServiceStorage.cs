@@ -40,5 +40,9 @@ namespace DataBaseImplement.Implements {
         {
             record = (SimbirServiceBindingModel)context.SimbirServices.First(x => x.Id == serviceId);
         }
+        public void GetServiceDbInfo(out SimbirServiceBindingModel record, string serviceName)
+        {
+            record = (SimbirServiceBindingModel)context.SimbirServices.First(x => x.ServiceName == serviceName);
+        }
     }
 }

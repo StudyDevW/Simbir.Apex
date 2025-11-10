@@ -15,6 +15,9 @@ namespace BusinessLogic.Implements {
 
         public void InsertService(in SimbirServiceBindingModel insertModel) 
         {
+            SimbirServiceBindingModel? searchModel;
+            simbirServiceStorage.GetServiceDbInfo(out searchModel, insertModel.ServiceName);
+            if (searchModel != null) { return; }
             simbirServiceStorage.InsertDbServiceInfo(insertModel);
             simbirServiceCache.InsertCacheServiceInfo(insertModel); 
         }
