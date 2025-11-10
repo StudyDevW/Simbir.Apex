@@ -122,6 +122,8 @@ namespace ServiceUI
 
             builder.Services.AddSingleton<IServiceManager, ServiceManager>();
 
+            builder.Services.AddHostedService<RedisKeyExpirationService>();
+
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowOrigin",

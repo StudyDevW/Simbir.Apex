@@ -3,14 +3,21 @@ import Cross from "../assets/icon/icon-cross.png";
 import Pencil from "../assets/icon/icon-pencil.png";
 import Plus from "../assets/icon/icon-plus.png";
 import "./Users.sass";
+import useUsers from "../hooks/UsersHook";
+import UsersApiService from "../service/UsersApiServe";
+
 
 export interface User {
-  id: number;
-  fullName: string;
-  email: string;
-  phone: string;
-  password: string;
-  role: "Аналитик" | "Руководитель" | "Эксперт";
+  id: string;
+  first_name: string;
+  last_name: string;
+  phone_number: string;
+  photo_url: string;
+  roles: "Аналитик" | "Руководитель" | "Эксперт";
+  username: string;
+  status: string;
+  created_at: string;
+  last_login: string;
 }
 
 const useModal = () => {
@@ -55,94 +62,85 @@ const ModalForm: React.FC<ModalFormProps> = ({ show, title, onSubmit, onClose, c
 };
 
 const Users: React.FC = () => {
-  const [users, setUsers] = useState<User[]>([
-    {
-      id: 1,
-      fullName: "Еремеев Ф.Б.",
-      email: "eremeev531@gmail.com",
-      phone: "+7(962)-876-80-87",
-      password: "qwert123",
-      role: "Аналитик",
-    },
-    {
-      id: 2,
-      fullName: "Марков А.М.",
-      email: "markovA01@gmail.com",
-      phone: "+7(937)-823-84-32",
-      password: "helmik789",
-      role: "Эксперт",
-    },
-    {
-      id: 3,
-      fullName: "Орлеев К.С.",
-      email: "orleevKKK@gmail.com",
-      phone: "+7(905)-421-92-92",
-      password: "gamalion456",
-      role: "Аналитик",
-    },
-  ]);
+  const { users, handleUsersChange } = useUsers();
 
   const [searchTerm, setSearchTerm] = useState("");
   const { isModalShow, showModal, hideModal } = useModal();
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
-    phone: "",
-    password: "",
-    role: "Аналитик" as "Аналитик" | "Руководитель" | "Эксперт",
+    first_name: "",
+    last_name: "",
+    phone_number: "",
+    photo_url: "",
+    roles: "Аналитик" as "Аналитик" | "Руководитель" | "Эксперт",
+    username: "",
+    password: ""
   });
 
   const filteredUsers = users.filter(
     (user) =>
-      user.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchTerm.toLowerCase())
+      user.first_name.toLowerCase().includes(searchTerm.toLowerCase()) 
+   //   user.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleDeleteUser = (userId: number) => {
+  const handleDeleteUser = async (userId: string) => {
     if (window.confirm("Вы уверены, что хотите удалить пользователя?")) {
-      setUsers((prev) => prev.filter((u) => u.id !== userId));
+      try {
+        await UsersApiService.delete(userId);
+        handleUsersChange();
+      } catch (error) {
+        console.error("Ошибка при удалении пользователя:", error);
+        alert("Не удалось удалить пользователя");
+      }
     }
   };
 
-  const handleSave = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!formData.fullName || !formData.email || !formData.phone || !formData.password) {
-      alert("Все поля обязательны для заполнения");
-      return;
-    }
+    // if (!formData.first_name || 
+    //   !formData.last_name || 
+    //   !formData.phone_number || 
+    //   !formData.username) {
+    //   alert("Все поля обязательны для заполнения");
+    //   return;
+    // }
 
-    if (editingUser) {
-      setUsers((prev) =>
-        prev.map((u) => (u.id === editingUser.id ? { ...editingUser, ...formData } : u))
-      );
-    } else {
-      const newUser: User = {
-        id: users.length > 0 ? Math.max(...users.map((u) => u.id)) + 1 : 1,
-        ...formData,
-      };
-      setUsers((prev) => [...prev, newUser]);
-    }
+    try {
+      if (editingUser) {
+        await UsersApiService.update(editingUser.id, formData);
+      } else {
+        await UsersApiService.create(formData);
+      }
 
-    hideModal();
-    setEditingUser(null);
-    setFormData({
-      fullName: "",
-      email: "",
-      phone: "",
-      password: "",
-      role: "Аналитик",
-    });
+      handleUsersChange();
+
+      hideModal();
+      setEditingUser(null);
+      setFormData({
+        first_name: "",
+        last_name: "",
+        phone_number: "",
+        photo_url: "",
+        roles: "Аналитик",
+        username: "",
+        password: ""
+      });
+    } catch (error) {
+      console.error("Ошибка при сохранении пользователя:", error);
+      alert("Не удалось сохранить пользователя");
+    }
   };
 
   const handleOpenCreate = () => {
     setEditingUser(null);
     setFormData({
-      fullName: "",
-      email: "",
-      phone: "",
-      password: "",
-      role: "Эксперт",
+      first_name: "",
+      last_name: "",
+      phone_number: "",
+      photo_url: "",
+      roles: "Эксперт",
+      username: "",
+      password: ""
     });
     showModal();
   };
@@ -150,11 +148,13 @@ const Users: React.FC = () => {
   const handleOpenEdit = (user: User) => {
     setEditingUser(user);
     setFormData({
-      fullName: user.fullName,
-      email: user.email,
-      phone: user.phone,
-      password: user.password,
-      role: user.role,
+      first_name: user.first_name,
+      last_name:  user.last_name,
+      phone_number: user.phone_number,
+      photo_url: user.photo_url,
+      roles: user.roles,
+      username: user.username,
+      password: ""
     });
     showModal();
   };
@@ -190,10 +190,10 @@ const Users: React.FC = () => {
           <table className="users-table">
             <thead>
               <tr>
-                <th>ФИО</th>
-                <th>Email</th>
+                <th>Имя</th>
+                <th>Фамилия</th>
                 <th>Телефон</th>
-                <th>Пароль</th>
+                <th>Статус</th>
                 <th>Роли</th>
                 <th>Действия</th>
               </tr>
@@ -201,13 +201,13 @@ const Users: React.FC = () => {
             <tbody>
               {filteredUsers.map((user) => (
                 <tr key={user.id}>
-                  <td>{user.fullName}</td>
-                  <td>{user.email}</td>
-                  <td>{user.phone}</td>
-                  <td>{user.password}</td>
+                  <td>{user.first_name}</td>
+                  <td>{user.last_name}</td>
+                  <td>{user.phone_number}</td>
+                  <td>{user.status}</td>
                   <td>
-                    <span className={`role ${user.role}`}>
-                      {user.role === "Аналитик" ? "Аналитик" : "Эксперт"}
+                    <span className={`role ${user.roles}`}>
+                      {user.roles === "Аналитик" ? "Аналитик" : "Эксперт"}
                     </span>
                   </td>
                   <td className="actions-cell">
@@ -243,22 +243,22 @@ const Users: React.FC = () => {
         onSubmit={handleSave}
       >
         <div className="form-group">
-          <label>ФИО</label>
+          <label>Имя</label>
           <input
             type="text"
-            value={formData.fullName}
-            onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+            value={formData.first_name}
+            onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
             required
           />
         </div>
 
         <div className="form-group">
-          <label>Email</label>
+          <label>Фамилия</label>
           <input
-            type="email"
-            value={formData.email}
-            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-            required
+           type="text"
+           value={formData.last_name}
+           onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
+           required
           />
         </div>
 
@@ -266,13 +266,13 @@ const Users: React.FC = () => {
           <label>Телефон</label>
           <input
             type="tel"
-            value={formData.phone}
-            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+            value={formData.phone_number}
+            onChange={(e) => setFormData({ ...formData, phone_number: e.target.value })}
             required
           />
         </div>
 
-        <div className="form-group">
+        {/* <div className="form-group">
           <label>Пароль</label>
           <input
             type="password"
@@ -280,13 +280,13 @@ const Users: React.FC = () => {
             onChange={(e) => setFormData({ ...formData, password: e.target.value })}
             required
           />
-        </div>
+        </div> */}
 
         <div className="form-group">
           <label>Роль</label>
           <select
-            value={formData.role}
-            onChange={(e) => setFormData({ ...formData, role: e.target.value as "Аналитик" | "Эксперт" | "Руководитель" })}
+            value={formData.roles}
+            onChange={(e) => setFormData({ ...formData, roles: e.target.value as "Аналитик" | "Эксперт" | "Руководитель" })}
           >
             <option value="Аналитик">Аналитик</option>
             <option value="Эксперт">Руководитель</option>

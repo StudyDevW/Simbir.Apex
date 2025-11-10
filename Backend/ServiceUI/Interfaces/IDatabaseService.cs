@@ -34,5 +34,7 @@ namespace ServiceUI.Interfaces
         public Task<List<Guid>> CollectAllIdUsers();
 
         public Task<MeDTO?> GetMeInfo(Guid userId);
+
+        public Task SetOfflineStatus(Guid userId);
     }
 }

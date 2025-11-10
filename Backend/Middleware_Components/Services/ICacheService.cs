@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StackExchange.Redis;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -37,5 +38,7 @@ namespace Middleware_Components.Services
         public T GetKeyFromStorage<T>(string storage_desc);
 
         public DateTime GetKeyExpirationTime(string key);
+
+        public ISubscriber RedisSubscriber();
     }
 }

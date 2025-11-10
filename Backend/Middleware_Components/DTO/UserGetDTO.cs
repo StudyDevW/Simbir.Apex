@@ -21,5 +21,11 @@ namespace Middleware_Components.DTO
         public string[] roles { get; set; }
 
         public string username { get; set; }
+
+        public string status { get; set; }
+
+        public DateTime created_at { get; set; }
+
+        public DateTime? last_login { get; set; }
     }
 }

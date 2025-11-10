@@ -28,9 +28,27 @@ namespace ServiceUI.Services
             var selectedUser = await _dbcontext.usersTable.Where(c => c.username == username && c.password == password)
                 .FirstOrDefaultAsync();
 
-            if (selectedUser != null) return new Auth_CheckSuccess() { Id = selectedUser.Id, roles = selectedUser.roles.ToList(), username = selectedUser.username };
+            if (selectedUser != null)
+            {
+                selectedUser.status = "online";
+                selectedUser.last_login = DateTime.UtcNow;
+                await _dbcontext.SaveChangesAsync();
+
+                return new Auth_CheckSuccess() { Id = selectedUser.Id, roles = selectedUser.roles.ToList(), username = selectedUser.username };
+            }
 
             return null;
+        }
+
+        public async Task SetOfflineStatus(Guid userId)
+        {
+            var selectedUser = await _dbcontext.usersTable.Where(c => c.Id == userId).FirstOrDefaultAsync();
+
+            if (selectedUser != null )
+            {
+                selectedUser.status = "offline";
+                await _dbcontext.SaveChangesAsync();
+            }
         }
 
         public async Task AddUser(UserAddDTO dtoObj)
@@ -129,7 +147,10 @@ namespace ServiceUI.Services
                     username = user.username,
                     phone_number = user.phone_number,
                     photo_url = user.photo_url,
-                    roles = user.roles
+                    status = user.status,
+                    roles = user.roles,
+                    last_login = user.last_login,
+                    created_at = user.created_at
                 };
 
                 retFunc.Add(userGetDto);
@@ -152,7 +173,10 @@ namespace ServiceUI.Services
                     username = userSelected.username,
                     phone_number = userSelected.phone_number,
                     photo_url = userSelected.photo_url,
-                    roles = userSelected.roles
+                    roles = userSelected.roles,
+                    created_at = userSelected.created_at,
+                    last_login = userSelected.last_login,
+                    status = userSelected.status
                 };
             }
             else
@@ -160,6 +184,7 @@ namespace ServiceUI.Services
 
         }
 
+ 
         public async Task RuleFillUp(TimedRuleDTO dtoObj)
         {
             RulesTable rulesTable = new RulesTable()

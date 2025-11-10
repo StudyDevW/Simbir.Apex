@@ -12,6 +12,7 @@ namespace Middleware_Components.Cache
     public class CacheSDK : ICacheService
     {
         private IDatabase _cacheDb;
+        private ISubscriber _cacheSub;
 
         public CacheSDK()
         {
@@ -24,6 +25,10 @@ namespace Middleware_Components.Cache
                 });
 
             _cacheDb = redis.GetDatabase();
+
+            _cacheDb.Execute("CONFIG", "SET", "notify-keyspace-events", "Ex");
+
+            _cacheSub = redis.GetSubscriber();
         }
 
         public T GetData<T>(string key)
@@ -35,6 +40,11 @@ namespace Middleware_Components.Cache
 
 
             return default;
+        }
+
+        public ISubscriber RedisSubscriber()
+        {
+            return _cacheSub;
         }
 
         public object RemoveData(string key)

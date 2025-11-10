@@ -7,7 +7,7 @@ import type { User } from '../users/Users';
 // }
 
 class UsersApiService {
-    private readonly url = 'Users';
+    private readonly url = 'User';
 
     async getAll(params?: { page?: number }): Promise<User[]> {
         return ApiClient.get(`${this.url}/All`, { params });

@@ -55,24 +55,84 @@ namespace ServiceUI
                 new RulesTable()
                 {
                     Id = Guid.NewGuid(),
-                    description = "testruledesc",
-                    name = "testrulename",
+                    description = "Possibly someone trying to bruteforce login credentials",
+                    name = "Bruteforce detected",
                     severity = "HIGH",
-                    logic = "\"logic\": \"action=LOGIN_FAIL;count=5\"",
+                    logic = "action=LOGIN_FAIL;count=5",
                     created_at= DateTime.UtcNow,
-                    status = "APPROVED",
+                    status = "ACTIVE",
                     updated_at = DateTime.UtcNow,
                     created_by = Guid.Parse("34e833c4-f431-41ad-b202-adc5ceb8eecd")
                 },
                 new RulesTable()
                 {
                     Id = Guid.NewGuid(),
-                    description = "testruledesc_second",
-                    name = "testrulename_second",
+                    description = "Possibly malicious process has been started",
+                    name = "Process started",
                     severity = "HIGH",
-                    logic = "\"logic\": \"action=LOGIN_SUCCESS;sequence=FILE_DELETE;count=1\"",
+                    logic = "action=PROCESS_START",
                     created_at = DateTime.UtcNow,
-                    status = "APPROVED",
+                    status = "ACTIVE",
+                    updated_at = DateTime.UtcNow,
+                    created_by = Guid.Parse("34e833c4-f431-41ad-b202-adc5ceb8eecd")
+                },
+                new RulesTable()
+                {
+                    Id = Guid.NewGuid(),
+                    description = "Unusual amount of file deletions detected",
+                    name = "Multiple file deletions",
+                    severity = "HIGH",
+                    logic = "action=FILE_DELETE;count=3",
+                    created_at = DateTime.UtcNow,
+                    status = "ACTIVE",
+                    updated_at = DateTime.UtcNow,
+                    created_by = Guid.Parse("34e833c4-f431-41ad-b202-adc5ceb8eecd")
+                },
+                new RulesTable()
+                {
+                    Id = Guid.NewGuid(),
+                    description = "High frequency of new network connections detected",
+                    name = "Frequent network connections",
+                    severity = "HIGH",
+                    logic = "action=NETWORK_CONNECT;count=8",
+                    created_at = DateTime.UtcNow,
+                    status = "ACTIVE",
+                    updated_at = DateTime.UtcNow,
+                    created_by = Guid.Parse("34e833c4-f431-41ad-b202-adc5ceb8eecd")
+                },
+                new RulesTable()
+                {
+                    Id = Guid.NewGuid(),
+                    description = "Massive file modification activity detected",
+                    name = "Multiple file edits",
+                    severity = "HIGH",
+                    logic = "action=FILE_EDIT;count=5",
+                    created_at = DateTime.UtcNow,
+                    status = "ACTIVE",
+                    updated_at = DateTime.UtcNow,
+                    created_by = Guid.Parse("34e833c4-f431-41ad-b202-adc5ceb8eecd")
+                },
+                new RulesTable()
+                {
+                    Id = Guid.NewGuid(),
+                    description = "System configuration has been modified",
+                    name = "Configuration changed",
+                    severity = "HIGH",
+                    logic = "action=CONFIG_CHANGE",
+                    created_at = DateTime.UtcNow,
+                    status = "ACTIVE",
+                    updated_at = DateTime.UtcNow,
+                    created_by = Guid.Parse("34e833c4-f431-41ad-b202-adc5ceb8eecd")
+                },
+                new RulesTable()
+                {
+                    Id = Guid.NewGuid(),
+                    description = "Suspiciously high number of file openings",
+                    name = "High file access activity",
+                    severity = "HIGH",
+                    logic = "action=FILE_OPEN;count=20",
+                    created_at = DateTime.UtcNow,
+                    status = "ACTIVE",
                     updated_at = DateTime.UtcNow,
                     created_by = Guid.Parse("34e833c4-f431-41ad-b202-adc5ceb8eecd")
                 }
