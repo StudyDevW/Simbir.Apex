@@ -2,13 +2,22 @@ import React from 'react';
 import './Analytics.sass';
 import Grafic from "../../img/icon/icon-grafic.png"
 import Glass from "../../img/icon/icon-glass.png"
+import { useNavigate } from 'react-router-dom';
 
-//заглушка для сборки
 export interface Analytics {
-  description: string;
+    description: string;
 }
 
 const Analytics: React.FC = () => {
+    const navigate = useNavigate();
+
+    const handleReportsClick = () => {
+        navigate('/reports');
+    };
+
+    const handleEventsClick = () => {
+        navigate('/events');
+    };
     return (
         <>
             <div className="analytics">
@@ -35,7 +44,13 @@ const Analytics: React.FC = () => {
 
                     <section className="events-section">
                         <div className="events-section-header">
-                            <p className='events-section-title'>События</p>
+                            <p
+                                className='events-section-title'
+                                onClick={handleEventsClick}
+                                style={{ cursor: 'pointer' }}
+                            >
+                                События
+                            </p>
                         </div>
                         <div className="search-container">
                             <input
@@ -78,7 +93,13 @@ const Analytics: React.FC = () => {
 
                         <section className='reports-section'>
                             <div className="section-header">
-                                <p className='section-header-title'>Отчеты</p>
+                                <p
+                                    className='section-header-title'
+                                    onClick={handleReportsClick}
+                                    style={{ cursor: 'pointer' }}
+                                >
+                                    Отчеты
+                                </p>
                                 <div className="search-container">
                                     <input
                                         type="text"
