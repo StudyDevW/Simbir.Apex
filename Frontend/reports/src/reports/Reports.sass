@@ -1,0 +1,142 @@
+.reports-page
+    width: 100%
+    height: 100%
+    margin: 0
+    padding: 0
+    display: flex
+    flex-direction: column
+    min-height: 100vh
+    font-family: 'Arial', sans-serif
+
+.main-content
+    display: flex
+    flex-direction: column
+    align-items: center
+    justify-content: flex-start
+    width: 100%
+    margin: 0
+
+.content-header
+    display: flex
+    justify-content: space-between
+    align-items: center
+    padding: 0 20px
+    background-color: black
+    width: 100%
+    height: 80px
+    border-radius: 15px
+    margin-bottom: 20px
+
+.content-header-title
+    color: white
+    font-weight: 600
+    margin: 0
+    width: 100px
+    flex: 1
+
+.content-header-left
+    display: flex
+    align-items: center
+    gap: 16px
+    width: 100%
+
+.content-header-back
+    cursor: pointer
+    transition: transform 0.2s ease
+
+    &:hover
+        transform: translateX(-2px)
+
+.content-header-plus
+    cursor: pointer
+    transition: all 0.3s ease
+    margin-left: 0.4% !important
+
+.reports-table-container
+    background: white
+    border-radius: 8px
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1)
+    overflow: hidden
+    width: 100%
+
+.search-container
+    width: 100%
+    padding: 12px 0px
+    margin: 0
+    border-bottom: 1px solid #ecf0f1
+    background-color: #f8f9fa
+    display: flex
+    justify-content: center
+
+.search-input
+    width: 92%
+    margin: 0
+    padding: 8px 10px
+    border: 1px solid #bdc3c7
+    background-color: white
+    color: black
+    border-radius: 6px
+    font-size: 13px
+    transition: border-color 0.3s ease
+
+    &:focus
+        outline: none
+        border-color: #3498db
+        box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2)
+
+    &::placeholder
+        color: #95a5a6
+
+.reports-table
+    width: 100%
+    border-collapse: collapse
+    font-size: 14px
+    margin-left: 5%
+
+thead
+    background-color: #f8f9fa
+
+th
+    padding: 12px 15px
+    text-align: left
+    font-weight: 600
+    color: black
+    border-bottom: 2px solid #ecf0f1
+
+.editing
+    margin-top: 15px
+    width: 30px
+    height: 30px
+
+.cross
+    padding-top: 6px
+    width: 50px
+    height: 50px
+
+tr
+    border-bottom: 1px solid #ecf0f1
+    transition: background-color 0.3s ease
+
+    &:hover
+        background-color: #f8f9fa
+
+    &:last-child
+        border-bottom: none
+
+td
+    padding: 12px 15px
+    color: black
+    text-align: left
+
+    &.actions-cell
+        display: flex
+        justify-content: flex-start
+        gap: 15px
+
+.status
+    padding: 4px 10px
+    border-radius: 20px
+    font-weight: 500
+    text-transform: uppercase
+    display: inline-block
+    font-size: 11px
