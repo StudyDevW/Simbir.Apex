@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Middleware_Components.DTO;
+using Middleware_Components.DTO.Pagination;
 using Middleware_Components.JWT.DTO.CheckUsers;
 using Middleware_Components.Services;
 using ServiceUI.Interfaces;
@@ -224,7 +225,7 @@ namespace ServiceUI.Services
             }
         }
 
-        public async Task<List<UserGetDTO>?> GetAllUsers(string token)
+        public async Task<PaginationOut<List<UserGetDTO>>?> GetAllUsers(int from, int count, string token)
         {
             var validation = await _jwt.AccessTokenValidation(token);
 
@@ -234,7 +235,7 @@ namespace ServiceUI.Services
             }
             else if (validation.TokenHasSuccess())
             {
-                return await _database.GetAllUsers();
+                return await _database.GetAllUsers(from, count);
             }
 
             return null;
@@ -401,7 +402,7 @@ namespace ServiceUI.Services
             return null;
         }
 
-        public async Task<List<GetAlertDTO>?> GetAlertsFromDB(string token)
+        public async Task<PaginationOut<List<GetAlertDTO>>?> GetAlertsFromDB(int from, int count, string token)
         {
             var validation = await _jwt.AccessTokenValidation(token);
 
@@ -411,7 +412,7 @@ namespace ServiceUI.Services
             }
             else if (validation.TokenHasSuccess())
             {
-                return await _database.GetAllAlertsFromDB();
+                return await _database.GetAllAlertsFromDB(from, count);
             }
 
             return null;
@@ -449,7 +450,7 @@ namespace ServiceUI.Services
             return null;
         }
 
-        public async Task<List<GetEventDTO>?> GetEventsFromDB(string token)
+        public async Task<PaginationOut<List<GetEventDTO>>?> GetEventsFromDB(int from, int count, string token)
         {
             var validation = await _jwt.AccessTokenValidation(token);
 
@@ -459,7 +460,7 @@ namespace ServiceUI.Services
             }
             else if (validation.TokenHasSuccess())
             {
-                return await _database.GetAllEventsFromDB();
+                return await _database.GetAllEventsFromDB(from, count);
             }
 
             return null;

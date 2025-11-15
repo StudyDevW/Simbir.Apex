@@ -85,11 +85,11 @@ namespace ServiceUI.Controllers
         }
 
         [HttpGet("All")]
-        public async Task<IActionResult> GetUsers(/**/)
+        public async Task<IActionResult> GetUsers([FromQuery] int from, [FromQuery] int count)
         {
             try
             {
-                var users = await _serviceUI.GetAllUsers(Request.Headers["Authorization"]);
+                var users = await _serviceUI.GetAllUsers(from, count, Request.Headers["Authorization"]);
                 return Ok(users);
             }
             catch (Exception ex)

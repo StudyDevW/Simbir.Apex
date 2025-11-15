@@ -41,11 +41,11 @@ namespace ServiceUI.Controllers
         }
 
         [HttpGet("All")]
-        public async Task<IActionResult> GetAlerts()
+        public async Task<IActionResult> GetAlerts([FromQuery] int from, [FromQuery] int count)
         {
             try
             {
-                var rules = await _serviceUI.GetAlertsFromDB(Request.Headers["Authorization"]);
+                var rules = await _serviceUI.GetAlertsFromDB(from, count, Request.Headers["Authorization"]);
                 return Ok(rules);
             }
             catch (Exception ex)

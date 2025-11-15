@@ -1,4 +1,5 @@
 ﻿using Middleware_Components.DTO;
+using Middleware_Components.DTO.Pagination;
 
 namespace ServiceUI.Interfaces
 {
@@ -16,7 +17,7 @@ namespace ServiceUI.Interfaces
 
         public Task DeleteUser(Guid idUser, string token);
 
-        public Task<List<UserGetDTO>?> GetAllUsers(string token);
+        public Task<PaginationOut<List<UserGetDTO>>?> GetAllUsers(int from, int count, string token);
 
         public Task<UserGetDTO?> GetUser(Guid idUser, string token);
 
@@ -32,11 +33,11 @@ namespace ServiceUI.Interfaces
 
         public Task<GetAlertDTO?> GetAlertFromDB(Guid alertId, string token);
 
-        public Task<List<GetAlertDTO>?> GetAlertsFromDB(string token);
+        public Task<PaginationOut<List<GetAlertDTO>>?> GetAlertsFromDB(int from, int count, string token);
 
         public Task<GetEventDTO?> GetEventFromDB(Guid eventId, string token);
 
-        public Task<List<GetEventDTO>?> GetEventsFromDB(string token);
+        public Task<PaginationOut<List<GetEventDTO>>?> GetEventsFromDB(int from, int count, string token);
 
         public Task<MeDTO> GetInfoMe(string token);
     }

@@ -1,4 +1,5 @@
 ﻿using Middleware_Components.DTO;
+using Middleware_Components.DTO.Pagination;
 using Middleware_Components.JWT.DTO.CheckUsers;
 
 namespace ServiceUI.Interfaces
@@ -13,7 +14,7 @@ namespace ServiceUI.Interfaces
 
         public Task DeleteUser(Guid userId);
 
-        public Task<List<UserGetDTO>?> GetAllUsers();
+        public Task<PaginationOut<List<UserGetDTO>>?> GetAllUsers(int from, int count);
 
         public Task<UserGetDTO?> GetUser(Guid userId);
 
@@ -25,11 +26,11 @@ namespace ServiceUI.Interfaces
 
         public Task<GetAlertDTO?> GetAlertFromDB(Guid alertId);
 
-        public Task<List<GetAlertDTO>> GetAllAlertsFromDB();
+        public Task<PaginationOut<List<GetAlertDTO>>?> GetAllAlertsFromDB(int from, int count);
 
         public Task<GetEventDTO?> GetEventFromDB(Guid eventId);
 
-        public Task<List<GetEventDTO>> GetAllEventsFromDB();
+        public Task<PaginationOut<List<GetEventDTO>>?> GetAllEventsFromDB(int from, int count);
 
         public Task<List<Guid>> CollectAllIdUsers();
 

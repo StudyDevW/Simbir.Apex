@@ -2,9 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Middleware_Components.DTO;
+using Middleware_Components.DTO.Pagination;
 using Middleware_Components.JWT.DTO.CheckUsers;
 using ServiceUI.Interfaces;
 using ServiceUI.Tables;
+using Sprache;
 using System.Collections.Generic;
 using System.Data;
 
@@ -14,12 +16,11 @@ namespace ServiceUI.Services
     {
         private readonly ILogger _logger;
         private readonly DataContext _dbcontext;
-        //private readonly PasswordHasher<PasswordAppUser> _passwordHasher;
+        private const int _defaultMaxPageSize = 500;
 
         public DatabaseService(IConfiguration conf)
         {
             _logger = LoggerFactory.Create(builder => builder.AddConsole()).CreateLogger("database-service-logger");
-       //     _passwordHasher = new PasswordHasher<PasswordAppUser>();
             _dbcontext = new DataContext(conf["DATABASE_CONNECT"]);
         }
 
@@ -131,9 +132,23 @@ namespace ServiceUI.Services
             await _dbcontext.SaveChangesAsync();
         }
 
-        public async Task<List<UserGetDTO>?> GetAllUsers()
+        //Функа с пагинацией - Антон
+        public async Task<PaginationOut<List<UserGetDTO>>?> GetAllUsers(int from, int count)
         {
-            var usersAllSelected = await _dbcontext.usersTable.ToListAsync();
+            var totalCount = await _dbcontext.usersTable.CountAsync();
+
+            var userTableSelect = _dbcontext.usersTable.AsQueryable();
+
+            if (from > 0 && count > 0)
+                userTableSelect = userTableSelect.Skip(from).Take(count);
+            else if (from <= 0 && count > 0)
+                userTableSelect = userTableSelect.Take(count);
+            else if (from > 0 && count <= 0)
+                throw new Exception("danger_output");
+            else
+                userTableSelect = userTableSelect.Take(_defaultMaxPageSize);
+
+            var usersAllSelected = await userTableSelect.ToListAsync();
 
             List<UserGetDTO> retFunc = new List<UserGetDTO>();
 
@@ -156,7 +171,10 @@ namespace ServiceUI.Services
                 retFunc.Add(userGetDto);
             }
 
-            return usersAllSelected.Count > 0 ? retFunc : null;
+            if (usersAllSelected.Count > 0)
+                return new PaginationOut<List<UserGetDTO>>(retFunc, from, count, totalCount);
+
+            return null;
         }
 
         public async Task<UserGetDTO?> GetUser(Guid userId)
@@ -280,11 +298,24 @@ namespace ServiceUI.Services
             return null;
         }
 
-        public async Task<List<GetAlertDTO>> GetAllAlertsFromDB()
+        public async Task<PaginationOut<List<GetAlertDTO>>?> GetAllAlertsFromDB(int from, int count)
         {
-            List<GetAlertDTO> alertsAll = new List<GetAlertDTO>();
+            var totalCount = await _dbcontext.alertsTable.CountAsync();
 
-            var selectedAlerts = await _dbcontext.alertsTable.ToListAsync();
+            var alertsTableSelect = _dbcontext.alertsTable.AsQueryable();
+
+            if (from > 0 && count > 0)
+                alertsTableSelect = alertsTableSelect.Skip(from).Take(count);
+            else if (from <= 0 && count > 0)
+                alertsTableSelect = alertsTableSelect.Take(count);
+            else if (from > 0 && count <= 0)
+                throw new Exception("danger_output");
+            else
+                alertsTableSelect = alertsTableSelect.Take(_defaultMaxPageSize);
+
+            var selectedAlerts = await alertsTableSelect.ToListAsync();
+
+            List<GetAlertDTO> alertsAll = new List<GetAlertDTO>();
 
             if (selectedAlerts != null)
                 foreach (var alert in selectedAlerts)
@@ -308,8 +339,10 @@ namespace ServiceUI.Services
                     alertsAll.Add(getAlertDTO);
                 }
 
+            if (alertsAll.Count > 0)
+                return new PaginationOut<List<GetAlertDTO>>(alertsAll, from, count, totalCount);
 
-            return alertsAll;
+            return null;
         }
 
         public async Task<GetEventDTO?> GetEventFromDB(Guid eventId)
@@ -330,11 +363,24 @@ namespace ServiceUI.Services
             return null;
         }
 
-        public async Task<List<GetEventDTO>> GetAllEventsFromDB()
+        public async Task<PaginationOut<List<GetEventDTO>>?> GetAllEventsFromDB(int from, int count)
         {
-            List<GetEventDTO> eventsAll = new List<GetEventDTO>();
+            var totalCount = await _dbcontext.eventsTable.CountAsync();
 
-            var selectedEvents = await _dbcontext.eventsTable.ToListAsync();
+            var eventsTableSelect = _dbcontext.eventsTable.AsQueryable();
+
+            if (from > 0 && count > 0)
+                eventsTableSelect = eventsTableSelect.Skip(from).Take(count);
+            else if (from <= 0 && count > 0)
+                eventsTableSelect = eventsTableSelect.Take(count);
+            else if (from > 0 && count <= 0)
+                throw new Exception("danger_output");
+            else
+                eventsTableSelect = eventsTableSelect.Take(_defaultMaxPageSize);
+
+            var selectedEvents = await eventsTableSelect.ToListAsync();
+
+            List<GetEventDTO> eventsAll = new List<GetEventDTO>();
 
             if (selectedEvents != null)
                 foreach (var event_ in selectedEvents)
@@ -353,7 +399,10 @@ namespace ServiceUI.Services
                 }
 
 
-            return eventsAll;
+            if (eventsAll.Count > 0)
+                return new PaginationOut<List<GetEventDTO>>(eventsAll, from, count, totalCount);
+
+            return null;
         }
 
         public async Task<List<Guid>> CollectAllIdUsers()
