@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Middleware_Components.DTO;
-using Middleware_Components.Services;
+using Middleware_Components.Interfaces;
 using ServiceUI.Interfaces;
 using System.ComponentModel.DataAnnotations;
 

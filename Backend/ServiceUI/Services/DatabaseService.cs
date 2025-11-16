@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Middleware_Components.DTO;
+using Middleware_Components.DTO.Enums;
 using Middleware_Components.DTO.Pagination;
 using Middleware_Components.JWT.DTO.CheckUsers;
 using ServiceUI.Interfaces;
@@ -9,6 +10,7 @@ using ServiceUI.Tables;
 using Sprache;
 using System.Collections.Generic;
 using System.Data;
+using System.Security.Cryptography;
 
 namespace ServiceUI.Services
 {
@@ -52,23 +54,62 @@ namespace ServiceUI.Services
             }
         }
 
-        public async Task AddUser(UserAddDTO dtoObj)
+        private string GeneratePassword(int length = 12)
         {
+            const string uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            const string lowercase = "abcdefghijklmnopqrstuvwxyz";
+            const string digits = "0123456789";
+            const string special = "!@#$%^&*()-_=+<>?";
+
+            string allChars = uppercase + lowercase + digits + special;
+
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                byte[] randomBytes = new byte[length];
+                rng.GetBytes(randomBytes);
+
+                char[] password = new char[length];
+
+                password[0] = uppercase[randomBytes[0] % uppercase.Length];
+                password[1] = lowercase[randomBytes[1] % lowercase.Length];
+                password[2] = digits[randomBytes[2] % digits.Length];
+                password[3] = special[randomBytes[3] % special.Length];
+
+                for (int i = 4; i < length; i++)
+                {
+                    password[i] = allChars[randomBytes[i] % allChars.Length];
+                }
+
+                return new string(password.OrderBy(x => randomBytes[password.Length - 1] % password.Length).ToArray());
+            }
+        }
+
+        public async Task<RegisterMailDTO> AddUser(UserAddDTO dtoObj)
+        {
+
+            var passwordGenerated = GeneratePassword();
+
             await _dbcontext.usersTable.AddAsync(new UsersTable()
             {
                 first_name = dtoObj.first_name,
                 last_name = dtoObj.last_name,
-                password = dtoObj.password,
+                password = passwordGenerated,
                 username = dtoObj.username,
                 roles = dtoObj.roles,
-                photo_url = dtoObj.photo_url,
-                phone_number = dtoObj.phone_number,
-                status = "offline",
+                photo_url = null,
+                phone_number = null,
+                status = "unactive",
                 created_at = DateTime.UtcNow,
                 last_login = null
             });
 
             await _dbcontext.SaveChangesAsync();
+
+            return new RegisterMailDTO()
+            {
+                username = dtoObj.username,
+                password = passwordGenerated
+            };
         }
 
         public async Task ChangeUser(UserChangeDTO dtoObj, Guid userId)
@@ -441,6 +482,21 @@ namespace ServiceUI.Services
             }
 
             return null;
+        }
+
+        public async Task UpdateAlertStatus(Guid alertId, Guid userId, AlertStatus statusFill)
+        {
+            var selectedAlert = await _dbcontext.alertsTable.Where(c => c.Id == alertId).FirstOrDefaultAsync();
+
+            if (selectedAlert != null && selectedAlert.status == AlertStatus.NEW.ToString())
+            {
+                selectedAlert.assigned_to = userId;
+                selectedAlert.status = statusFill.ToString();
+
+                await _dbcontext.SaveChangesAsync();
+            }
+            else
+                throw new Exception("status_update_failed");
         }
     }
 }

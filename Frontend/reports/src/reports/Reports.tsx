@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './Reports.sass';
-import { useNavigate } from 'react-router-dom';
+//import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Cross from "../img/icon/icon-cross.png";
 import Plus from "../img/icon/icon-plus.png";
@@ -18,7 +18,7 @@ export interface Reports {
 const Reports: React.FC = () => {
     const { users, handleUsersChange } = useUsers();
     const [searchTerm, setSearchTerm] = useState("");
-    const navigate = useNavigate();
+  //  const navigate = useNavigate();
 
     const filteredUsers = users.filter(
         (user) =>

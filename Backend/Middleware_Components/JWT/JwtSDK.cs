@@ -2,7 +2,7 @@
 using Microsoft.IdentityModel.Tokens;
 using Middleware_Components.JWT.DTO.CheckUsers;
 using Middleware_Components.JWT.DTO.Token;
-using Middleware_Components.Services;
+using Middleware_Components.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;

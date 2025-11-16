@@ -11,7 +11,7 @@ namespace ServiceUI.Interfaces
 
         public Task<AuthTokenInfoWR?> RefreshClientSession(string refreshTokenDTO);
 
-        public Task AddNewUser(UserAddDTO dtoObj, string token);
+        public Task AddNewUser(UserAddDTO dtoObj, string email, string token);
 
         public Task ChangeUser(UserChangeDTO dtoObj, Guid id, string token);
 

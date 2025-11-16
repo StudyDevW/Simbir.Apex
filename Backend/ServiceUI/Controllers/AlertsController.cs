@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Middleware_Components.Services;
+using Middleware_Components.Interfaces;
 using ServiceUI.Interfaces;
 
 namespace ServiceUI.Controllers
@@ -19,9 +19,12 @@ namespace ServiceUI.Controllers
             _serviceUI = serviceUI;
         }
 
-        [HttpPost("Status/{alertId}/(NOTREADY)")]
+        [HttpPost("Status/{alertId}")]
         public async Task<IActionResult> AlertStatus(Guid alertId)
         {
+
+
+
             return BadRequest();
         }
 

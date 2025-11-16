@@ -1,4 +1,4 @@
-﻿using Middleware_Components.Services;
+﻿using Middleware_Components.Interfaces;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;

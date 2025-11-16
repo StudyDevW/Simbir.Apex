@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Middleware_Components.DTO;
-using Middleware_Components.Services;
+using Middleware_Components.Interfaces;
 using ServiceUI.Interfaces;
 
 namespace ServiceUI.Controllers
@@ -25,12 +25,12 @@ namespace ServiceUI.Controllers
         }
 
         //ТОЛЬКО Руководитель 
-        [HttpPost("Add")]
-        public async Task<IActionResult> AddUser([FromBody] UserAddDTO dtoObj)
+        [HttpPost("Add/{email}")]
+        public async Task<IActionResult> AddUser([FromBody] UserAddDTO dtoObj, string email)
         {
             try
             {
-                await _serviceUI.AddNewUser(dtoObj, Request.Headers["Authorization"]);
+                await _serviceUI.AddNewUser(dtoObj, email, Request.Headers["Authorization"]);
                 return Ok("user_added");
             }
             catch (Exception ex)

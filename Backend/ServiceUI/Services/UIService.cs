@@ -2,7 +2,7 @@
 using Middleware_Components.DTO;
 using Middleware_Components.DTO.Pagination;
 using Middleware_Components.JWT.DTO.CheckUsers;
-using Middleware_Components.Services;
+using Middleware_Components.Interfaces;
 using ServiceUI.Interfaces;
 
 
@@ -14,13 +14,15 @@ namespace ServiceUI.Services
         private readonly IJwtService _jwt;
         private readonly ICacheService _cache;
         private readonly ILogger _logger;
+        private readonly IMailService _mail;
 
-        public UIService(IDatabaseService database, IJwtService jwt, ICacheService cache)
+        public UIService(IDatabaseService database, IMailService mail, IJwtService jwt, ICacheService cache)
         {
             _logger = LoggerFactory.Create(builder => builder.AddConsole()).CreateLogger("ui-service-logger");
             _database = database;
             _jwt = jwt;
             _cache = cache;
+            _mail = mail;
         }
         
         //AUTH PARTS
@@ -174,7 +176,7 @@ namespace ServiceUI.Services
         }
 
         //USERS CONTROLS PARTS
-        public async Task AddNewUser(UserAddDTO dtoObj, string token)
+        public async Task AddNewUser(UserAddDTO dtoObj, string email, string token)
         {
             var validation = await _jwt.AccessTokenValidation(token);
 
@@ -184,8 +186,12 @@ namespace ServiceUI.Services
             }
             else if (validation.TokenHasSuccess())
             {
-                if (validation.token_success!.userRoles!.Equals("MANAGER") || validation.token_success!.userRoles!.Equals("SUPER_USER"))
-                    await _database.AddUser(dtoObj);
+                if (validation.token_success.userRoles.Contains("MANAGER") || validation.token_success.userRoles.Contains("SUPER_USER"))
+                {
+                    var userData = await _database.AddUser(dtoObj);
+
+                    await _mail.SendRegisterData(email, userData);
+                }
                 else
                     throw new Exception("role_invalid");
             }
@@ -465,6 +471,8 @@ namespace ServiceUI.Services
 
             return null;
         }
+
+        
 
     }
 }

@@ -5,7 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Middleware_Components.Cache;
 using Middleware_Components.JWT;
-using Middleware_Components.Services;
+using Middleware_Components.Interfaces;
 using ServiceUI.Interfaces;
 using ServiceUI.Services;
 using System.Security.Cryptography;
@@ -121,6 +121,8 @@ namespace ServiceUI
             builder.Services.AddSingleton<ICacheService, CacheSDK>();
 
             builder.Services.AddSingleton<IServiceManager, ServiceManager>();
+
+            builder.Services.AddSingleton<IMailService, MailService>();
 
             builder.Services.AddHostedService<RedisKeyExpirationService>();
 

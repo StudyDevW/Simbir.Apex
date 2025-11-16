@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Middleware_Components.Services
+namespace Middleware_Components.Interfaces
 {
     public interface ICacheService
     {

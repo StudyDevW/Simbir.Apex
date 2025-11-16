@@ -9,7 +9,7 @@ export default defineConfig({
             name: 'reports',
             filename: 'remoteEntry.js',
             exposes: {
-                './Reports': './src/assets/reports/Reports.tsx',
+                './Reports': './src/reports/Reports.tsx',
             },
             remotes: {
                 shell: 'http://localhost:5000/assets/remoteEntry.js',

@@ -1,5 +1,5 @@
 ﻿
-using Middleware_Components.Services;
+using Middleware_Components.Interfaces;
 using ServiceUI.Interfaces;
 
 namespace ServiceUI.Services

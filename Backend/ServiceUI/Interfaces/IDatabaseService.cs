@@ -1,4 +1,5 @@
 ﻿using Middleware_Components.DTO;
+using Middleware_Components.DTO.Enums;
 using Middleware_Components.DTO.Pagination;
 using Middleware_Components.JWT.DTO.CheckUsers;
 
@@ -8,7 +9,7 @@ namespace ServiceUI.Interfaces
     {
         public Task<Auth_CheckSuccess?> CheckUserAuth(string username, string password);
 
-        public Task AddUser(UserAddDTO dtoObj);
+        public Task<RegisterMailDTO> AddUser(UserAddDTO dtoObj);
 
         public Task ChangeUser(UserChangeDTO dtoObj, Guid userId);
 
@@ -37,5 +38,7 @@ namespace ServiceUI.Interfaces
         public Task<MeDTO?> GetMeInfo(Guid userId);
 
         public Task SetOfflineStatus(Guid userId);
+
+        public Task UpdateAlertStatus(Guid alertId, Guid userId, AlertStatus statusFill);
     }
 }

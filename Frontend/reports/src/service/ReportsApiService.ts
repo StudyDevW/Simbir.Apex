@@ -1,5 +1,5 @@
 import { ApiClient } from 'shell/api';
-import type { Reports } from '../assets/reports/Reports';
+import type { Reports } from '../reports/Reports';
 
 // interface PaginatedResponse<T> {
 //   items: T[];
