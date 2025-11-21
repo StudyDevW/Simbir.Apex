@@ -138,21 +138,21 @@ namespace ServiceUI
                 }
             );
 
-            modelBuilder.Entity<EventsTable>()
-                .Property(e => e.severity)
-                .HasConversion(
-                v => v.ToString().ToLower(), 
-                v => (SeverityStatus)Enum.Parse(typeof(SeverityStatus), v, true)
-            )
-            .HasColumnType("varchar(10)");
-
-            modelBuilder.Entity<AlertsTable>()
-               .Property(e => e.severity)
-               .HasConversion(
-               v => v.ToString().ToLower(),
-               v => (SeverityStatus)Enum.Parse(typeof(SeverityStatus), v, true) 
-           )
-           .HasColumnType("varchar(10)");
+            //modelBuilder.Entity<EventsTable>()
+            //    .Property(e => e.severity)
+            //    .HasConversion(
+            //    v => v.ToString().ToLower(), 
+            //    v => (SeverityStatus)Enum.Parse(typeof(SeverityStatus), v, true)
+            //)
+            //.HasColumnType("varchar(10)");
+            ////ПОФИКСИТЬ НЕСООТВЕТCТВИЕ ДАННЫХ
+            //modelBuilder.Entity<AlertsTable>()
+            //   .Property(e => e.severity)
+            //   .HasConversion(
+            //   v => v.ToString().ToLower(),
+            //   v => (SeverityStatus)Enum.Parse(typeof(SeverityStatus), v, true) 
+            //)
+            //.HasColumnType("varchar(10)");
         }
     }
 }

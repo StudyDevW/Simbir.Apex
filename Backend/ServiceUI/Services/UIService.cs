@@ -4,7 +4,7 @@ using Middleware_Components.DTO.Pagination;
 using Middleware_Components.JWT.DTO.CheckUsers;
 using Middleware_Components.Interfaces;
 using ServiceUI.Interfaces;
-
+using Middleware_Components.DTO.Enums;
 
 namespace ServiceUI.Services
 {
@@ -408,7 +408,7 @@ namespace ServiceUI.Services
             return null;
         }
 
-        public async Task<PaginationOut<List<GetAlertDTO>>?> GetAlertsFromDB(int from, int count, string token)
+        public async Task<PaginationOut<List<GetAlertDTO>>?> GetAlertsFromDB(AlertsArgsDTO dtoObj, string token)
         {
             var validation = await _jwt.AccessTokenValidation(token);
 
@@ -418,7 +418,7 @@ namespace ServiceUI.Services
             }
             else if (validation.TokenHasSuccess())
             {
-                return await _database.GetAllAlertsFromDB(from, count);
+                return await _database.GetAllAlertsFromDB(dtoObj);
             }
 
             return null;

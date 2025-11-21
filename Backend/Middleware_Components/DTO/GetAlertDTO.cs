@@ -23,7 +23,7 @@ namespace Middleware_Components.DTO
 
         public string status { get; set; }
 
-        public SeverityStatus severity { get; set; }
+        public string severity { get; set; }
 
         public string raw_data { get; set; }
 

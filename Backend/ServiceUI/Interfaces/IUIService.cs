@@ -1,4 +1,5 @@
 ﻿using Middleware_Components.DTO;
+using Middleware_Components.DTO.Enums;
 using Middleware_Components.DTO.Pagination;
 
 namespace ServiceUI.Interfaces
@@ -33,7 +34,7 @@ namespace ServiceUI.Interfaces
 
         public Task<GetAlertDTO?> GetAlertFromDB(Guid alertId, string token);
 
-        public Task<PaginationOut<List<GetAlertDTO>>?> GetAlertsFromDB(int from, int count, string token);
+        public Task<PaginationOut<List<GetAlertDTO>>?> GetAlertsFromDB(AlertsArgsDTO dtoObj, string token);
 
         public Task<GetEventDTO?> GetEventFromDB(Guid eventId, string token);
 

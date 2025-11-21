@@ -27,7 +27,7 @@ namespace ServiceUI.Interfaces
 
         public Task<GetAlertDTO?> GetAlertFromDB(Guid alertId);
 
-        public Task<PaginationOut<List<GetAlertDTO>>?> GetAllAlertsFromDB(int from, int count);
+        public Task<PaginationOut<List<GetAlertDTO>>?> GetAllAlertsFromDB(AlertsArgsDTO dtoObj);
 
         public Task<GetEventDTO?> GetEventFromDB(Guid eventId);
 
@@ -39,6 +39,6 @@ namespace ServiceUI.Interfaces
 
         public Task SetOfflineStatus(Guid userId);
 
-        public Task UpdateAlertStatus(Guid alertId, Guid userId, AlertStatus statusFill);
+        public Task UpdateAlertStatus(Guid alertId, Guid userId, AlertStatus statusFill, bool workEquip);
     }
 }

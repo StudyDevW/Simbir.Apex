@@ -12,7 +12,7 @@ namespace ServiceUI.Tables
 
         public string eventId { get; set; }
 
-        public SeverityStatus severity { get; set; }
+        public string severity { get; set; }
 
         public DateTime timestamp { get; set; }
     }

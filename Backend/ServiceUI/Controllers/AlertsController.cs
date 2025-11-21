@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Middleware_Components.DTO;
+using Middleware_Components.DTO.Enums;
 using Middleware_Components.Interfaces;
 using ServiceUI.Interfaces;
+using static StackExchange.Redis.Role;
 
 namespace ServiceUI.Controllers
 {
@@ -20,7 +23,7 @@ namespace ServiceUI.Controllers
         }
 
         [HttpPost("Status/{alertId}")]
-        public async Task<IActionResult> AlertStatus(Guid alertId)
+        public async Task<IActionResult> AlertStatusF(Guid alertId)
         {
 
 
@@ -43,13 +46,28 @@ namespace ServiceUI.Controllers
             }
         }
 
-        [HttpGet("All")]
-        public async Task<IActionResult> GetAlerts([FromQuery] int from, [FromQuery] int count)
+        [HttpGet("All/{filterStatus}")]
+        public async Task<IActionResult> GetAlerts(string filterStatus, [FromQuery] string filterSeverity, [FromQuery] int from, [FromQuery] int count)
         {
             try
             {
-                var rules = await _serviceUI.GetAlertsFromDB(from, count, Request.Headers["Authorization"]);
-                return Ok(rules);
+       
+                if (Enum.TryParse(filterStatus, true, out AlertStatus statusOut) && Enum.TryParse(filterSeverity, true, out SeverityStatus severityOut))
+                {
+                    var rules = await _serviceUI.GetAlertsFromDB(new AlertsArgsDTO()
+                    {
+                        from = from,
+                        count = count,
+                        filterStatus = statusOut,
+                        filterSeverity = severityOut
+                    }, Request.Headers["Authorization"]);
+
+                    _logger.LogWarning($"GetAlerts: \n  stat: {filterStatus};\n  sev: {filterSeverity};");
+
+                    return Ok(rules);
+                }
+                else 
+                    return BadRequest("filters_unknown");
             }
             catch (Exception ex)
             {
